@@ -1,0 +1,189 @@
+{
+  "candidate": "ALPHA_013_FUNDING_DISPERSION_REVERSAL",
+  "status": "ACCUMULATING",
+  "development": {
+    "base": {
+      "eligible_weeks": 0,
+      "closed_legs": 0,
+      "ending_equity": 1000.0,
+      "net_return": 0.0,
+      "profit_factor_by_week": null,
+      "maximum_mark_to_market_drawdown": 0.0,
+      "liquidations": 0,
+      "pnl_components": {
+        "raw_relative_price_pnl": 0,
+        "modeled_slippage": 0,
+        "trading_fees": 0,
+        "funding_pnl": 0,
+        "price_after_fees_and_slippage": 0,
+        "net_pnl": 0
+      },
+      "first_half_net_pnl": null,
+      "second_half_net_pnl": null,
+      "largest_winning_week_concentration": null,
+      "median_score_spread": null,
+      "configuration": {
+        "lookback_days": 7,
+        "minimum_events": 21,
+        "minimum_spread": 0.0025,
+        "leg_equity_fraction": 0.2,
+        "hold_days": 7,
+        "stop_fraction": 0.1,
+        "liquidation_adverse_move": 0.8,
+        "fee_per_fill": 0.0005,
+        "slippage_per_fill": 0.0002,
+        "starting_equity": 1000.0,
+        "maximum_development_weeks": 30
+      },
+      "weeks": [],
+      "legs": []
+    },
+    "double_fee": {
+      "eligible_weeks": 0,
+      "closed_legs": 0,
+      "ending_equity": 1000.0,
+      "net_return": 0.0,
+      "profit_factor_by_week": null,
+      "maximum_mark_to_market_drawdown": 0.0,
+      "liquidations": 0,
+      "pnl_components": {
+        "raw_relative_price_pnl": 0,
+        "modeled_slippage": 0,
+        "trading_fees": 0,
+        "funding_pnl": 0,
+        "price_after_fees_and_slippage": 0,
+        "net_pnl": 0
+      },
+      "first_half_net_pnl": null,
+      "second_half_net_pnl": null,
+      "largest_winning_week_concentration": null,
+      "median_score_spread": null,
+      "configuration": {
+        "lookback_days": 7,
+        "minimum_events": 21,
+        "minimum_spread": 0.0025,
+        "leg_equity_fraction": 0.2,
+        "hold_days": 7,
+        "stop_fraction": 0.1,
+        "liquidation_adverse_move": 0.8,
+        "fee_per_fill": 0.001,
+        "slippage_per_fill": 0.0002,
+        "starting_equity": 1000.0,
+        "maximum_development_weeks": 30
+      },
+      "weeks": [],
+      "legs": []
+    },
+    "five_bps_slippage": {
+      "eligible_weeks": 0,
+      "closed_legs": 0,
+      "ending_equity": 1000.0,
+      "net_return": 0.0,
+      "profit_factor_by_week": null,
+      "maximum_mark_to_market_drawdown": 0.0,
+      "liquidations": 0,
+      "pnl_components": {
+        "raw_relative_price_pnl": 0,
+        "modeled_slippage": 0,
+        "trading_fees": 0,
+        "funding_pnl": 0,
+        "price_after_fees_and_slippage": 0,
+        "net_pnl": 0
+      },
+      "first_half_net_pnl": null,
+      "second_half_net_pnl": null,
+      "largest_winning_week_concentration": null,
+      "median_score_spread": null,
+      "configuration": {
+        "lookback_days": 7,
+        "minimum_events": 21,
+        "minimum_spread": 0.0025,
+        "leg_equity_fraction": 0.2,
+        "hold_days": 7,
+        "stop_fraction": 0.1,
+        "liquidation_adverse_move": 0.8,
+        "fee_per_fill": 0.0005,
+        "slippage_per_fill": 0.0005,
+        "starting_equity": 1000.0,
+        "maximum_development_weeks": 30
+      },
+      "weeks": [],
+      "legs": []
+    }
+  },
+  "gate": {
+    "eligible_weeks_minimum_30": false,
+    "closed_legs_minimum_60": false,
+    "net_return_positive": false,
+    "raw_relative_price_pnl_positive": false,
+    "price_after_base_fees_and_slippage_positive": false,
+    "profit_factor_minimum_1_20": false,
+    "double_fee_net_positive": false,
+    "five_bps_slippage_net_positive": false,
+    "first_half_net_positive": false,
+    "second_half_net_positive": false,
+    "maximum_mark_to_market_drawdown_at_most_0_15": true,
+    "largest_winning_week_concentration_at_most_0_25": false,
+    "zero_liquidations": true,
+    "all_funding_rows_reconciled": false,
+    "locked_validation_remains_unopened": true
+  },
+  "locked_validation_opened": false,
+  "warning": "Alpha #13 is a post-hoc child of Alpha #9 and only fresh post-registration weeks count.",
+  "data_integrity": {
+    "sealed_days": 8,
+    "first_day": "2026-10-10",
+    "last_day": "2026-10-17",
+    "day_manifests": [
+      {
+        "day": "2026-10-10",
+        "manifest_sha256": "183a9c106e359a3f902c1cd9c8a9926cecd4c75317e788b2b85a3aa2de764d42"
+      },
+      {
+        "day": "2026-10-11",
+        "manifest_sha256": "579cd253601f023ebcd4724c31aa63c634cf999ca3ed3f3b2b293663b7c398a3"
+      },
+      {
+        "day": "2026-10-12",
+        "manifest_sha256": "67de8ee3d23c732677f4e220f71351d8e0ce8dad2c2e7085465fbe3ad15bcc74"
+      },
+      {
+        "day": "2026-10-13",
+        "manifest_sha256": "38d7dbd7bcc255ff192a83ff5b844fc980d466cfba46dc13d140e2f8263f1bff"
+      },
+      {
+        "day": "2026-10-14",
+        "manifest_sha256": "a26c3cdd0271c842589837c743469b414b332108ba3e2f24284bac98323ebe35"
+      },
+      {
+        "day": "2026-10-15",
+        "manifest_sha256": "989676570ddf00cf430fd571be30bbdad1b5f85d2873bd6ea703a973dc16bb41"
+      },
+      {
+        "day": "2026-10-16",
+        "manifest_sha256": "22a4bdb5290951350724924935cc728f633934e4cf71e8dda40a15a67811d97e"
+      },
+      {
+        "day": "2026-10-17",
+        "manifest_sha256": "f1855643d860d6a2760cbe3ce543e7e7212753e177cb4af81f61e649f738c34d"
+      }
+    ],
+    "source_inventory_sha256": "47bfacbad41c60c7b124f17a7cd283401ac1335ff64f2455bd46852f1443781f",
+    "protocol_sha256": {
+      "research/alpha013-preregistration.json": "278589e5166379c37b27c7207c15b59192b0adbe68620a7d99d5c7124f7e29ba",
+      "scripts/download_alpha013_day.py": "57597bb4725b9b2450cb8d786d8417a1fd8dec4c8b0d1b11f6217c5827e94b33",
+      "quant/research/funding_dispersion_reversal.py": "b86bc71b71f8dbb7adf0f044928eef7d6cd54c3d734568e10ec8419af3273342",
+      "scripts/analyze_alpha013_forward.py": "f53beafe2fabc1a39d881acc4a7b9831ae2a292504b1f3e1bce2c0461fbbbb0d",
+      "scripts/reconcile_alpha013_funding.py": "f8fbd92ea1356b288349696be45ce2997bea36edce16b84469c11e7abf58226e"
+    },
+    "funding_reconciled": false
+  },
+  "funding_reconciliation": {
+    "status": "NOT_APPLICABLE_YET",
+    "required_days": 0,
+    "covered_days": [],
+    "failures": []
+  },
+  "preregistration_sha256": "278589e5166379c37b27c7207c15b59192b0adbe68620a7d99d5c7124f7e29ba",
+  "preregistration_path": "research/alpha013-preregistration.json"
+}

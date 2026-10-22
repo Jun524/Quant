@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-11T05:50:34.401213+00:00",
+  "maximum_age_seconds_for_promotion": 3600,
+  "sources": {
+    "exchange_info": {
+      "url": "https://fapi.binance.com/fapi/v1/exchangeInfo",
+      "response_sha256": "db6a0c5bde5fc247224826f26be78729da74eecd2bc419a93728f255fd9244f4"
+    },
+    "book_ticker": {
+      "url": "https://fapi.binance.com/fapi/v1/ticker/bookTicker?symbol=BTCUSDT",
+      "response_sha256": "002788e581146a3f237efd8fd3bd1a2a358be43e434124537c90cec609366f2c"
+    }
+  },
+  "source_snapshot": {
+    "symbol": {
+      "symbol": "BTCUSDT",
+      "pair": "BTCUSDT",
+      "contractType": "PERPETUAL",
+      "deliveryDate": 4133404800000,
+      "onboardDate": 1567965300000,
+      "status": "TRADING",
+      "maintMarginPercent": "2.5000",
+      "requiredMarginPercent": "5.0000",
+      "baseAsset": "BTC",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "pricePrecision": 2,
+      "quantityPrecision": 3,
+      "baseAssetPrecision": 8,
+      "quotePrecision": 8,
+      "underlyingType": "COIN",
+      "underlyingSubType": [
+        "PoW",
+        "Crypto"
+      ],
+      "triggerProtect": "0.0500",
+      "liquidationFee": "0.012500",
+      "marketTakeBound": "0.05",
+      "maxMoveOrderLimit": 10000,
+      "filters": [
+        {
+          "maxPrice": "4529764",
+          "tickSize": "0.10",
+          "filterType": "PRICE_FILTER",
+          "minPrice": "556.80"
+        },
+        {
+          "stepSize": "0.001",
+          "minQty": "0.001",
+          "maxQty": "1000",
+          "filterType": "LOT_SIZE"
+        },
+        {
+          "minQty": "0.001",
+          "maxQty": "120",
+          "filterType": "MARKET_LOT_SIZE",
+          "stepSize": "0.001"
+        },
+        {
+          "filterType": "MAX_NUM_ORDERS",
+          "limit": 200
+        },
+        {
+          "notional": "50",
+          "filterType": "MIN_NOTIONAL"
+        },
+        {
+          "multiplierDown": "0.9500",
+          "multiplierUp": "1.0500",
+          "multiplierDecimal": "4",
+          "filterType": "PERCENT_PRICE"
+        },
+        {
+          "filterType": "POSITION_RISK_CONTROL",
+          "positionControlSide": "NONE"
+        }
+      ],
+      "orderTypes": [
+        "LIMIT",
+        "MARKET",
+        "STOP",
+        "STOP_MARKET",
+        "TAKE_PROFIT",
+        "TAKE_PROFIT_MARKET",
+        "TRAILING_STOP_MARKET"
+      ],
+      "timeInForce": [
+        "GTC",
+        "IOC",
+        "FOK",
+        "GTX",
+        "GTD"
+      ],
+      "permissionSets": [
+        "GRID",
+        "COPY",
+        "DCA",
+        "PSB"
+      ]
+    },
+    "book_ticker": {
+      "symbol": "BTCUSDT",
+      "bidPrice": "83012.80",
+      "bidQty": "2.636",
+      "askPrice": "83012.90",
+      "askQty": "15.952",
+      "time": 1791697834368,
+      "lastUpdateId": 11786364355697
+    }
+  },
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "status": "FAIL",
+  "promotion_eligible": false,
+  "fixed_notional_usdt": 50.0,
+  "filters": {
+    "tick_size": "0.10",
+    "lot_step_size": "0.001",
+    "lot_minimum_qty": "0.001",
+    "market_minimum_qty": "0.001",
+    "minimum_notional": "50"
+  },
+  "sides": {
+    "BUY": {
+      "book_price": "83012.80",
+      "filtered_entry_price": "83012.80",
+      "fixed_notional_quantity": "0.000",
+      "fixed_notional_actual": "0.00000",
+      "minimum_executable_quantity": "0.001",
+      "minimum_executable_notional": "83.01280",
+      "passes": false
+    },
+    "SELL": {
+      "book_price": "83012.90",
+      "filtered_entry_price": "83012.90",
+      "fixed_notional_quantity": "0.000",
+      "fixed_notional_actual": "0.00000",
+      "minimum_executable_quantity": "0.001",
+      "minimum_executable_notional": "83.01290",
+      "passes": false
+    }
+  },
+  "checks": [
+    {
+      "name": "symbol_trading",
+      "passed": true,
+      "actual": "TRADING",
+      "required": "TRADING"
+    },
+    {
+      "name": "required_order_types",
+      "passed": true,
+      "actual": [
+        "LIMIT",
+        "MARKET",
+        "STOP",
+        "STOP_MARKET",
+        "TAKE_PROFIT",
+        "TAKE_PROFIT_MARKET",
+        "TRAILING_STOP_MARKET"
+      ],
+      "required": [
+        "LIMIT",
+        "MARKET"
+      ]
+    },
+    {
+      "name": "gtx_supported",
+      "passed": true,
+      "actual": [
+        "FOK",
+        "GTC",
+        "GTD",
+        "GTX",
+        "IOC"
+      ],
+      "required": "GTX"
+    },
+    {
+      "name": "buy_fixed_notional_executable",
+      "passed": false,
+      "actual": "0.00000",
+      "required_min": "50"
+    },
+    {
+      "name": "sell_fixed_notional_executable",
+      "passed": false,
+      "actual": "0.00000",
+      "required_min": "50"
+    }
+  ],
+  "interpretation": "A FAIL blocks the current order path. It cannot be repaired by silently increasing the preregistered 50 USDT order size."
+}

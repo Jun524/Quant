@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-12T04:10:00Z",
+  "purpose": "Screen distinct perpetual-futures information sets without reading project candidate returns or reopening sealed trials.",
+  "project_return_data_inspected_during_screening": false,
+  "sources_reviewed": [
+    {
+      "title": "Point-in-Time Audit Before Alpha: Public-Archive Availability and a Negative Matched-Budget Study on BTC Perpetual Futures",
+      "authors": ["Baocheng Zeng", "Jinhao Yang", "Peilin Han", "Kangnan He"],
+      "year": 2026,
+      "source_type": "arXiv preprint",
+      "url": "https://arxiv.org/abs/2608.25348",
+      "finding_used": "The paper treats historical open interest as unavailable for factor admission because its archive publication time is unverified; it also reports that positive historical IC did not survive its preregistered fee-and-slippage economic tests."
+    },
+    {
+      "title": "Volume Profile Mean Reversion Strategy with Tape Speed Confirmation for Cryptocurrency Futures Markets",
+      "authors": ["Nipun Perera"],
+      "year": 2026,
+      "source_type": "SSRN working paper",
+      "url": "https://ssrn.com/abstract=6932998",
+      "finding_used": "The accessible abstract proposes previous-day volume-profile levels and a tape-speed confirmation, but the primary PDF could not be retrieved during screening and the accessible record does not specify a complete reproducible signal, timing, universe, or execution contract."
+    }
+  ],
+  "candidates": [
+    {
+      "name": "HISTORICAL_OPEN_INTEREST_CROWDING",
+      "decision": "REJECT_AS_IMMEDIATE_HISTORICAL_ALPHA",
+      "reason": "Historical Binance open-interest archives lack demonstrated publication or receive time. Using their event timestamp as a decision-time feature would leave an unresolved future-information path. The closely related Alpha 010 is already sealed FAIL on its preregistered rule and may not be retuned.",
+      "policy_action": "research/historical-research-policy.json now blocks historical OI as a decision feature until source-specific availability evidence is supplied.",
+      "permitted_follow_up": "Only a new forward hypothesis may use OI after append-only capture with a local UTC receive time, source endpoint, and preregistered decision delay."
+    },
+    {
+      "name": "VOLUME_PROFILE_TAPE_SPEED_MEAN_REVERSION",
+      "decision": "DEFER_REPRODUCIBILITY_CONTRACT_INCOMPLETE",
+      "reason": "The accessible study description is not enough to fix all signal definitions, session boundary treatment, confirmation computation, trading universe, order role, and cost assumptions before project returns are seen. A follow-up search found no public code repository or complete alternative method specification. It also needs an independence review against sealed Alpha 002 before any trial could be numbered.",
+      "follow_up_reproducibility_search": {
+        "searched_at_utc": "2026-10-12T04:15:00Z",
+        "queries": [
+          "Volume Profile Mean Reversion Strategy Tape Speed GitHub",
+          "Nipun Perera Tape Speed GitHub",
+          "6932998 Volume Profile code github"
+        ],
+        "result": "NO_PUBLIC_CODE_OR_COMPLETE_EXECUTABLE_METHOD_FOUND",
+        "primary_source_access": "SSRN full PDF download was unavailable to the research browser during both attempts."
+      },
+      "required_before_any_preregistration": [
+        "primary-source method or supplement containing every signal and execution rule",
+        "point-in-time tradable and liquidity universe",
+        "preregistered fee, funding, spread, slippage, and fill model",
+        "independence review against Alpha 002"
+      ]
+    }
+  ],
+  "selected_next_step": "NO_NEW_EXPERIMENT; preserve the OI availability block and continue existing forward public-data collection.",
+  "live_order_authorization": "CLOSED"
+}

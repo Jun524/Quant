@@ -1,0 +1,718 @@
+{
+  "schema_version": 1,
+  "kind": "BINANCE_USDTM_BOUNDED_ORDER_FEASIBILITY",
+  "generated_at_utc": "2026-10-19T06:09:02.316660+00:00",
+  "maximum_age_seconds_for_live_review": 900,
+  "status": "FAIL",
+  "promotion_eligible": false,
+  "live_order_authorization": "CLOSED",
+  "symbols": [
+    "BNBUSDT",
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "desired_notional_usdt": "50",
+  "maximum_notional_usdt": "50",
+  "sources": {
+    "exchange_info": {
+      "url": "https://fapi.binance.com/fapi/v1/exchangeInfo",
+      "response_sha256": "9a17cf095125fb8778695ffbf0b37e066e00760e0aff00fc44aa599609287198"
+    },
+    "book_ticker:BNBUSDT": {
+      "url": "https://fapi.binance.com/fapi/v1/ticker/bookTicker?symbol=BNBUSDT",
+      "response_sha256": "993beeac8bf0a3a764a229be3bf762bec3ed2a331910e82d524e7161f349b8dd"
+    },
+    "book_ticker:BTCUSDT": {
+      "url": "https://fapi.binance.com/fapi/v1/ticker/bookTicker?symbol=BTCUSDT",
+      "response_sha256": "f67b983ff53c4e8775d7b05e2445d44314ba522c127f913b74ee89a2085ae060"
+    },
+    "book_ticker:ETHUSDT": {
+      "url": "https://fapi.binance.com/fapi/v1/ticker/bookTicker?symbol=ETHUSDT",
+      "response_sha256": "3973f3c03fdd45870ab869f3df5e524b4a9146f81942814cbf03ebc8d55eef2f"
+    },
+    "book_ticker:SOLUSDT": {
+      "url": "https://fapi.binance.com/fapi/v1/ticker/bookTicker?symbol=SOLUSDT",
+      "response_sha256": "c5ddab2bb50c351466ce951cbec236f90d222b0365a2da03c6b6d6726c0addda"
+    },
+    "book_ticker:XRPUSDT": {
+      "url": "https://fapi.binance.com/fapi/v1/ticker/bookTicker?symbol=XRPUSDT",
+      "response_sha256": "e668263fb82c6e865d332b95ff6f210dbf7f6712a9e66963aa055871cef53afa"
+    }
+  },
+  "results": {
+    "BNBUSDT": {
+      "source_snapshot": {
+        "symbol": {
+          "symbol": "BNBUSDT",
+          "pair": "BNBUSDT",
+          "contractType": "PERPETUAL",
+          "deliveryDate": 4133404800000,
+          "onboardDate": 1581321600000,
+          "status": "TRADING",
+          "maintMarginPercent": "2.5000",
+          "requiredMarginPercent": "5.0000",
+          "baseAsset": "BNB",
+          "quoteAsset": "USDT",
+          "marginAsset": "USDT",
+          "pricePrecision": 3,
+          "quantityPrecision": 2,
+          "baseAssetPrecision": 8,
+          "quotePrecision": 8,
+          "underlyingType": "COIN",
+          "underlyingSubType": [
+            "Layer-1",
+            "Crypto"
+          ],
+          "triggerProtect": "0.0500",
+          "liquidationFee": "0.012500",
+          "marketTakeBound": "0.05",
+          "maxMoveOrderLimit": 10000,
+          "filters": [
+            {
+              "maxPrice": "100000",
+              "filterType": "PRICE_FILTER",
+              "minPrice": "6.600",
+              "tickSize": "0.010"
+            },
+            {
+              "maxQty": "100000",
+              "filterType": "LOT_SIZE",
+              "stepSize": "0.01",
+              "minQty": "0.01"
+            },
+            {
+              "stepSize": "0.01",
+              "minQty": "0.01",
+              "filterType": "MARKET_LOT_SIZE",
+              "maxQty": "2000"
+            },
+            {
+              "limit": 200,
+              "filterType": "MAX_NUM_ORDERS"
+            },
+            {
+              "notional": "5",
+              "filterType": "MIN_NOTIONAL"
+            },
+            {
+              "multiplierUp": "1.0500",
+              "filterType": "PERCENT_PRICE",
+              "multiplierDown": "0.9500",
+              "multiplierDecimal": "4"
+            },
+            {
+              "positionControlSide": "NONE",
+              "filterType": "POSITION_RISK_CONTROL"
+            }
+          ],
+          "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET"
+          ],
+          "timeInForce": [
+            "GTC",
+            "IOC",
+            "FOK",
+            "GTX",
+            "GTD"
+          ],
+          "permissionSets": [
+            "GRID",
+            "COPY",
+            "RPI",
+            "DCA",
+            "PSB"
+          ]
+        },
+        "book_ticker": {
+          "symbol": "BNBUSDT",
+          "bidPrice": "727.920",
+          "bidQty": "61.63",
+          "askPrice": "727.930",
+          "askQty": "4.86",
+          "time": 1792390145552,
+          "lastUpdateId": 11858978979235
+        }
+      },
+      "sizing": {
+        "schema_version": 1,
+        "kind": "BOUNDED_EXECUTABLE_NOTIONAL_DIAGNOSTIC",
+        "status": "RISK_CAP_VETO",
+        "promotion_eligible": false,
+        "live_order_authorization": "CLOSED",
+        "symbol": "BNBUSDT",
+        "desired_notional_usdt": "50",
+        "maximum_notional_usdt": "50",
+        "sides": {
+          "BUY": {
+            "filtered_price": "727.920",
+            "desired_quantity_rounded_up": "0.07",
+            "minimum_executable_quantity": "0.01",
+            "executable_quantity": "0.07",
+            "executable_notional_usdt": "50.95440",
+            "increment_over_desired_usdt": "0.95440",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          },
+          "SELL": {
+            "filtered_price": "727.930",
+            "desired_quantity_rounded_up": "0.07",
+            "minimum_executable_quantity": "0.01",
+            "executable_quantity": "0.07",
+            "executable_notional_usdt": "50.95510",
+            "increment_over_desired_usdt": "0.95510",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          }
+        },
+        "interpretation": "This is a sizing diagnostic only. A risk-cap veto must reject the trade; it must not be repaired by silently increasing the stake."
+      }
+    },
+    "BTCUSDT": {
+      "source_snapshot": {
+        "symbol": {
+          "symbol": "BTCUSDT",
+          "pair": "BTCUSDT",
+          "contractType": "PERPETUAL",
+          "deliveryDate": 4133404800000,
+          "onboardDate": 1567965300000,
+          "status": "TRADING",
+          "maintMarginPercent": "2.5000",
+          "requiredMarginPercent": "5.0000",
+          "baseAsset": "BTC",
+          "quoteAsset": "USDT",
+          "marginAsset": "USDT",
+          "pricePrecision": 2,
+          "quantityPrecision": 3,
+          "baseAssetPrecision": 8,
+          "quotePrecision": 8,
+          "underlyingType": "COIN",
+          "underlyingSubType": [
+            "PoW",
+            "Crypto"
+          ],
+          "triggerProtect": "0.0500",
+          "liquidationFee": "0.012500",
+          "marketTakeBound": "0.05",
+          "maxMoveOrderLimit": 10000,
+          "filters": [
+            {
+              "maxPrice": "4529764",
+              "tickSize": "0.10",
+              "filterType": "PRICE_FILTER",
+              "minPrice": "556.80"
+            },
+            {
+              "stepSize": "0.001",
+              "minQty": "0.001",
+              "maxQty": "1000",
+              "filterType": "LOT_SIZE"
+            },
+            {
+              "minQty": "0.001",
+              "maxQty": "120",
+              "filterType": "MARKET_LOT_SIZE",
+              "stepSize": "0.001"
+            },
+            {
+              "filterType": "MAX_NUM_ORDERS",
+              "limit": 200
+            },
+            {
+              "notional": "50",
+              "filterType": "MIN_NOTIONAL"
+            },
+            {
+              "multiplierDown": "0.9500",
+              "multiplierUp": "1.0500",
+              "multiplierDecimal": "4",
+              "filterType": "PERCENT_PRICE"
+            },
+            {
+              "filterType": "POSITION_RISK_CONTROL",
+              "positionControlSide": "NONE"
+            }
+          ],
+          "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET"
+          ],
+          "timeInForce": [
+            "GTC",
+            "IOC",
+            "FOK",
+            "GTX",
+            "GTD"
+          ],
+          "permissionSets": [
+            "GRID",
+            "COPY",
+            "DCA",
+            "PSB"
+          ]
+        },
+        "book_ticker": {
+          "symbol": "BTCUSDT",
+          "bidPrice": "82746.60",
+          "bidQty": "9.434",
+          "askPrice": "82746.70",
+          "askQty": "2.134",
+          "time": 1792390146162,
+          "lastUpdateId": 11858979039371
+        }
+      },
+      "sizing": {
+        "schema_version": 1,
+        "kind": "BOUNDED_EXECUTABLE_NOTIONAL_DIAGNOSTIC",
+        "status": "RISK_CAP_VETO",
+        "promotion_eligible": false,
+        "live_order_authorization": "CLOSED",
+        "symbol": "BTCUSDT",
+        "desired_notional_usdt": "50",
+        "maximum_notional_usdt": "50",
+        "sides": {
+          "BUY": {
+            "filtered_price": "82746.60",
+            "desired_quantity_rounded_up": "0.001",
+            "minimum_executable_quantity": "0.001",
+            "executable_quantity": "0.001",
+            "executable_notional_usdt": "82.74660",
+            "increment_over_desired_usdt": "32.74660",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          },
+          "SELL": {
+            "filtered_price": "82746.70",
+            "desired_quantity_rounded_up": "0.001",
+            "minimum_executable_quantity": "0.001",
+            "executable_quantity": "0.001",
+            "executable_notional_usdt": "82.74670",
+            "increment_over_desired_usdt": "32.74670",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          }
+        },
+        "interpretation": "This is a sizing diagnostic only. A risk-cap veto must reject the trade; it must not be repaired by silently increasing the stake."
+      }
+    },
+    "ETHUSDT": {
+      "source_snapshot": {
+        "symbol": {
+          "symbol": "ETHUSDT",
+          "pair": "ETHUSDT",
+          "contractType": "PERPETUAL",
+          "deliveryDate": 4133404800000,
+          "onboardDate": 1574840700000,
+          "status": "TRADING",
+          "maintMarginPercent": "2.5000",
+          "requiredMarginPercent": "5.0000",
+          "baseAsset": "ETH",
+          "quoteAsset": "USDT",
+          "marginAsset": "USDT",
+          "pricePrecision": 2,
+          "quantityPrecision": 3,
+          "baseAssetPrecision": 8,
+          "quotePrecision": 8,
+          "underlyingType": "COIN",
+          "underlyingSubType": [
+            "Layer-1",
+            "Crypto"
+          ],
+          "triggerProtect": "0.0500",
+          "liquidationFee": "0.012500",
+          "marketTakeBound": "0.05",
+          "maxMoveOrderLimit": 10000,
+          "filters": [
+            {
+              "minPrice": "39.86",
+              "filterType": "PRICE_FILTER",
+              "tickSize": "0.01",
+              "maxPrice": "306177"
+            },
+            {
+              "minQty": "0.001",
+              "maxQty": "10000",
+              "filterType": "LOT_SIZE",
+              "stepSize": "0.001"
+            },
+            {
+              "minQty": "0.001",
+              "stepSize": "0.001",
+              "maxQty": "2000",
+              "filterType": "MARKET_LOT_SIZE"
+            },
+            {
+              "limit": 200,
+              "filterType": "MAX_NUM_ORDERS"
+            },
+            {
+              "filterType": "MIN_NOTIONAL",
+              "notional": "20"
+            },
+            {
+              "filterType": "PERCENT_PRICE",
+              "multiplierDecimal": "4",
+              "multiplierUp": "1.0500",
+              "multiplierDown": "0.9500"
+            },
+            {
+              "positionControlSide": "NONE",
+              "filterType": "POSITION_RISK_CONTROL"
+            }
+          ],
+          "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET"
+          ],
+          "timeInForce": [
+            "GTC",
+            "IOC",
+            "FOK",
+            "GTX",
+            "GTD"
+          ],
+          "permissionSets": [
+            "GRID",
+            "COPY",
+            "DCA",
+            "PSB"
+          ]
+        },
+        "book_ticker": {
+          "symbol": "ETHUSDT",
+          "bidPrice": "2431.65",
+          "bidQty": "118.745",
+          "askPrice": "2431.66",
+          "askQty": "128.582",
+          "time": 1792390145997,
+          "lastUpdateId": 11858979015803
+        }
+      },
+      "sizing": {
+        "schema_version": 1,
+        "kind": "BOUNDED_EXECUTABLE_NOTIONAL_DIAGNOSTIC",
+        "status": "RISK_CAP_VETO",
+        "promotion_eligible": false,
+        "live_order_authorization": "CLOSED",
+        "symbol": "ETHUSDT",
+        "desired_notional_usdt": "50",
+        "maximum_notional_usdt": "50",
+        "sides": {
+          "BUY": {
+            "filtered_price": "2431.65",
+            "desired_quantity_rounded_up": "0.021",
+            "minimum_executable_quantity": "0.009",
+            "executable_quantity": "0.021",
+            "executable_notional_usdt": "51.06465",
+            "increment_over_desired_usdt": "1.06465",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          },
+          "SELL": {
+            "filtered_price": "2431.66",
+            "desired_quantity_rounded_up": "0.021",
+            "minimum_executable_quantity": "0.009",
+            "executable_quantity": "0.021",
+            "executable_notional_usdt": "51.06486",
+            "increment_over_desired_usdt": "1.06486",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          }
+        },
+        "interpretation": "This is a sizing diagnostic only. A risk-cap veto must reject the trade; it must not be repaired by silently increasing the stake."
+      }
+    },
+    "SOLUSDT": {
+      "source_snapshot": {
+        "symbol": {
+          "symbol": "SOLUSDT",
+          "pair": "SOLUSDT",
+          "contractType": "PERPETUAL",
+          "deliveryDate": 4133404800000,
+          "onboardDate": 1600066800000,
+          "status": "TRADING",
+          "maintMarginPercent": "2.5000",
+          "requiredMarginPercent": "5.0000",
+          "baseAsset": "SOL",
+          "quoteAsset": "USDT",
+          "marginAsset": "USDT",
+          "pricePrecision": 4,
+          "quantityPrecision": 2,
+          "baseAssetPrecision": 8,
+          "quotePrecision": 8,
+          "underlyingType": "COIN",
+          "underlyingSubType": [
+            "Layer-1",
+            "Crypto"
+          ],
+          "triggerProtect": "0.0500",
+          "liquidationFee": "0.015000",
+          "marketTakeBound": "0.05",
+          "maxMoveOrderLimit": 10000,
+          "filters": [
+            {
+              "filterType": "PRICE_FILTER",
+              "minPrice": "0.4200",
+              "tickSize": "0.0100",
+              "maxPrice": "6857"
+            },
+            {
+              "minQty": "0.01",
+              "filterType": "LOT_SIZE",
+              "stepSize": "0.01",
+              "maxQty": "1000000"
+            },
+            {
+              "maxQty": "80000",
+              "minQty": "0.01",
+              "filterType": "MARKET_LOT_SIZE",
+              "stepSize": "0.01"
+            },
+            {
+              "limit": 200,
+              "filterType": "MAX_NUM_ORDERS"
+            },
+            {
+              "filterType": "MIN_NOTIONAL",
+              "notional": "5"
+            },
+            {
+              "multiplierDecimal": "4",
+              "multiplierUp": "1.0500",
+              "multiplierDown": "0.9500",
+              "filterType": "PERCENT_PRICE"
+            },
+            {
+              "filterType": "POSITION_RISK_CONTROL",
+              "positionControlSide": "NONE"
+            }
+          ],
+          "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET"
+          ],
+          "timeInForce": [
+            "GTC",
+            "IOC",
+            "FOK",
+            "GTX",
+            "GTD"
+          ],
+          "permissionSets": [
+            "GRID",
+            "COPY",
+            "DCA",
+            "PSB"
+          ]
+        },
+        "book_ticker": {
+          "symbol": "SOLUSDT",
+          "bidPrice": "105.7200",
+          "bidQty": "2173.77",
+          "askPrice": "105.7300",
+          "askQty": "220.59",
+          "time": 1792390146405,
+          "lastUpdateId": 11858979064324
+        }
+      },
+      "sizing": {
+        "schema_version": 1,
+        "kind": "BOUNDED_EXECUTABLE_NOTIONAL_DIAGNOSTIC",
+        "status": "RISK_CAP_VETO",
+        "promotion_eligible": false,
+        "live_order_authorization": "CLOSED",
+        "symbol": "SOLUSDT",
+        "desired_notional_usdt": "50",
+        "maximum_notional_usdt": "50",
+        "sides": {
+          "BUY": {
+            "filtered_price": "105.7200",
+            "desired_quantity_rounded_up": "0.48",
+            "minimum_executable_quantity": "0.05",
+            "executable_quantity": "0.48",
+            "executable_notional_usdt": "50.745600",
+            "increment_over_desired_usdt": "0.745600",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          },
+          "SELL": {
+            "filtered_price": "105.7300",
+            "desired_quantity_rounded_up": "0.48",
+            "minimum_executable_quantity": "0.05",
+            "executable_quantity": "0.48",
+            "executable_notional_usdt": "50.750400",
+            "increment_over_desired_usdt": "0.750400",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          }
+        },
+        "interpretation": "This is a sizing diagnostic only. A risk-cap veto must reject the trade; it must not be repaired by silently increasing the stake."
+      }
+    },
+    "XRPUSDT": {
+      "source_snapshot": {
+        "symbol": {
+          "symbol": "XRPUSDT",
+          "pair": "XRPUSDT",
+          "contractType": "PERPETUAL",
+          "deliveryDate": 4133404800000,
+          "onboardDate": 1578298800000,
+          "status": "TRADING",
+          "maintMarginPercent": "2.5000",
+          "requiredMarginPercent": "5.0000",
+          "baseAsset": "XRP",
+          "quoteAsset": "USDT",
+          "marginAsset": "USDT",
+          "pricePrecision": 4,
+          "quantityPrecision": 1,
+          "baseAssetPrecision": 8,
+          "quotePrecision": 8,
+          "underlyingType": "COIN",
+          "underlyingSubType": [
+            "Payment",
+            "Crypto"
+          ],
+          "triggerProtect": "0.0500",
+          "liquidationFee": "0.012500",
+          "marketTakeBound": "0.05",
+          "maxMoveOrderLimit": 10000,
+          "filters": [
+            {
+              "filterType": "PRICE_FILTER",
+              "tickSize": "0.0001",
+              "maxPrice": "100000",
+              "minPrice": "0.0143"
+            },
+            {
+              "maxQty": "10000000",
+              "stepSize": "0.1",
+              "minQty": "0.1",
+              "filterType": "LOT_SIZE"
+            },
+            {
+              "minQty": "0.1",
+              "filterType": "MARKET_LOT_SIZE",
+              "stepSize": "0.1",
+              "maxQty": "2000000"
+            },
+            {
+              "filterType": "MAX_NUM_ORDERS",
+              "limit": 200
+            },
+            {
+              "filterType": "MIN_NOTIONAL",
+              "notional": "5"
+            },
+            {
+              "multiplierDecimal": "4",
+              "filterType": "PERCENT_PRICE",
+              "multiplierUp": "1.0500",
+              "multiplierDown": "0.9500"
+            },
+            {
+              "positionControlSide": "NONE",
+              "filterType": "POSITION_RISK_CONTROL"
+            }
+          ],
+          "orderTypes": [
+            "LIMIT",
+            "MARKET",
+            "STOP",
+            "STOP_MARKET",
+            "TAKE_PROFIT",
+            "TAKE_PROFIT_MARKET",
+            "TRAILING_STOP_MARKET"
+          ],
+          "timeInForce": [
+            "GTC",
+            "IOC",
+            "FOK",
+            "GTX",
+            "GTD"
+          ],
+          "permissionSets": [
+            "GRID",
+            "COPY",
+            "DCA",
+            "PSB"
+          ]
+        },
+        "book_ticker": {
+          "symbol": "XRPUSDT",
+          "bidPrice": "1.3125",
+          "bidQty": "44954.0",
+          "askPrice": "1.3126",
+          "askQty": "4929.8",
+          "time": 1792390146425,
+          "lastUpdateId": 11858979066382
+        }
+      },
+      "sizing": {
+        "schema_version": 1,
+        "kind": "BOUNDED_EXECUTABLE_NOTIONAL_DIAGNOSTIC",
+        "status": "RISK_CAP_VETO",
+        "promotion_eligible": false,
+        "live_order_authorization": "CLOSED",
+        "symbol": "XRPUSDT",
+        "desired_notional_usdt": "50",
+        "maximum_notional_usdt": "50",
+        "sides": {
+          "BUY": {
+            "filtered_price": "1.3125",
+            "desired_quantity_rounded_up": "38.1",
+            "minimum_executable_quantity": "3.9",
+            "executable_quantity": "38.1",
+            "executable_notional_usdt": "50.00625",
+            "increment_over_desired_usdt": "0.00625",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          },
+          "SELL": {
+            "filtered_price": "1.3126",
+            "desired_quantity_rounded_up": "38.1",
+            "minimum_executable_quantity": "3.9",
+            "executable_quantity": "38.1",
+            "executable_notional_usdt": "50.01006",
+            "increment_over_desired_usdt": "0.01006",
+            "fits_exchange_filters": true,
+            "fits_risk_cap": false,
+            "admitted": false
+          }
+        },
+        "interpretation": "This is a sizing diagnostic only. A risk-cap veto must reject the trade; it must not be repaired by silently increasing the stake."
+      }
+    }
+  },
+  "interpretation": "A PASS only establishes current order-size feasibility. It does not authorize live trading or replace strategy, risk, or execution gates."
+}

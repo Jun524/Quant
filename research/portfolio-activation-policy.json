@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "candidate": "BINANCE_USDTM_MULTI_STRATEGY_PORTFOLIO",
+  "status": "DEFERRED_NOT_OPENED",
+  "created_at_utc": "2026-10-12T03:45:00Z",
+  "purpose": "Forbid opening a combined portfolio sample until two independently validated alpha families exist, then require a separately preregistered twelve-month locked-forward portfolio study.",
+  "live_order_authorization": "CLOSED",
+  "activation_requirements": {
+    "minimum_independent_sleeves": 2,
+    "require_distinct_families": true,
+    "minimum_complete_locked_forward_months": 12,
+    "sleeve_evidence_contract": "Each candidate must carry an append-only result portfolio_activation_evidence object with sample_role=locked_forward, pre_registered=true, parameter_changes_after_start=0, and locked_validation_status=PASS.",
+    "portfolio_registration_must_precede_first_portfolio_observation": true,
+    "portfolio_sample_starts_at": "first UTC midnight strictly after the portfolio manifest and sleeve source receipts are sealed",
+    "portfolio_must_use": "the separately enforced portfolio-promotion policy for source-replayed accounting, execution, risk, and selection-bias evidence"
+  },
+  "prohibited": [
+    "constructing a portfolio from registry status alone",
+    "using same-family parameter variants to satisfy the two-sleeve requirement",
+    "backdating the portfolio manifest to include earlier sleeve returns",
+    "treating a portfolio preregistration as approval for live or test orders"
+  ]
+}

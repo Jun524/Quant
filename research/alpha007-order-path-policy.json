@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-11T05:47:18Z",
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "policy": "ALPHA007_ORDER_PATH_CONFORMANCE_V1",
+  "role": "post-terminal credential-free order-command conformance gate; it cannot prove profitability, exchange fills, or authorize live orders",
+  "activation_requires": {
+    "primary_terminal_receipt_valid": true,
+    "primary_shadow_status": "PASS",
+    "registry_status": "REVIEW",
+    "ten_bps_external_cost_stress": "PASS",
+    "partial_fill_veto": "PASS",
+    "fresh_exchange_filter_feasibility": "PASS"
+  },
+  "fixed_order_path": {
+    "account_position_mode": "ONE_WAY",
+    "position_side": "BOTH",
+    "signal_maximum_age_ms": 250,
+    "entry_notional_usdt": 50,
+    "entry_type": "LIMIT",
+    "entry_time_in_force": "GTX",
+    "entry_reduce_only": false,
+    "entry_quote": "buy at filtered best bid; sell at filtered best ask",
+    "entry_timeout_ms": 3000,
+    "partial_remainder_action": "cancel",
+    "exit_due_ms_after_decision": 60000,
+    "exit_type": "MARKET",
+    "exit_reduce_only": true,
+    "new_signal_while_cycle_active": "reject",
+    "exit_waits_for_entry_terminal_state": true,
+    "symbol_filters": "exchangeInfo PRICE_FILTER, LOT_SIZE, and minimum notional; precision fields are not substitutes",
+    "client_order_id_maximum_length": 36,
+    "network_submission": false
+  },
+  "future_campaign_gate": {
+    "separate_post_terminal_sample": true,
+    "minimum_complete_cycles_per_side": 30,
+    "minimum_partial_fill_cycles_per_side": 10,
+    "entry_commands_must_be_non_marketable_gtx": true,
+    "all_exit_commands_must_be_reduce_only": true,
+    "zero_overfill_or_position_flip": true,
+    "zero_unreconciled_residual_position": true,
+    "all_rejected_or_timed_out_entries_reconciled": true,
+    "fixed_50_usdt_notional_must_satisfy_fresh_exchange_filters": true,
+    "raw_event_log_and_command_log_sha256_required": true
+  },
+  "official_references": [
+    "https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order",
+    "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Exchange-Information"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "kind": "ALPHA015_RETURN_FREE_UNIVERSE_DIAGNOSTIC",
+  "status": "ACCUMULATING",
+  "universe_status": "ACCUMULATING",
+  "current_consecutive_universe_days": 4,
+  "required_consecutive_universe_days": 180,
+  "milestones": [
+    {
+      "days": 30,
+      "name": "COLLECTION_INTEGRITY_REVIEW",
+      "status": "PENDING",
+      "days_until_due": 26,
+      "review_scope": "Review sealed-chain continuity, fixed-window collection, and endpoint coverage.",
+      "promotion_capability": "DIAGNOSTIC_ONLY",
+      "return_data_authorized": false,
+      "experiment_registration_authorized": false,
+      "live_order_authorization": "CLOSED"
+    },
+    {
+      "days": 60,
+      "name": "UNIVERSE_STABILITY_REVIEW",
+      "status": "PENDING",
+      "days_until_due": 56,
+      "review_scope": "Review membership continuity and collection quality before committing further research time.",
+      "promotion_capability": "DIAGNOSTIC_ONLY",
+      "return_data_authorized": false,
+      "experiment_registration_authorized": false,
+      "live_order_authorization": "CLOSED"
+    },
+    {
+      "days": 90,
+      "name": "PRE_ACTIVATION_RESEARCH_REVIEW",
+      "status": "PENDING",
+      "days_until_due": 86,
+      "review_scope": "Decide whether the deferred candidate remains worth completing without inspecting returns.",
+      "promotion_capability": "DIAGNOSTIC_ONLY",
+      "return_data_authorized": false,
+      "experiment_registration_authorized": false,
+      "live_order_authorization": "CLOSED"
+    }
+  ],
+  "reviews_due": [],
+  "membership_summary": {
+    "source_scope": "SEALED_UNIVERSE_MEMBERSHIP_ONLY",
+    "return_or_price_data_accessed": false,
+    "days_analyzed": 4,
+    "daily_eligible_counts": [
+      {
+        "date": "2026-10-10",
+        "eligible_symbols": 41
+      },
+      {
+        "date": "2026-10-11",
+        "eligible_symbols": 32
+      },
+      {
+        "date": "2026-10-12",
+        "eligible_symbols": 33
+      },
+      {
+        "date": "2026-10-13",
+        "eligible_symbols": 41
+      }
+    ],
+    "minimum_eligible_symbols": 32,
+    "maximum_eligible_symbols": 41,
+    "median_eligible_symbols": 37.0,
+    "minimum_cross_section": 30,
+    "minimum_cross_section_met_every_day": true,
+    "membership_transitions": [
+      {
+        "from_date": "2026-10-10",
+        "to_date": "2026-10-11",
+        "shared_symbols": 24,
+        "entrants": 8,
+        "exits": 17,
+        "jaccard_similarity": 0.4897959183673469
+      },
+      {
+        "from_date": "2026-10-11",
+        "to_date": "2026-10-12",
+        "shared_symbols": 28,
+        "entrants": 5,
+        "exits": 4,
+        "jaccard_similarity": 0.7567567567567568
+      },
+      {
+        "from_date": "2026-10-12",
+        "to_date": "2026-10-13",
+        "shared_symbols": 30,
+        "entrants": 11,
+        "exits": 3,
+        "jaccard_similarity": 0.6818181818181818
+      }
+    ],
+    "minimum_jaccard_similarity": 0.4897959183673469,
+    "median_jaccard_similarity": 0.6818181818181818
+  },
+  "snapshot_parse_failures": [],
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "return_data_authorized": false,
+  "experiment_registration_authorized": false,
+  "live_order_authorization": "CLOSED",
+  "warning": "This report evaluates sealed universe membership only; it cannot establish alpha or authorize return-data access."
+}

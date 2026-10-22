@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "state": "TERMINAL_CAUSAL_AVAILABILITY_VETO",
+  "pid": null,
+  "heartbeat_at": "2026-10-19T06:00:14.129111+00:00",
+  "last_exit_code": 0,
+  "interval_seconds": 21600,
+  "reason": "Alpha #13 is terminal; scheduler start is refused."
+}

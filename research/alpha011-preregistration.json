@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-08T05:02:04Z",
+  "candidate": "ALPHA_011_QUARTER_HOUR_FLOW_CONTINUATION",
+  "status": "PREREGISTERED_FORWARD_COLLECTION",
+  "hypothesis_family": "clock_phase_order_flow",
+  "hypothesis": "The sign of BTCUSDT taker order imbalance in the first ten seconds after selected quarter-hour boundaries predicts the same direction of the next twelve-hour return strongly enough for a non-overlapping 1x futures position to retain positive expectancy after taker fees, actual funding, and modeled slippage.",
+  "research_basis": [
+    "Kim and Hansen (2026), The Quarter-Hour Effect: quarter-hour opening order imbalance predicts four-to-twelve-hour returns across six Binance perpetual contracts; sign-based results are qualitatively robust.",
+    "The paper explicitly states that its separate ten-second opening-return forecast is too small for a standalone taker strategy, so this experiment tests only the medium-horizon order-flow result.",
+    "Binance aggregate trades expose millisecond timestamp, price, quantity, and buyer-maker flag required to reconstruct normalized taker imbalance."
+  ],
+  "data": {
+    "source": "Binance public-data daily BTCUSDT USD-M aggTrades archives with publisher SHA-256 checksums plus the public USD-M /fapi/v1/fundingRate history endpoint sealed per complete UTC day",
+    "eligible_start": "2026-10-09T00:00:00Z, the first complete UTC day after immutable experiment registration",
+    "historical_reuse": "No observation received before eligible_start may affect a feature, threshold, trade, or verdict.",
+    "development": "first 60 complete eligible UTC days",
+    "locked_validation": "next 60 complete UTC days; must remain unopened unless every development gate passes",
+    "complete_day": "both scheduled twelve-hour holding paths have continuous aggregate-trade IDs across checksum-verified daily archives",
+    "orders_submitted": false,
+    "api_key": false
+  },
+  "pre_result_data_amendments": [
+    {
+      "recorded_at_utc": "2026-10-08T05:06:00Z",
+      "sample_state": "No Alpha #11 archive was downloaded, no eligible observation was loaded, and no feature, trade, or performance statistic was calculated.",
+      "reason": "The Alpha #7 collector intentionally seals and reconnects hourly chunks, which creates unavoidable inter-chunk trade-ID gaps and cannot satisfy Alpha #11's preregistered twelve-hour continuity rule.",
+      "replacement": "Use Binance official daily USD-M aggTrades archives and publisher CHECKSUM files beginning with the first complete UTC day after registration. Require exact archive checksum, schema, symbol, UTC-day containment, unique monotonically increasing aggregate-trade IDs, and no internal ID gaps.",
+      "unchanged": "Signal, direction, clock times, measurement window, holding period, stop, costs, development/validation split, and all gates are unchanged."
+    },
+    {
+      "recorded_at_utc": "2026-10-08T05:06:43Z",
+      "sample_state": "No Alpha #11 eligible archive existed or was downloaded and no feature, trade, or performance statistic was calculated.",
+      "reason": "Official daily archives preserve exchange timestamps but not the collector's local receive timestamps.",
+      "replacement": "After measuring [boundary, boundary + 10 seconds), wait a fixed one-second operational buffer and use the first aggregate trade at or after boundary + 11 seconds as the executable reference price.",
+      "unchanged": "Order-imbalance formula and direction, scheduled boundaries, twelve-hour horizon, stop, costs, samples, and gates are unchanged."
+    },
+    {
+      "recorded_at_utc": "2026-10-08T11:12:00Z",
+      "sample_state": "No Alpha #11 eligible archive existed or was downloaded and no eligible feature, trade, funding PnL, or performance statistic was calculated. A 2026-10-07 pre-eligibility funding response was inspected only as an infrastructure/schema probe.",
+      "reason": "The pre-existing Freqtrade funding feather stopped at 2026-09-16, was not updated by the Alpha #11 acquisition supervisor, and was not cryptographically bound to the forward sample.",
+      "replacement": "For every complete eligible UTC day, query Binance's public USD-M /fapi/v1/fundingRate endpoint with fixed inclusive startTime and endTime and limit 1000; validate BTCUSDT, timestamp containment/order, finite rates, positive mark prices, and Regular/Special type; canonicalize and immutably seal the response and SHA-256 in the same acquisition manifest. Sum distinct Regular and Special rows at an identical fundingTime because both are actual charges at that event. Reconcile against publisher-checksummed monthly fundingRate archives when each month becomes available.",
+      "unchanged": "Signal, direction, clock times, measurement window, holding period, stop, fee/slippage assumptions, actual-funding accounting, development/validation split, and all gates are unchanged."
+    },
+    {
+      "recorded_at_utc": "2026-10-08T11:13:00Z",
+      "sample_state": "No Alpha #11 eligible archive existed or was downloaded and no eligible feature, trade, funding PnL, or performance statistic was calculated.",
+      "reason": "A code audit found that applying a bare funding rate ignores the mark-notional basis of the actual perpetual-futures funding transfer.",
+      "replacement": "For a fixed 1x base-quantity position, calculate each funding event return as -direction * fundingRate * markPrice / executedEntryPrice. Apply every distinct Regular and Special row; rows sharing fundingTime therefore contribute additively using their own sealed markPrice.",
+      "unchanged": "This implements the already preregistered actual-funding requirement; signal, direction, clock times, holding period, stop, trading costs, samples, and gates are unchanged."
+    },
+    {
+      "recorded_at_utc": "2026-10-08T11:14:00Z",
+      "sample_state": "No Alpha #11 eligible archive existed or was downloaded and no eligible feature, trade, funding PnL, or performance statistic was calculated.",
+      "reason": "Aggregate-trade and funding timestamps cannot establish ordering inside the same millisecond when a stop or entry shares a fundingTime.",
+      "replacement": "At an entry/exit timestamp tie, include an adverse funding charge but exclude an ambiguous funding credit. Strictly interior funding events are always applied.",
+      "unchanged": "Signal, holding period, stop level, fees, slippage, non-tied funding accounting, samples, and gates are unchanged."
+    }
+  ],
+  "fixed_signal": {
+    "instrument": "BTCUSDT USD-M perpetual only",
+    "decision_boundaries_utc": ["00:15:00", "12:15:00"],
+    "measurement_window": "exchange timestamps in [boundary, boundary + 10 seconds)",
+    "availability_rule": "the ten-second window is complete at boundary + 10 seconds; a fixed one-second operational buffer is then imposed",
+    "order_imbalance": "sum(quantity * direction) / sum(quantity), with direction +1 when isBuyerMaker is false and -1 when true",
+    "direction": "imbalance > 0 enters long; imbalance < 0 enters short; exactly zero or no trades emits no signal",
+    "entry": "first aggregate trade with exchange timestamp at or after boundary + 11 seconds, with adverse modeled slippage",
+    "holding_hours": 12,
+    "protective_stop_pct": 0.04,
+    "maximum_concurrent_positions": 1,
+    "leverage": 1
+  },
+  "cost_model": {
+    "base_taker_fee_per_side_bps": 5,
+    "base_slippage_per_side_bps": 2,
+    "double_fee_taker_fee_per_side_bps": 10,
+    "slippage_stress_per_side_bps": 5,
+    "funding": "actual Binance funding events while the position is open",
+    "funding_timestamp_tie_rule": "when exchange timestamps cannot order an entry/exit and a funding event within the same millisecond, include the event only when it is adverse to the position and exclude an ambiguous credit",
+    "stop_gap_rule": "if the first executable price after a gap is beyond the stop, exit at that worse price; otherwise exit at the stop; exit fee and slippage still apply"
+  },
+  "development_gate": {
+    "complete_utc_days_minimum": 60,
+    "natural_closed_trades_minimum": 100,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.15,
+    "double_fee_net_positive": true,
+    "five_bps_per_side_slippage_net_positive": true,
+    "maximum_drawdown_maximum": 0.20,
+    "top_three_winner_profit_concentration_maximum": 0.50,
+    "long_expectancy_positive": true,
+    "short_expectancy_positive": true,
+    "eight_day_block_bootstrap_probability_of_loss_maximum": 0.10
+  },
+  "locked_validation_gate": {
+    "complete_utc_days_minimum": 60,
+    "natural_closed_trades_minimum": 100,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.20,
+    "double_fee_net_positive": true,
+    "five_bps_per_side_slippage_net_positive": true,
+    "maximum_drawdown_maximum": 0.20,
+    "top_three_winner_profit_concentration_maximum": 0.35,
+    "long_expectancy_positive": true,
+    "short_expectancy_positive": true,
+    "eight_day_block_bootstrap_probability_of_loss_maximum": 0.05
+  },
+  "prohibited": [
+    "using pre-registration observations for warmup, selection, or performance",
+    "changing boundary times, ten-second window, holding horizon, stop, direction mapping, costs, or gates after observing results",
+    "treating overlapping quarter-hour regression observations from the paper as executable independent trades",
+    "opening locked validation when any development gate fails",
+    "using archives with manifest, publisher-checksum, schema, UTC-day, or aggregate-trade-ID continuity failure",
+    "submitting live or test orders during this experiment"
+  ]
+}

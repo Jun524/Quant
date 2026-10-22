@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "status": "ACQUISITION_COMPLETE",
+  "source_catalog_sha256": "f77cedd9ca675f9db5abf05b731f5a60a72317b62b5f2457763254533d6dedc0",
+  "calendar": {
+    "start": "2024-01-01",
+    "end_exclusive": "2024-08-01",
+    "months": [
+      "2024-01-01",
+      "2024-02-01",
+      "2024-03-01",
+      "2024-04-01",
+      "2024-05-01",
+      "2024-06-01",
+      "2024-07-01"
+    ]
+  },
+  "expected_archives": 6335,
+  "verified_present_archives": 1949,
+  "verified_not_found_archives": 4386,
+  "resolved_archives": 6335,
+  "remaining_archives": 0,
+  "batch": {
+    "task_offset": 0,
+    "archive_limit": 0,
+    "resume": false,
+    "workers": 1,
+    "downloaded": 0,
+    "not_found": 0,
+    "verified_cached": 0
+  },
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED",
+  "membership_output": "research/historical_universe/daily-membership-2024H1.json",
+  "membership_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+}

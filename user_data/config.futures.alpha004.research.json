@@ -1,0 +1,4 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "timeframe": "1h"
+}

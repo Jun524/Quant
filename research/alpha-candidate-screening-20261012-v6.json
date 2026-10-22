@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-12T14:52:00Z",
+  "purpose": "Adversarial literature re-screen after the capital-preservation objective: identify an independent Binance USDT-M-futures hypothesis only if its decision-time inputs and post-cost execution can be reproduced without reopening a failed family.",
+  "search_record": {
+    "workstreams": 4,
+    "sources_reviewed": 70,
+    "project_return_data_inspected_during_screening": false,
+    "hard_filters": [
+      "independent of a sealed failed alpha family",
+      "executable as a Binance USDT-M futures sleeve without an unmodelled spot hedge or cross-venue latency assumption",
+      "decision-time inputs have a defensible availability timestamp",
+      "a fixed signed rule, cost model, and execution path can be preregistered",
+      "historical data do not substitute an unavailable point-in-time order book or contract universe"
+    ]
+  },
+  "candidates": [
+    {
+      "name": "BINANCE_L2_ORDER_FLOW_MODEL",
+      "decision": "RETAIN_EXISTING_ALPHA007_FORWARD_ONLY",
+      "reason": "A 2026 Binance-perpetual L2 study reports predictive order-flow, spread, and depth features under both maker and conservative taker simulations. Its feature set and sub-second order-book requirement are not available in the project's historical candle archive, and model/threshold selection would be a new multiple-trial programme. The admissible response is to continue Alpha 007's preregistered append-only forward L2 capture and maker-fill audit, not to open an archival directional backtest or alter Alpha 007 thresholds.",
+      "source": "https://arxiv.org/pdf/2602.00776",
+      "quality": "Primary preprint with Binance Futures L2/trade data and adverse-selection discussion; useful as mechanism evidence, but not a sealed deployable rule."
+    },
+    {
+      "name": "CROSS_VENUE_PRICE_DISCOVERY_SIGNAL",
+      "decision": "REJECT_SCOPE_AND_LATENCY_DEPENDENCE",
+      "reason": "Cross-venue price discovery is an empirical market-structure finding rather than a fixed Binance-only rule. A deployable version would require source-venue data, synchronized receive timestamps, transport-delay modelling, venue outage handling, and contemporaneous depth at both venues. Those conditions are not present in the historical archive and would create a new external-data/execution programme rather than an independent historical Binance USDT-M diagnostic.",
+      "source": "https://personal.lse.ac.uk/makarov1/published-papers/price-discovery-in-crypto-markets.pdf",
+      "quality": "Seminal primary academic evidence on fragmented crypto price discovery; it does not establish an executable current Binance-perpetual lead-lag alpha."
+    },
+    {
+      "name": "OPEN_INTEREST_OR_LIQUIDATION_DIRECTIONAL_SIGNAL",
+      "decision": "REJECT_UNVERIFIED_AVAILABILITY_AND_DATA_QUALITY",
+      "reason": "Tick-level research documents implausible and delayed perpetual-swap open-interest reporting at major venues. The project's historical policy already classifies historical open interest as unavailable for a decision feature without an independent publication/receive-time and revision audit. Liquidation or OI observations remain descriptive forward risk telemetry only, not an archival entry signal.",
+      "source": "https://arxiv.org/html/2310.14973",
+      "quality": "Primary tick-level data-quality study; directly supports the exclusion rather than a return claim."
+    },
+    {
+      "name": "ARCHIVAL_FORMULAIC_FACTOR_SEARCH",
+      "decision": "REJECT_FACTOR_MINING_AND_RETAIN_AUDIT_POLICY",
+      "reason": "A 2026 point-in-time audit of public BTC perpetual archives found that a large fixed template search produced no positive net-Sharpe result across its primary post-cost holdout grid. Its positive contribution is the three-timestamp, no-backfill audit discipline, which is consistent with this project's historical policy; it is not evidence to begin another broad parameter or formula search aimed at the monthly target.",
+      "source": "https://arxiv.org/pdf/2608.25348.pdf",
+      "quality": "Primary preprint with explicit archive, availability, null-control, and cost-stress methodology; its negative result is informative but not a profitability forecast."
+    },
+    {
+      "name": "QUARTER_HOUR_INTRADAY_FUTURES_EFFECT",
+      "decision": "RETAIN_EXISTING_ALPHA011_ONLY",
+      "reason": "The literature maps directly to the separately preregistered Alpha 011 forward study. Opening a second historical or modified timing trial would duplicate a currently accumulating candidate and breach the frozen trial inventory.",
+      "source": "https://arxiv.org/pdf/2607.09426",
+      "quality": "Primary preprint with a named periodic-futures mechanism; already represented by Alpha 011 rather than a new family."
+    }
+  ],
+  "selected_next_step": "NO_ALPHA016_OPENED; continue Alpha 007 forward L2/maker evidence, Alpha 011 and Alpha 013 sealed forward collection, Alpha 015 point-in-time universe collection, and the historical cost/funding diagnostics without retuning failed strategies.",
+  "result": "No source passed every independence, causal availability, Binance-USDT-M-only execution, and reproducible-cost requirement for a new archival return-data experiment. The safe improvement is to make forward data quality and execution evidence stronger, not to raise leverage, turnover, or adverse averaging to pursue the aspirational monthly target.",
+  "live_order_authorization": "CLOSED"
+}

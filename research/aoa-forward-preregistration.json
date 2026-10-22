@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-06T04:36:28Z",
+  "policy": "AoaDistilledPolicyPrototype",
+  "status_before_open": "LOCKED_UNSEEN",
+  "purpose": "Interim forward observation only; cannot promote the strategy.",
+  "locked_timerange": "20260901-20260916",
+  "end_is_exclusive": true,
+  "frozen_artifacts": {
+    "user_data/strategies/AoaDistilledPolicyPrototype.py": "sha256:9efc916ac123225553525841389a09905c46fa47a23c711785a818720639fa47",
+    "research/aoa-behavior-model-spec.json": "sha256:925f39921defb1862dc7c9c9e91958e21f6b3ac6ec0fa273643c1c18a64fb3ff",
+    "user_data/config.futures.aoa-distilled.research.json": "sha256:cff40d58f36722a2fc68b4aa51b24323fa47274e0f218ec893089c45557f1c11"
+  },
+  "cost_scenarios": {
+    "primary_all_taker_fee_per_fill": 0.0005,
+    "secondary_historical_maker_mix_fee_per_fill": 0.00028,
+    "secondary_is_not_a_fill_claim": true
+  },
+  "interim_metrics": [
+    "organic_trade_count",
+    "gross_price_pnl",
+    "trading_fees",
+    "funding_pnl",
+    "net_pnl",
+    "long_short_pnl",
+    "exit_reason_distribution"
+  ],
+  "decision_rule": {
+    "pass_allowed": false,
+    "default_status": "ACCUMULATING",
+    "fail_fast_conditions": [
+      "lookahead_or_recursive_bias",
+      "data_integrity_failure",
+      "unexpected_live_order_submission"
+    ],
+    "promotion_sample": {
+      "minimum_organic_trades": 100,
+      "minimum_calendar_months": 12,
+      "minimum_profit_factor": 1.2,
+      "net_after_cost_positive": true,
+      "double_cost_stress_positive": true
+    }
+  },
+  "prohibited_after_open": [
+    "changing model coefficients or thresholds using this interval",
+    "removing a losing direction or regime using this interval",
+    "changing stop or maximum holding time using this interval",
+    "calling this short interval final OOS"
+  ]
+}

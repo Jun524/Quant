@@ -1,0 +1,47 @@
+{
+  "candidate": "ALPHA_008_TIME_SERIES_MOMENTUM",
+  "status": "FAIL_DEVELOPMENT",
+  "timerange": "20220101-20250101",
+  "result_file": "user_data/backtest_results/backtest-result-2026-10-06_11-15-06.zip",
+  "organic": {
+    "trades": 110,
+    "wins": 46,
+    "losses": 64,
+    "net_profit_usdt": -65.48757874,
+    "net_return": -0.06548757874,
+    "profit_factor": 0.9350425601,
+    "expectancy_usdt": -0.5953416249
+  },
+  "risk": {
+    "closed_trade_maximum_drawdown": 0.2797100713,
+    "maximum_leverage": 1.0,
+    "maximum_leverage_adjusted_mae": 0.2529036107,
+    "liquidation_exits": 0,
+    "stop_loss_exits": 46
+  },
+  "pnl_components": {
+    "price_pnl_estimate": -18.6767471154,
+    "trading_fees": -13.5125337504,
+    "funding_pnl": -33.2982978741,
+    "net_pnl": -65.48757874
+  },
+  "direction": {
+    "long": {"trades": 60, "price_pnl_estimate": 138.1036252795, "funding_pnl": -39.2403248188, "net_pnl": 90.80871391},
+    "short": {"trades": 50, "price_pnl_estimate": -156.7803723949, "funding_pnl": 5.9420269447, "net_pnl": -156.29629265}
+  },
+  "monthly_closed_trade_diagnostic": {
+    "complete_months": 36,
+    "geometric_monthly_return": -0.0018796302,
+    "positive_month_ratio": 0.3611111111,
+    "best_month": 0.1334271686,
+    "worst_month": -0.1208024326
+  },
+  "development_gate": {
+    "sample_100_trades": true,
+    "net_return_positive": false,
+    "profit_factor_at_least_1_10": false,
+    "price_pnl_positive": false,
+    "maximum_drawdown_at_most_0_20": false
+  },
+  "decision": "Seal unchanged; do not open the 2025-2026 locked interval and do not rescue the observed long side by deleting shorts."
+}

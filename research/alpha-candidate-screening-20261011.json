@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-11T12:10:00Z",
+  "purpose": "Re-screen candidate families while Alpha 015's point-in-time universe is accumulating, without inspecting any project return data or opening Experiment 0016.",
+  "search_record": {
+    "skill": "Exa Search",
+    "workstreams": 3,
+    "sources_reviewed": 36,
+    "topics": [
+      "perpetual-futures open-interest and funding predictors",
+      "executable order-flow and liquidity signals",
+      "options-implied information and perpetual futures"
+    ],
+    "source_priority": "original academic papers and publisher-hosted research",
+    "project_return_data_inspected_during_screening": false
+  },
+  "candidates": [
+    {
+      "name": "OPEN_INTEREST_STATE_OR_LIQUIDATION_ALPHA",
+      "decision": "REJECT_AS_PRIMARY_ALPHA_INPUT",
+      "reason": "A tick-level multi-exchange study finds systematic reconciliation failures between reported perpetual-swap open interest and traded volume, including Binance. Public OI can remain a data-quality diagnostic only; it is not accepted as a return-prediction feature until an independent, source-bound consistency protocol passes.",
+      "source": "https://arxiv.org/html/2310.14973",
+      "retain": "Use OI discrepancies to veto or downgrade risk telemetry, never to create a directional trade signal."
+    },
+    {
+      "name": "COPULA_COINTEGRATION_PAIRS_USDTM",
+      "decision": "REJECT_COST_DOMINATED",
+      "reason": "A 2026 peer-reviewed Binance USDT perpetual study on ten contracts reports that its market-neutral copula pairs strategies are negative after its baseline costs and funding. Testing parameter variants after Alpha 002's mean-reversion failure would be overlapping post-hoc optimization, not an independent alpha.",
+      "source": "https://www.aimspress.com/aimspress-data/qfe/2026/2/PDF/QFE-10-02-016.pdf",
+      "retain": "The paper is retained as a cost-stress benchmark and failure reference only."
+    },
+    {
+      "name": "PERPETUAL_SPOT_FUNDAMENTAL_VALUE_ARBITRAGE",
+      "decision": "REJECT_FOR_USDTM_ONLY_SCOPE",
+      "reason": "The theoretical and empirical perpetual-futures framework requires a spot-plus-perpetual random-maturity arbitrage book. That is a different capital, venue, custody, and liquidation-risk system from the requested Binance USDT-M futures-only portfolio, and the apparent arbitrage is explicitly not riskless under margin and transaction costs.",
+      "source": "https://arxiv.org/html/2212.06888v6",
+      "retain": "Its warning that random-maturity arbitrage can liquidate before convergence is incorporated as a portfolio risk principle, not an alpha claim."
+    }
+  ],
+  "selected_next_step": "KEEP_ALPHA_015_POINT_IN_TIME_UNIVERSE_PROTOCOL_UNCHANGED",
+  "experiment_0016_open": false,
+  "selection_rationale": "No reviewed family clears independence, source integrity, execution feasibility, and cost-aware evidence thresholds. Alpha 015 remains the only preregistration-ready candidate once its 180-day universe condition is met.",
+  "guard": "This screening is not return evidence, does not authorize data acquisition, and does not alter live-order authorization."
+}

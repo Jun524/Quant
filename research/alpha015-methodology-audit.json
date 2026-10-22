@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "audited_at_utc": "2026-10-11T10:22:41Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "search_record": {
+    "workstreams": 6,
+    "sources_reviewed": 60,
+    "primary_sources_prioritized": true
+  },
+  "final_version_search": {
+    "checked_at_utc": "2026-10-11T05:57:14Z",
+    "publisher_article": "https://www.sciencedirect.com/science/article/pii/S0165188924000551",
+    "publisher_access": "The indexed publisher text exposes substantial article content but direct publisher PDF access remains restricted.",
+    "author_repository": "https://ink.library.smu.edu.sg/lkcsb_research/6901/",
+    "author_repository_label": "publishedVersion, but repository metadata still identifies it as a 2021 working paper and the PDF endpoint returned HTTP 403 to automated retrieval",
+    "accepted_manuscript_repository": "https://research-information.bris.ac.uk/en/publications/cross-cryptocurrency-return-predictability/",
+    "accepted_manuscript_file": "https://research-information.bris.ac.uk/ws/files/416503708/CryptoCrossPredictability.pdf",
+    "accepted_manuscript_status": "The University of Bristol OAI-PMH record exposed the CC BY accepted manuscript through /ws/files. The 90-page PDF is archived locally and bound by SHA-256 da4c8573eecf41bb027474d0b0b95b0e7713f4d957fdd1c49b2cdf8eeaba6686.",
+    "publisher_indexed_methodology_conflict": "The source uses equal-weight quintiles, a 720-minute rolling window, and 10-minute futures rebalancing as its primary practical case. The superseded draft used deciles and 13 minutes.",
+    "decision": "Resolve the source-archive requirement and apply one pre-data amendment: quintiles and 10-minute rebalancing. Retain the independent chronological-MSE lambda rule and current measured cost floor because the source does not make lambda selection reproducible and its historical 4-bp cost is not current execution evidence."
+  },
+  "primary_evidence": [
+    {
+      "citation": "Guo, Sang, Tu and Wang (2024), Cross-cryptocurrency return predictability, Journal of Economic Dynamics and Control 163, 104863",
+      "url": "https://doi.org/10.1016/j.jedc.2024.104863",
+      "implementation_evidence": [
+        "one-minute-ahead per-coin forecasts",
+        "720-minute rolling estimation window",
+        "adaptive LASSO using lagged standardized returns of the cross-section, including own lag",
+        "equal-weight top-minus-bottom quintile portfolios in the final publisher text",
+        "a half-day training window and a 10-minute futures rebalance example in the final publisher text",
+        "reported VIP0 taker net mean of 0.15 basis points per minute under the paper's fee assumptions"
+      ],
+      "limitations": [
+        "the original top-30 set was selected at a project start date rather than reconstructed daily point in time",
+        "the accepted manuscript states a futures sample beginning 29 July 2020 but that historical venue/sample statement is not treated as current replication evidence",
+        "the manuscript does not fully specify whether standardization parameters roll strictly inside each training window",
+        "penalty selection, realized turnover accounting, execution-price timing, slippage, latency, and market impact are not sufficiently explicit for a faithful live-grade replication"
+      ]
+    },
+    {
+      "citation": "Jia, Wu, Yan and Liu (2023), A seesaw effect in the cryptocurrency market, Journal of Empirical Finance 74, 101428",
+      "url": "https://doi.org/10.1016/j.jempfin.2023.101428",
+      "implementation_evidence": [
+        "LASSO-based intraday cross-cryptocurrency prediction across 22 major coins and multiple exchanges",
+        "reported profitability after the paper's realistic-cost assumptions"
+      ],
+      "conflict": "This paper reports a negative large-coin-to-other-coin lead-lag effect, whereas Guo et al. emphasize positive information spillover. The sign must therefore be learned only inside each rolling training window and never hard-coded from either paper."
+    },
+    {
+      "citation": "Price Transmission from Bitcoin to Altcoins: High-Frequency Evidence and Implications for Trading Strategy (2026)",
+      "url": "https://link.springer.com/article/10.1007/s10690-026-09589-z",
+      "conflict": "Multi-minute BTC leadership is reported mainly for illiquid small caps; large and medium caps respond almost simultaneously. A modern liquid-universe replication may therefore find much less exploitable delay."
+    }
+  ],
+  "mandatory_resolution_before_preregistration": [
+    "obtain and archive the final published methodology or author supplement",
+    "freeze a single penalty-selection rule without using strategy PnL",
+    "freeze rolling-only standardization and prove future-row invariance",
+    "freeze one source-aligned rebalance and holding convention before project return acquisition",
+    "charge costs from realized portfolio turnover at current measured fee, spread, slippage, latency, and market-impact floors",
+    "use prior-day sealed universe membership with at least 30 eligible instruments",
+    "bind every minute archive and aggTrades archive to publisher checksums",
+    "preserve the final 60 universe days as locked validation"
+  ],
+  "resolution_status": {
+    "final_published_methodology_or_author_supplement_archived": true,
+    "penalty_selection_rule_frozen_without_pnl": true,
+    "rolling_only_standardization_implemented": true,
+    "future_row_invariance_tested": true,
+    "ten_minute_holding_semantics_resolved": true,
+    "utc_phase_boundary_cannot_leak_next_day": true,
+    "realized_turnover_cost_accounting_implemented": true,
+    "current_execution_floor_frozen": true,
+    "prior_day_membership_and_minimum_thirty_policy_present": true,
+    "publisher_checksum_downloader_implemented": true,
+    "locked_validation_loader_separation_implemented": true,
+    "prior_day_calendar_bound_to_sealed_manifests": true,
+    "exact_archive_inventory_implemented": true,
+    "daily_funding_source_sealing_implemented": true,
+    "signed_funding_pnl_accounting_implemented": true,
+    "monthly_publisher_funding_reconciliation_implemented": true,
+    "direct_boundary_rebalance_turnover_implemented": true,
+    "closed_kline_timestamp_contract_implemented": true,
+    "aggregate_trade_boundary_reference_implemented": true
+    ,
+    "authorized_streaming_acquisition_implemented": true,
+    "development_statistical_gate_frozen": true,
+    "minute_mark_to_market_risk_path_implemented": true,
+    "source_bound_daily_replay_implemented": true,
+    "locked_validation_unlock_authorization_implemented": true
+  },
+  "causal_kernel": {
+    "path": "quant/research/cross_crypto_predictor.py",
+    "sha256": "25dc8bca77e8450c8225a27f58855e1838dee5617441e49934e55a40f886a865",
+    "return_data_used": false
+  },
+  "data_guard": {
+    "path": "quant/research/alpha015_data_guard.py",
+    "sha256": "c5563423a6cf1153cdbc10e682382bb3ca4c14a736a13b3030b27e40996d6ef8",
+    "capabilities": [
+      "download publisher CHECKSUM before archive bytes",
+      "bind checksum to the exact expected archive filename",
+      "verify SHA-256 and the single expected CSV member before atomic sealing",
+      "expose only the first 120 calendar days to development callers",
+      "deny the final 60 calendar days without an explicit receipt bound to the calendar, preregistration, and development report",
+      "reverify archive path containment, filename, publisher checksum, ZIP member, and manifest digest immediately before exposing a file",
+      "require an exact 1440-row UTC one-minute OHLCV grid and reject invalid prices or gaps",
+      "require UTC-bounded monotonic aggTrades with continuous aggregate-trade IDs"
+      ,
+      "allow exactly one prior-day kline archive for the first 720-minute causal window while keeping aggTrades and evaluation PnL inside authorized days",
+      "map only CCXT BASE/USDT:USDT symbols to exact Binance BASEUSDT publisher archive names",
+      "derive an exact dataset-symbol-day inventory from every immutable prior-day activation binding and reject duplicate, missing, or extra files",
+      "replay aggregate-trade ID continuity across every adjacent included UTC-day seam",
+      "seal canonical public funding-history responses separately for each authorized evaluation symbol-day",
+      "reconcile daily funding timestamps and rates to Binance monthly fundingRate archives bound to publisher CHECKSUMs before a final verdict",
+      "verify a streamed temporary archive from disk against its publisher checksum before atomically sealing it, without loading full aggTrades archives into memory",
+      "stream rows only from a reverified sealed archive and reload canonical funding events only after digest and path replay"
+    ],
+    "real_return_archives_downloaded": false
+  },
+  "activation_policy": {
+    "path": "research/alpha015-activation-policy.json",
+    "sha256": "c323181b2a486851cd510eb9bfa49edbfe2bb33f7cf5947a639ab9a13b3af3cc",
+    "amendments": [
+      {
+        "path": "research/alpha015-activation-amendment-001.json",
+        "sha256": "f4966539a5a80c063a24f252d202d201af9456b37a61f5e79565374048383690"
+      },
+      {
+        "path": "research/alpha015-methodology-amendment-002.json",
+        "sha256": "465c5d6c0738a0e1a1fcffc5aad8eec105e98df477abbc969c15617b757041bd"
+      },
+      {
+        "path": "research/alpha015-methodology-amendment-003.json",
+        "sha256": "0bee09e37958b9e584e2eaccd188c210f1c92d65efecf610f6834af418c56dff"
+      },
+      {
+        "path": "research/alpha015-data-amendment-004.json",
+        "sha256": "586afd0981a17cb1224919cf69b46a3660229ba03b37de68e6bc324e33bae3c7"
+      },
+      {
+        "path": "research/alpha015-funding-amendment-005.json",
+        "sha256": "be5ce944d1d3cae4a5918c251312c8be4003781f6605cefe29639a25fa3e5724"
+      },
+      {
+        "path": "research/alpha015-rebalance-amendment-006.json",
+        "sha256": "9a07bc6ebf2f5bf0180cb070558bfa99d8d784b00edc5e8f9d817c3344c021b5"
+      },
+      {
+        "path": "research/alpha015-timestamp-amendment-007.json",
+        "sha256": "91c211ed28fe1f03666687749b014e265f3eefdbdfee21f309269e3da0aa766b"
+      },
+      {
+        "path": "research/alpha015-acquisition-amendment-008.json",
+        "sha256": "6384506cf214fae1514f21a81d00d77ea4ce70a519ffcb22071a653f709b9f9f"
+      },
+      {
+        "path": "research/alpha015-selection-amendment-009.json",
+        "sha256": "9416d833242746ff470dccfd397da058e222caf438130b2aa4add93a8cd1be53"
+      },
+      {
+        "path": "research/alpha015-risk-amendment-010.json",
+        "sha256": "3aa3db494c5879045b719feb2dc9efb8dc828b57812205b982ce420e488fc634"
+      },
+      {
+        "path": "research/alpha015-contract-amendment-011.json",
+        "sha256": "f946de59a2566f1ae9177cc122b9aa7d0cf9416de7b81da76e39d9fd19ac5a5f"
+      }
+    ]
+  },
+  "activation_lock": {
+    "purpose": "Bind each of 180 evaluation days to its exact prior-day sealed universe before any return archive is acquired.",
+    "artifact_scope": "Only sources that define the activation contract belong here. Operational health reporters are deliberately excluded so their monitoring-only changes cannot alter a candidate methodology or block preregistration.",
+    "artifacts": [
+      {
+        "path": "quant/research/alpha015_activation_lock.py",
+        "sha256": "c508c65c3d7aabef7a5c160654eb64c19c275229be5ba4bf6c1e07308ecaf878"
+      },
+      {
+        "path": "scripts/alpha015_activation_lock.py",
+        "sha256": "ae583f31f75393ad0b2c649327820436b95246432da972d19d480445b93691b8"
+      },
+      {
+        "path": "quant/research/candidate_activation.py",
+        "sha256": "28c21089dabe7737c6deb403f7010cee03ae01e1f366dfc7451f32d46a571cee"
+      },
+      {
+        "path": "scripts/alpha015_readiness.py",
+        "sha256": "d0eea87f834408e6bf28014cacfa6151eb03e39090ccacf47e657f2cb935ac97"
+      }
+    ],
+    "return_data_used": false
+  },
+  "primary_source": {
+    "status": "ARCHIVED_AND_HASHED",
+    "artifacts": [
+      {
+        "path": "research/papers/alpha015-primary-source-manifest.json",
+        "sha256": "316d934409fe6cc04c87f943b9097579a4ea89655df46868a8a2c8798d8fb606"
+      },
+      {
+        "path": "research/papers/guo-sang-tu-wang-2024-cross-cryptocurrency-return-predictability-aam.pdf",
+        "sha256": "da4c8573eecf41bb027474d0b0b95b0e7713f4d957fdd1c49b2cdf8eeaba6686"
+      }
+    ]
+  },
+  "preregistration_pipeline": {
+    "status": "LOCKED_TEMPLATE_WAITING_ACTIVATION",
+    "artifacts": [
+      {
+        "path": "research/alpha015-preregistration-template.json",
+        "sha256": "07ea1584956ac535c76615597b72a59eb68ff1a10e866e82761a4e60b25e690a"
+      },
+      {
+        "path": "quant/research/alpha015_preregistration.py",
+        "sha256": "e750a5cf801c29810872c78a7b48bdfaadbc005725254af97b823d2ad8a87642"
+      },
+      {
+        "path": "quant/research/alpha015_simulation.py",
+        "sha256": "6d62f9499e228e209a051780646338f4178d5182889254577af3b5d9a740bcfe"
+      },
+      {
+        "path": "scripts/register_alpha015.py",
+        "sha256": "8a9a0d91210093a423a4e39dddc1a82825133c3da521828478cb3272158335cc"
+      },
+      {
+        "path": "quant/research/registry.py",
+        "sha256": "100e41ad3d40a25cfba05c8eccbe7abc3e14c3767bd15eb6859b77cb067c8d9c"
+      },
+      {
+        "path": "quant/research/alpha015_acquisition.py",
+        "sha256": "1a11e871d03ea442c3c68237cd6ec69db66e0c7dc4628a22b5120a3c2200bc58"
+      },
+      {
+        "path": "scripts/acquire_alpha015.py",
+        "sha256": "f7bfb83e07b1cc2bf4c64249e985d7e8bd5b63c0dc6b10bffab4e4af30945d8c"
+      },
+      {
+        "path": "quant/research/alpha015_evaluation.py",
+        "sha256": "5a026e4ac13f07d80c431d2c5db8d5508f32902ec04cb22b6025cd3d8cfbe954"
+      },
+      {
+        "path": "quant/research/alpha015_replay.py",
+        "sha256": "ec8122e885a6a33041b5f7965eec7ad41a378336e4ae4780b930370a7fd1a6bf"
+      },
+      {
+        "path": "scripts/evaluate_alpha015_development.py",
+        "sha256": "3376b294f90da85ce5a7f4b88b066d201f040a508f7e442c56879f8c750c6bac"
+      },
+      {
+        "path": "scripts/open_alpha015_validation.py",
+        "sha256": "07e88dd08e9eb73c2f87a667b7726773aadef0744a032487008c084388854f6a"
+      },
+      {
+        "path": "scripts/evaluate_alpha015_validation.py",
+        "sha256": "a36e72adadbb05b22bc24014d98aa13a151f7fdb0a1f90094ec0ddd519053c98"
+      },
+      {
+        "path": "scripts/reconcile_alpha015_funding.py",
+        "sha256": "4e8ebd77516a4b09f9a6365c4066276e4d6e665a3b848849ee34f6d47b47a6bc"
+      }
+    ],
+    "return_data_used": false
+  },
+  "frozen_transfer_choices": {
+    "penalty_selection": "For every target and every decision, use the first 600 of the 720 chronological training pairs for inner fitting and the last 120 for forward validation. Evaluate the fixed lambda fractions [1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005, 0.002, 0.001, 0] times the adaptive weighted KKT lambda maximum. Select minimum one-step return MSE; an exact tie selects the larger penalty. Portfolio PnL is forbidden from selecting lambda.",
+    "portfolio_construction": "Sort at least 30 forecasts into five equal-count buckets; use equal-weight top-quintile longs and bottom-quintile shorts with gross exposure one and net exposure zero.",
+    "holding_semantics": "Use a 10-minute UTC-epoch decision grid from 00:00 through 23:40, exactly 143 decisions per complete UTC day. Decide on closed information through minute t, enter no earlier than t+1, exit ten minutes after entry as the next portfolio enters, prohibit overlapping exposure, and reject any entry or exit crossing the evaluation-day boundary. One-, five-, and ten-minute markouts are diagnostic; only the fixed ten-minute portfolio determines gates.",
+    "timestamp_and_execution_reference": "Label a one-minute return at the boundary where its kline has fully closed. A decision at t may read through t; the t+1 entry deliberately excludes the forecasted t-to-t+1 minute. Use the first verified aggTrade on or after each boundary and reject the whole UTC day if any required symbol waits more than 60000 ms.",
+    "execution_cost": "Charge realized L1 portfolio turnover at 10 basis points all-in per fill in base results and 20 basis points per fill in stress. The amount includes fees and must not be double counted. The base is the whole-basis-point ceiling of the 9bp worst observed immutable calibration receipt. Enter the first target from cash, mark expiring positions at the verified boundary price and directly net from those pretrade weights to each new target, then liquidate the final marked positions to cash; do not fabricate an intermediate flat round trip.",
+    "funding_accounting": "Seal public funding history by authorized symbol-day. For each event in the half-open holding interval [entry, exit), add -weight times funding rate to portfolio PnL. Before a final verdict, reconcile all authorized events to Binance monthly fundingRate publisher archives and CHECKSUMs.",
+    "execution_calibration_path": "reports/execution-calibration-alpha001-entry-20261013T065131Z.json",
+    "execution_calibration_sha256": "ba4f36d60d6a9c193fa6a3e60ba51c02b533c02b520e0f9324ee7e9f0f46d014"
+  },
+  "current_decision": "METHODOLOGY_LOCKED_AWAIT_POINT_IN_TIME_UNIVERSE_NO_RETURN_DATA",
+  "experiment_0015_open": false,
+  "live_eligible": false
+}

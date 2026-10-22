@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_COST_GOVERNANCE_ONLY",
+  "checks": [
+    {
+      "name": "schema_version",
+      "passed": true,
+      "required": 1,
+      "actual": 1
+    },
+    {
+      "name": "preregistered",
+      "passed": true,
+      "required": "PREREGISTERED",
+      "actual": "PREREGISTERED"
+    },
+    {
+      "name": "live_closed",
+      "passed": true,
+      "required": "CLOSED",
+      "actual": "CLOSED"
+    },
+    {
+      "name": "next_open_entry",
+      "passed": true,
+      "required": "next available UTC daily open",
+      "actual": "next available UTC daily open"
+    },
+    {
+      "name": "next_open_exit",
+      "passed": true,
+      "required": "next available UTC daily open",
+      "actual": "next available UTC daily open"
+    },
+    {
+      "name": "round_trip_has_two_fills",
+      "passed": true,
+      "required": 2,
+      "actual": 2
+    },
+    {
+      "name": "positive_base_costs",
+      "passed": true,
+      "required": "> 0",
+      "actual": {
+        "fee": 0.0005,
+        "slippage": 0.0005
+      }
+    },
+    {
+      "name": "stress_not_lower_than_base",
+      "passed": true,
+      "required": ">= base",
+      "actual": {
+        "base_fee": 0.0005,
+        "stress_fee": 0.001,
+        "base_slippage": 0.0005,
+        "stress_slippage": 0.001
+      }
+    },
+    {
+      "name": "funding_checksum_source",
+      "passed": true,
+      "required": "publisher CHECKSUM",
+      "actual": "Binance data.binance.vision USD-M monthly fundingRate archive with publisher CHECKSUM"
+    },
+    {
+      "name": "missing_funding_rejects",
+      "passed": true,
+      "required": "REJECT_EVALUATION_DAY",
+      "actual": "REJECT_EVALUATION_DAY"
+    },
+    {
+      "name": "zero_funding_forbidden",
+      "passed": true,
+      "required": "FORBIDDEN",
+      "actual": "FORBIDDEN"
+    },
+    {
+      "name": "no_daily_ohlc_liquidation_claim",
+      "passed": true,
+      "required": "FORBIDDEN_FROM_DAILY_OHLC_ONLY",
+      "actual": "FORBIDDEN_FROM_DAILY_OHLC_ONLY"
+    },
+    {
+      "name": "gross_leverage_bounded",
+      "passed": true,
+      "required": "0 < leverage <= 1",
+      "actual": 1.0
+    },
+    {
+      "name": "diagnostic_only",
+      "passed": true,
+      "required": "DIAGNOSTIC_ONLY",
+      "actual": "DIAGNOSTIC_ONLY"
+    }
+  ],
+  "live_order_authorization": "CLOSED",
+  "warning": "A PASS validates the accounting contract, not a strategy return or promotion decision.",
+  "policy_path": "research/historical-cost-accounting-policy.json"
+}

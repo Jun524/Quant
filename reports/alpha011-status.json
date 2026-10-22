@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-19T06:41:57.846713+00:00",
+  "candidate": "ALPHA_011_QUARTER_HOUR_FLOW_CONTINUATION",
+  "status": "WAITING_PUBLISHER_ARCHIVE",
+  "eligible_start": "2026-10-09",
+  "last_complete_utc_day": "2026-10-18",
+  "eligible_days_elapsed": 10,
+  "sealed_eligible_archives": 9,
+  "contiguous_sealed_days": 9,
+  "development_days_required": 60,
+  "development_archives_required_for_final_exit": 61,
+  "closed_development_days": 8,
+  "development_days_remaining": 52,
+  "locked_validation_days_required": 60,
+  "locked_validation_opened": false,
+  "validation_lock_valid": null,
+  "validation_start_utc": null,
+  "validation_archives_sealed": 0,
+  "closed_validation_days": 0,
+  "validation_days_remaining": 60,
+  "validation_report_status": null,
+  "validation_phase": {
+    "opened": false,
+    "valid": null,
+    "report_status": null
+  },
+  "missing_archive_days": [
+    "2026-10-18"
+  ],
+  "publisher_grace_hours": 24.0,
+  "pending_publication_days": [
+    "2026-10-18"
+  ],
+  "overdue_missing_archive_days": [],
+  "performance_calculated": false,
+  "development_report_status": null,
+  "development_receipt": {
+    "valid": false,
+    "failures": [
+      "receipt_inputs_invalid:FileNotFoundError"
+    ]
+  },
+  "current_protocol_manifest": "research/alpha011/raw/BTCUSDT/manifest-2026-10-09-2026-10-18.json",
+  "current_protocol_manifest_present": true,
+  "invalid_manifest_count": 0,
+  "invalid_manifests": [],
+  "scheduler": {
+    "health": "RUNNING_HEALTHY",
+    "running": true,
+    "pid": 5482,
+    "state": "SLEEPING",
+    "heartbeat_at": "2026-10-19T04:28:46.978610+00:00",
+    "heartbeat_age_seconds": 7990.868103,
+    "last_exit_code": 0,
+    "next_run_at": "2026-10-19T10:28:46.978610+00:00",
+    "interval_seconds": 21600
+  }
+}

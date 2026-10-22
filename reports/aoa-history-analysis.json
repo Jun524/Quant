@@ -1,0 +1,644 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-06T03:17:04.568087+00:00",
+  "source": "user-supplied public BitMEX execution and wallet exports",
+  "execution": {
+    "execution_rows": 1444583,
+    "trade_fill_rows": 1439207,
+    "ordinary_orders": 23415,
+    "fills_per_order": {
+      "median": 17.0,
+      "p90": 152.0,
+      "p99": 630.7200000000012
+    },
+    "fill_duration_seconds": {
+      "median": 1.902733,
+      "p90": 90.11623560000004,
+      "p99": 1847.018546240004
+    },
+    "maker_quantity_share": 0.7337821902495466,
+    "taker_quantity_share": 0.26621780975045345,
+    "post_only_orders": 6046,
+    "order_types": {
+      "Market": 620,
+      "Limit": 22755,
+      "Stop": 39,
+      "StopLimit": 1
+    },
+    "funding_net_xbt": 149.5754409299999,
+    "counts": {
+      "symbol": {
+        "XBTUSD": 944968,
+        "ETHUSD": 328217,
+        "XRPUSD": 55788,
+        "XBTU21": 25747,
+        "LTCUSD": 17296,
+        "DOTUSDT": 11412,
+        "DOGEUSDT": 11229,
+        "BCHUSD": 9268,
+        "LINKUSDT": 6430,
+        "XBTH20": 5923,
+        "ETHUSDM21": 5357,
+        "BNBUSDT": 4808,
+        "XRPZ18": 2849,
+        "BCHZ18": 2467,
+        "EOSH21": 2020,
+        "XRPU18": 2000,
+        "XRPH21": 1809,
+        "EOSU18": 1085,
+        "TRXU18": 776,
+        "ADAU18": 654,
+        "XBTH19": 532,
+        "ADAM18": 527,
+        "TRXU19": 497,
+        "ADAUSDT": 485,
+        "EOSZ18": 384,
+        "EOSM18": 277,
+        "ADAZ18": 253,
+        "XBTM18": 212,
+        "XBTZ18": 180,
+        "XBTM19": 170,
+        "ETHU18": 158,
+        "TRXZ18": 147,
+        "XRPM18": 138,
+        "LTCH19": 109,
+        "XRPH19": 72,
+        "BCHM18": 70,
+        "XRPM19": 59,
+        "BCHM19": 46,
+        "TRXH19": 38,
+        "XBTU18": 36,
+        "BCHU18": 33,
+        "ADAM19": 17,
+        "XBT7D_U110": 12,
+        "LTCU18": 12,
+        "YFIUSDTZ20": 11,
+        "ETHM18": 5
+      },
+      "exec_type": {
+        "Trade": 1439207,
+        "Funding": 5368,
+        "Settlement": 8
+      },
+      "order_type": {
+        "Limit": 1435642,
+        "Stop": 4773,
+        "Market": 4067,
+        "StopLimit": 101
+      },
+      "liquidity": {
+        "AddedLiquidity": 966607,
+        "RemovedLiquidity": 472608,
+        "<NA>": 5368
+      },
+      "text": {
+        "Submission from www.bitmex.com": 1392332,
+        "Amended price: Amend from www.bitmex.com\nSubmission from www.bitmex.com": 38736,
+        "Funding": 5368,
+        "Triggered: Order stop price reached\nSubmission from www.bitmex.com": 4870,
+        "Position Close from www.bitmex.com": 3050,
+        "Amended orderQty: Amend from www.bitmex.com\nSubmission from www.bitmex.com": 160,
+        "Liquidation": 59,
+        "Settlement": 8
+      }
+    },
+    "liquidations": {
+      "execution_rows": 59,
+      "distinct_dates": 25,
+      "by_symbol": {
+        "XBTUSD": 19,
+        "XBTM18": 2,
+        "XRPU18": 4,
+        "ETHUSD": 33,
+        "BCHZ18": 1
+      }
+    }
+  },
+  "wallet": {
+    "valid_rows": 2253,
+    "realized_pnl_xbt": 3537.3236940400016,
+    "deposits_xbt": 14.489257139999998,
+    "withdrawals_xbt": -2832.5290342599997,
+    "last_reported_wallet_balance_xbt": 737.26973405,
+    "balance_reconciliation_mismatch_rows": 1288,
+    "balance_reconciliation_passed": false,
+    "by_symbol": {
+      "XBTUSD": {
+        "rows": 1377,
+        "pnl_xbt": 2007.084646450001,
+        "wins": 867,
+        "losses": 510
+      },
+      "ETHUSD": {
+        "rows": 312,
+        "pnl_xbt": 830.3645073900005,
+        "wins": 210,
+        "losses": 102
+      },
+      "XBTU21": {
+        "rows": 11,
+        "pnl_xbt": 246.3337332,
+        "wins": 8,
+        "losses": 3
+      },
+      "XRPUSD": {
+        "rows": 109,
+        "pnl_xbt": 173.8614494100001,
+        "wins": 98,
+        "losses": 11
+      },
+      "ETHUSDM21": {
+        "rows": 5,
+        "pnl_xbt": 140.93425904,
+        "wins": 4,
+        "losses": 1
+      },
+      "XBTH20": {
+        "rows": 14,
+        "pnl_xbt": 119.20156973,
+        "wins": 11,
+        "losses": 3
+      },
+      "BCHUSD": {
+        "rows": 20,
+        "pnl_xbt": -69.93503012000001,
+        "wins": 12,
+        "losses": 8
+      },
+      "DOGEUSDT": {
+        "rows": 19,
+        "pnl_xbt": 52.60704662999999,
+        "wins": 17,
+        "losses": 2
+      },
+      "BNBUSDT": {
+        "rows": 9,
+        "pnl_xbt": 19.1529491,
+        "wins": 9,
+        "losses": 0
+      },
+      "LINKUSDT": {
+        "rows": 18,
+        "pnl_xbt": -17.846272909999996,
+        "wins": 14,
+        "losses": 4
+      },
+      "XRPU18": {
+        "rows": 14,
+        "pnl_xbt": -17.74146044,
+        "wins": 10,
+        "losses": 4
+      },
+      "LTCUSD": {
+        "rows": 35,
+        "pnl_xbt": 16.865321270000006,
+        "wins": 33,
+        "losses": 2
+      },
+      "DOTUSDT": {
+        "rows": 23,
+        "pnl_xbt": 16.409236460000002,
+        "wins": 19,
+        "losses": 4
+      },
+      "XBTM19": {
+        "rows": 3,
+        "pnl_xbt": -14.75753344,
+        "wins": 2,
+        "losses": 1
+      },
+      "XBTZ18": {
+        "rows": 4,
+        "pnl_xbt": 12.323135070000001,
+        "wins": 3,
+        "losses": 1
+      },
+      "XBTH19": {
+        "rows": 4,
+        "pnl_xbt": 8.167252090000002,
+        "wins": 1,
+        "losses": 3
+      },
+      "EOSH21": {
+        "rows": 3,
+        "pnl_xbt": 6.85887397,
+        "wins": 2,
+        "losses": 1
+      },
+      "TRXU19": {
+        "rows": 2,
+        "pnl_xbt": -6.259585599999999,
+        "wins": 1,
+        "losses": 1
+      },
+      "TRXU18": {
+        "rows": 18,
+        "pnl_xbt": 3.8844689799999994,
+        "wins": 17,
+        "losses": 1
+      },
+      "XBTU18": {
+        "rows": 3,
+        "pnl_xbt": 3.83204412,
+        "wins": 2,
+        "losses": 1
+      },
+      "XRPH21": {
+        "rows": 2,
+        "pnl_xbt": 3.7393104100000003,
+        "wins": 1,
+        "losses": 1
+      },
+      "ETHU18": {
+        "rows": 11,
+        "pnl_xbt": -2.5914745100000003,
+        "wins": 4,
+        "losses": 7
+      },
+      "BCHZ18": {
+        "rows": 15,
+        "pnl_xbt": 2.36883793,
+        "wins": 11,
+        "losses": 4
+      },
+      "EOSU18": {
+        "rows": 38,
+        "pnl_xbt": 1.92900434,
+        "wins": 26,
+        "losses": 12
+      },
+      "ADAU18": {
+        "rows": 27,
+        "pnl_xbt": -1.4862707099999999,
+        "wins": 18,
+        "losses": 9
+      },
+      "BCHM19": {
+        "rows": 1,
+        "pnl_xbt": -1.287675,
+        "wins": 0,
+        "losses": 1
+      },
+      "EOSM18": {
+        "rows": 7,
+        "pnl_xbt": 1.19280411,
+        "wins": 5,
+        "losses": 2
+      },
+      "EOSZ18": {
+        "rows": 4,
+        "pnl_xbt": 1.03451314,
+        "wins": 3,
+        "losses": 1
+      },
+      "TRXZ18": {
+        "rows": 3,
+        "pnl_xbt": 0.5906167,
+        "wins": 3,
+        "losses": 0
+      },
+      "TRXH19": {
+        "rows": 1,
+        "pnl_xbt": -0.55500093,
+        "wins": 0,
+        "losses": 1
+      },
+      "XRPM19": {
+        "rows": 1,
+        "pnl_xbt": 0.42158077,
+        "wins": 1,
+        "losses": 0
+      },
+      "XRPZ18": {
+        "rows": 12,
+        "pnl_xbt": 0.4204110700000001,
+        "wins": 8,
+        "losses": 4
+      },
+      "XBTM18": {
+        "rows": 11,
+        "pnl_xbt": -0.4167484800000001,
+        "wins": 7,
+        "losses": 4
+      },
+      "XRPM18": {
+        "rows": 3,
+        "pnl_xbt": 0.31911239,
+        "wins": 3,
+        "losses": 0
+      },
+      "ADAM18": {
+        "rows": 15,
+        "pnl_xbt": -0.19235290999999965,
+        "wins": 13,
+        "losses": 2
+      },
+      "BCHM18": {
+        "rows": 3,
+        "pnl_xbt": 0.17498197,
+        "wins": 3,
+        "losses": 0
+      },
+      "BCHU18": {
+        "rows": 2,
+        "pnl_xbt": 0.16194102,
+        "wins": 2,
+        "losses": 0
+      },
+      "XRPH19": {
+        "rows": 2,
+        "pnl_xbt": 0.15636572999999998,
+        "wins": 2,
+        "losses": 0
+      },
+      "LTCU18": {
+        "rows": 1,
+        "pnl_xbt": 0.12403579,
+        "wins": 1,
+        "losses": 0
+      },
+      "YFIUSDTZ20": {
+        "rows": 1,
+        "pnl_xbt": 0.10688095,
+        "wins": 1,
+        "losses": 0
+      },
+      "ADAZ18": {
+        "rows": 2,
+        "pnl_xbt": -0.09745548,
+        "wins": 1,
+        "losses": 1
+      },
+      "LTCH19": {
+        "rows": 2,
+        "pnl_xbt": -0.07577663000000001,
+        "wins": 1,
+        "losses": 1
+      },
+      "ADAM19": {
+        "rows": 1,
+        "pnl_xbt": -0.06469965,
+        "wins": 0,
+        "losses": 1
+      },
+      "ADAUSDT": {
+        "rows": 2,
+        "pnl_xbt": 0.022091339999999994,
+        "wins": 1,
+        "losses": 1
+      },
+      "XBT7D_U110": {
+        "rows": 1,
+        "pnl_xbt": -0.00909,
+        "wins": 0,
+        "losses": 1
+      },
+      "ETHM18": {
+        "rows": 1,
+        "pnl_xbt": -0.00285972,
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "by_year": {
+      "2018": {
+        "pnl_xbt": 188.42572231999992,
+        "deposits_xbt": 14.489257139999998,
+        "withdrawals_xbt": -100.93863426000001
+      },
+      "2019": {
+        "pnl_xbt": 516.3728842500001,
+        "deposits_xbt": 0.0,
+        "withdrawals_xbt": -259.1844
+      },
+      "2020": {
+        "pnl_xbt": 763.6426454899994,
+        "deposits_xbt": 0.0,
+        "withdrawals_xbt": -622.1489999999999
+      },
+      "2021": {
+        "pnl_xbt": 2068.8824419800026,
+        "deposits_xbt": 0.0,
+        "withdrawals_xbt": -1850.2569999999998
+      }
+    }
+  },
+  "xbtusd_episodes": {
+    "episodes": 2655,
+    "wins": 2016,
+    "win_rate": 0.7593220338983051,
+    "gross_pnl_xbt": 2070.8149939539285,
+    "commission_xbt": 85.18810941891955,
+    "net_pnl_xbt": 1985.6268845350087,
+    "profit_factor": 1.5501618765196874,
+    "median_net_pnl_xbt": 0.035061460020533154,
+    "largest_winner_share": 0.041419448889607344,
+    "duration_minutes": {
+      "median": 24.87055946666667,
+      "p90": 1345.3932713066663,
+      "p99": 11404.176296639003
+    },
+    "winner_duration_median": 21.516173658333337,
+    "loser_duration_median": 40.84490016666667,
+    "peak_to_initial_order": {
+      "median": 1.3292355893051535,
+      "p90": 6989.4202793257455,
+      "p99": 204220.12000000034
+    },
+    "entry_orders": {
+      "median": 2.0,
+      "p90": 9.0,
+      "p99": 27.460000000000036
+    },
+    "exit_orders": {
+      "median": 2.0,
+      "p90": 9.0,
+      "p99": 30.0
+    },
+    "favorable_add_orders": 2356,
+    "adverse_add_orders": 5047,
+    "entry_maker_share": 0.7463421570353634,
+    "exit_maker_share": 0.7164544429088603,
+    "liquidated_episodes": 18,
+    "behavior_segments": {
+      "entry_maker_share": {
+        "below_50pct": {
+          "episodes": 1037,
+          "win_rate": 0.7020250723240116,
+          "mean_return_proxy": 0.001904158969819763,
+          "median_return_proxy": 0.0016210464961810736,
+          "profit_factor_proxy": 1.9596337733567326
+        },
+        "50_to_90pct": {
+          "episodes": 599,
+          "win_rate": 0.7128547579298832,
+          "mean_return_proxy": 0.004761674831035476,
+          "median_return_proxy": 0.0035422660421331282,
+          "profit_factor_proxy": 1.8541353716220386
+        },
+        "at_least_90pct": {
+          "episodes": 1019,
+          "win_rate": 0.844946025515211,
+          "mean_return_proxy": 0.00485374125152276,
+          "median_return_proxy": 0.0031718358583233486,
+          "profit_factor_proxy": 4.314085564648518
+        }
+      },
+      "entry_order_count": {
+        "one": {
+          "episodes": 1229,
+          "win_rate": 0.7957689178193653,
+          "mean_return_proxy": 0.0030429585067138464,
+          "median_return_proxy": 0.002298222395133484,
+          "profit_factor_proxy": 3.1692845249067716
+        },
+        "two_to_three": {
+          "episodes": 701,
+          "win_rate": 0.7945791726105563,
+          "mean_return_proxy": 0.0042157436016027235,
+          "median_return_proxy": 0.0026560569754016288,
+          "profit_factor_proxy": 4.119353581615595
+        },
+        "four_to_nine": {
+          "episodes": 487,
+          "win_rate": 0.704312114989733,
+          "mean_return_proxy": 0.004572960970529073,
+          "median_return_proxy": 0.003368006471360518,
+          "profit_factor_proxy": 2.1550059517010287
+        },
+        "ten_or_more": {
+          "episodes": 238,
+          "win_rate": 0.5798319327731093,
+          "mean_return_proxy": 0.0035745972633300497,
+          "median_return_proxy": 0.003390946406809498,
+          "profit_factor_proxy": 1.3715256832035567
+        }
+      },
+      "position_adjustment": {
+        "no_adverse_add": {
+          "episodes": 1418,
+          "win_rate": 0.7968970380818053,
+          "mean_return_proxy": 0.003427354386873439,
+          "median_return_proxy": 0.0024468951397742284,
+          "profit_factor_proxy": 3.537565276143513
+        },
+        "has_adverse_add": {
+          "episodes": 1237,
+          "win_rate": 0.7162489894907034,
+          "mean_return_proxy": 0.003971568221672191,
+          "median_return_proxy": 0.0027650735625375667,
+          "profit_factor_proxy": 1.9876630122802692
+        },
+        "no_favorable_add": {
+          "episodes": 1874,
+          "win_rate": 0.7689434364994664,
+          "mean_return_proxy": 0.002570619982888289,
+          "median_return_proxy": 0.0022105637927842614,
+          "profit_factor_proxy": 2.3324899738925255
+        },
+        "has_favorable_add": {
+          "episodes": 781,
+          "win_rate": 0.736235595390525,
+          "mean_return_proxy": 0.006345040413396137,
+          "median_return_proxy": 0.004397437859796845,
+          "profit_factor_proxy": 2.513529069738889
+        }
+      },
+      "holding_time": {
+        "up_to_30m": {
+          "episodes": 1397,
+          "win_rate": 0.7916964924838941,
+          "mean_return_proxy": 0.0022898145938194505,
+          "median_return_proxy": 0.0021368466237689132,
+          "profit_factor_proxy": 3.775485022347807
+        },
+        "30m_to_4h": {
+          "episodes": 576,
+          "win_rate": 0.7881944444444444,
+          "mean_return_proxy": 0.004073553475083077,
+          "median_return_proxy": 0.003358133789912631,
+          "profit_factor_proxy": 2.8076722575859736
+        },
+        "over_4h": {
+          "episodes": 682,
+          "win_rate": 0.6686217008797654,
+          "mean_return_proxy": 0.00619879856536864,
+          "median_return_proxy": 0.005335616252528782,
+          "profit_factor_proxy": 1.9524014245400685
+        }
+      }
+    }
+  },
+  "xbtusd_open_position_contracts_at_export_end": -29080100.0,
+  "market_context": {
+    "source": "BitMEX public XBTUSD 1h trade/bucketed API",
+    "bars": 33673,
+    "episodes_joined": 2615,
+    "entry_volume_ratio_median": 1.2193591735781313,
+    "groups": {
+      "all": {
+        "episodes": 2615,
+        "win_rate": 0.7636711281070746,
+        "net_pnl_xbt": 1985.679355943907,
+        "profit_factor": 1.5502070585064793,
+        "largest_winner_share": 0.041420548593021085
+      },
+      "aligned_1h": {
+        "episodes": 1192,
+        "win_rate": 0.7441275167785235,
+        "net_pnl_xbt": 513.9026149637064,
+        "profit_factor": 1.3384066744389902,
+        "largest_winner_share": 0.1140140882267451
+      },
+      "aligned_4h": {
+        "episodes": 1196,
+        "win_rate": 0.7617056856187291,
+        "net_pnl_xbt": 820.3950786073352,
+        "profit_factor": 1.4820049065329655,
+        "largest_winner_share": 0.09186864078105782
+      },
+      "aligned_24h": {
+        "episodes": 1248,
+        "win_rate": 0.7724358974358975,
+        "net_pnl_xbt": 1074.553218084325,
+        "profit_factor": 1.6910083195528842,
+        "largest_winner_share": 0.08812479556721803
+      },
+      "aligned_168h": {
+        "episodes": 1313,
+        "win_rate": 0.7791317593297792,
+        "net_pnl_xbt": 1261.4244331615719,
+        "profit_factor": 1.767679315234856,
+        "largest_winner_share": 0.07978176498716587
+      },
+      "ema200_aligned": {
+        "episodes": 1312,
+        "win_rate": 0.7759146341463414,
+        "net_pnl_xbt": 1062.482068858168,
+        "profit_factor": 1.627862914361133,
+        "largest_winner_share": 0.08412283740162005
+      },
+      "breakout_aligned": {
+        "episodes": 172,
+        "win_rate": 0.7906976744186046,
+        "net_pnl_xbt": 63.733664011715184,
+        "profit_factor": 1.233532907436674,
+        "largest_winner_share": 0.14141549740349382
+      },
+      "aligned_24h_with_1h_pullback": {
+        "episodes": 566,
+        "win_rate": 0.7950530035335689,
+        "net_pnl_xbt": 524.8860299572835,
+        "profit_factor": 1.6667418816721782,
+        "largest_winner_share": 0.06972457324950251
+      }
+    }
+  },
+  "limitations": [
+    "execution history omits unfilled and cancelled orders",
+    "wallet balance rows do not reconcile sequentially, so normalized returns and drawdown are unavailable",
+    "one-contract residual positions are treated as economically flat to avoid artificial episode chaining",
+    "the history identifies behavior correlations, not the trader's causal decision rule",
+    "all derived conditions are in-sample and require new never-seen OOS data"
+  ]
+}

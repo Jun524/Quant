@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_METHOD_009_DEVELOPMENT_STATISTICAL_GATE",
+  "registered_at_utc": "2026-10-11T11:32:00Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_STATISTICAL_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "development_statistics": {
+    "return_observation": "one complete UTC-day base-net portfolio return, compounded from that day's 143 non-overlapping ten-minute intervals after funding and realized-turnover costs",
+    "observations": 120,
+    "newey_west": {
+      "estimator": "Bartlett-kernel HAC t statistic for the arithmetic mean daily base-net return",
+      "maximum_lag_days": 5,
+      "minimum_t_statistic": 2.0
+    },
+    "selection_bias": {
+      "minimum_complete_daily_observations": 100,
+      "minimum_deflated_sharpe_probability": 0.95,
+      "cscv_slices_when_multiple_trials_exist": 8,
+      "maximum_probability_backtest_overfitting": 0.1,
+      "single_trial_rule": "The sole preregistered Alpha 015 configuration may report PBO as NOT_APPLICABLE_SINGLE_PREREGISTERED_TRIAL. This is not a PBO pass and cannot be used for live or portfolio promotion.",
+      "multiple_trial_rule": "A second model, timing, universe, cost, or portfolio variation is outside Experiment 0015. If a future independently preregistered family contains multiple trials, it must use eight-slice CSCV/PBO; it may not invoke the single-trial exemption."
+    }
+  },
+  "interpretation": "These are development-screening diagnostics only. Alpha 015 cannot become live-eligible from this gate; portfolio promotion retains its separate 252-observation, multi-sleeve, locked-forward selection-bias requirements.",
+  "unchanged": [
+    "the 120/60 development and locked-validation split",
+    "all PnL, cost, timing, model, and universe choices",
+    "locked validation remains inaccessible until every development gate passes",
+    "live order authorization remains CLOSED"
+  ]
+}

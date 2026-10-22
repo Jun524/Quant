@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-10T07:36:54Z",
+  "purpose": "Select the next falsifiable research candidate without opening another weak or falsely independent alpha.",
+  "search_record": {
+    "workstreams": 10,
+    "sources_reviewed": 120,
+    "source_priority": "peer-reviewed papers, university working papers, institutional papers, and official exchange data documentation",
+    "return_data_inspected_during_screening": false
+  },
+  "candidates": [
+    {
+      "name": "LIQUID_LARGE_CAP_BTC_TO_ALT_LEAD_LAG",
+      "decision": "REJECT",
+      "reason": "Recent high-frequency evidence places the exploitable multi-minute delay mainly in illiquid small caps; liquid large caps adjust almost simultaneously and the effect largely disappears after one minute. That is incompatible with the fixed five-asset liquid universe and its measured execution budget.",
+      "source": "https://link.springer.com/article/10.1007/s10690-026-09589-z"
+    },
+    {
+      "name": "LOW_VOLUME_SHORT_TERM_REVERSAL",
+      "decision": "REJECT",
+      "reason": "The reported premium is concentrated in small, volatile, low-activity pairs and is weak in value-weighted portfolios after costs. Selecting those names would deliberately import adverse-selection and capacity risk into a safety-constrained futures system.",
+      "source": "https://www.cerge-ei.cz/pdf/wp/Wp730.pdf"
+    },
+    {
+      "name": "TURN_OF_15_MINUTE_CANDLE",
+      "decision": "REJECT",
+      "reason": "The reported mean effect is about 0.58 bp in the turn minute. The platform's current public-L2 entry estimate alone is about 3.36 bp before the exit leg, so the effect has no credible taker execution margin and overlaps Alpha 011's periodic-flow family.",
+      "source": "https://www.cell.com/heliyon/fulltext/S2405-8440(23)01443-3"
+    },
+    {
+      "name": "VOLATILITY_MANAGED_CROSS_SECTIONAL_MOMENTUM",
+      "decision": "DEFER",
+      "reason": "The family has useful crash-control evidence but overlaps failed Alpha 006 and Alpha 008. A defensible test requires the point-in-time, survivorship-free universe that is still accumulating.",
+      "source": "https://link.springer.com/article/10.1007/s11408-025-00474-9"
+    },
+    {
+      "name": "MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+      "decision": "DEFER_HIGH_PRIORITY",
+      "reason": "A primary working paper reports out-of-sample Binance futures profitability after transaction costs, but its adaptive-LASSO top-30 implementation requires point-in-time membership, minute data, order-level execution controls, and a modern post-2021 replication. The current five surviving names cannot reproduce the cross-section without severe selection bias.",
+      "source": "https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=7900&context=lkcsb_research",
+      "activation_conditions": [
+        "at least 180 sealed point-in-time universe days",
+        "publisher-bound minute futures data including delisted instruments",
+        "preregistered latency and turnover budget",
+        "no parameter search on the locked forward interval"
+      ]
+    },
+    {
+      "name": "CROSS_SECTIONAL_PERPETUAL_BASIS_CATCHUP",
+      "decision": "OPEN_TRANSFER_DIAGNOSTIC",
+      "reason": "The dated-futures basis factor has the strongest primary evidence among the screened candidates, but no strong independent perpetual-futures replication was found. The test is therefore explicitly family trial 3 under Alpha 009/013, not a new independent alpha, and a historical pass can only authorize a prospective point-in-time protocol.",
+      "source": "https://api.repository.cam.ac.uk/server/api/core/bitstreams/50f9c065-2731-4ab3-bba9-3ec4dcfc7ef7/content"
+    }
+  ],
+  "selected_next_step": "ALPHA_014_CROSS_SECTIONAL_PERP_BASIS_CATCHUP",
+  "selection_guard": "No result from the development interval was calculated before this screen and Alpha 014 preregistration were written."
+}

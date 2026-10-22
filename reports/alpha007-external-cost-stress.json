@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-13T06:35:53.509158+00:00",
+  "policy": "ALPHA007_EXTERNAL_EXECUTION_COST_STRESS_V1",
+  "policy_sha256": "b6a6e47b17ee99bdcdd89c136117d2344e9b23e615ad45154bb33db2621fbe63",
+  "primary_report_sha256": "f1a4e1fd3fc52199c294306045a267fc4aa05dbcc3fdd4444058735597b4be40",
+  "calibration_report_sha256": "da2404f428c62b35b7fab4e799f5019a173650522fc25e8d034fc014be42b6cf",
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "status": "ACCUMULATING",
+  "promotion_eligible": false,
+  "base_round_trip_cost_bps": 7.0,
+  "stressed_round_trip_cost_bps": 10.0,
+  "additional_deduction_bps": 3.0,
+  "stressed_locked_net_60s_mean": null,
+  "stressed_locked_hour_block_bootstrap_95pct_lower": null,
+  "stressed_locked_plus_100ms_latency_mean": null,
+  "checks": [
+    {
+      "name": "primary_alpha007_pass",
+      "passed": false,
+      "actual": "ACCUMULATING"
+    },
+    {
+      "name": "ten_bps_net_60s_mean_positive",
+      "passed": false,
+      "actual": null
+    },
+    {
+      "name": "ten_bps_hour_block_bootstrap_95pct_lower_positive",
+      "passed": false,
+      "actual": null
+    },
+    {
+      "name": "ten_bps_plus_100ms_latency_mean_positive",
+      "passed": false,
+      "actual": null
+    }
+  ]
+}

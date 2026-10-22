@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-08T04:22:52Z",
+  "candidate": "ALPHA_010_LEVERAGE_CROWDING_CRASH_SHORT",
+  "status": "PREREGISTERED_DATA_ACQUISITION",
+  "hypothesis_family": "derivatives_leverage_crowding",
+  "hypothesis": "When BTCUSDT perpetual open interest expands unusually over 24 hours while price, funding, and realized volatility jointly indicate crowded long risk, the next eight-hour BTCUSDT return is negative enough for a fixed-horizon 1x short to retain positive expectancy after actual funding, taker fees, and modeled slippage.",
+  "instrument": "BTCUSDT USD-M perpetual only",
+  "data": {
+    "metrics_source": "Binance public data archive daily USD-M metrics with publisher SHA-256 checksums",
+    "price_source": "Binance BTCUSDT USD-M 5m futures candles",
+    "funding_source": "Binance BTCUSDT historical funding events",
+    "warmup": "2021-01-01 through 2021-06-30 UTC",
+    "development": "2021-07-01 through 2025-01-01 UTC, end-exclusive",
+    "locked_oos": "2025-01-01 through 2026-09-01 UTC, end-exclusive",
+    "locked_oos_rule": "must not be evaluated unless every development gate passes",
+    "orders_submitted": false,
+    "api_key": false
+  },
+  "fixed_signal": {
+    "decision_times_utc": [
+      "00:00",
+      "08:00",
+      "16:00"
+    ],
+    "decision_delay_minutes": 5,
+    "open_interest_measure": "sum_open_interest contracts, not notional open interest",
+    "open_interest_change_horizon_hours": 24,
+    "open_interest_threshold": "greater than the shifted rolling 90th percentile of prior 365 days; minimum 180 days",
+    "price_return_horizon_hours": 24,
+    "price_return_must_be_positive": true,
+    "funding_sum_horizon_hours": 24,
+    "funding_sum_must_be_positive": true,
+    "realized_volatility_horizon_hours": 24,
+    "realized_volatility_threshold": "greater than the shifted rolling median of prior 30 days",
+    "entry": "short at the first 5m candle open exactly five minutes after the decision timestamp",
+    "holding_hours": 8,
+    "protective_stop_above_entry_pct": 0.04,
+    "maximum_concurrent_positions": 1,
+    "leverage": 1
+  },
+  "cost_model": {
+    "base_taker_fee_per_side_bps": 5,
+    "base_slippage_per_side_bps": 2,
+    "double_fee_taker_fee_per_side_bps": 10,
+    "slippage_stress_per_side_bps": 5,
+    "funding": "actual event rates during each position; positive funding is received by the short and negative funding is paid",
+    "stop_gap_rule": "if a 5m candle opens above the stop, cover at that open; otherwise cover at the stop; exit-side slippage and fee still apply"
+  },
+  "pre_result_data_amendments": [
+    {
+      "recorded_at_utc": "2026-10-08T04:48:14Z",
+      "sample_state": "No development result was calculated. The loader stopped on the first archive before any signal, trade, or performance statistic was produced.",
+      "observed_publisher_condition": "The checksum-verified Binance archive contains byte-for-byte identical repeated CSV rows on 141 days and 598 absent five-minute timestamps across 66 days. No conflicting duplicate timestamps were observed in the acquired development archive.",
+      "fixed_normalization_rule": "Collapse only rows that are identical across every CSV field. Reject any timestamp whose repeated rows conflict, any timestamp outside its named UTC day, any off-grid timestamp, or any unexpected symbol.",
+      "fixed_missing_data_rule": "Reindex to the complete five-minute UTC grid without interpolation or forward/backward filling. Missing values remain NaN; any decision whose required feature window is incomplete is ineligible and cannot emit a signal.",
+      "scope": "Data-integrity normalization only. Signal conditions, feature windows, percentiles, execution delay, holding period, stop, cost assumptions, development dates, and gates are unchanged."
+    }
+  ],
+  "development_gate": {
+    "natural_closed_trades_minimum": 60,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.15,
+    "double_fee_net_positive": true,
+    "five_bps_per_side_slippage_net_positive": true,
+    "maximum_drawdown_maximum": 0.20,
+    "top_three_winner_profit_concentration_maximum": 0.50,
+    "three_percent_crash_precision_lift_minimum": 1.50
+  },
+  "locked_oos_gate": {
+    "natural_closed_trades_minimum": 30,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.20,
+    "double_fee_net_positive": true,
+    "five_bps_per_side_slippage_net_positive": true,
+    "maximum_drawdown_maximum": 0.20,
+    "top_three_winner_profit_concentration_maximum": 0.35,
+    "three_percent_crash_precision_lift_minimum": 1.50
+  },
+  "prohibited": [
+    "changing feature windows, percentiles, stop, holding horizon, or costs after viewing development results",
+    "opening locked OOS when any development gate fails",
+    "using sum_open_interest_value because contemporaneous price mechanically changes notional open interest",
+    "forward-filling, backward-filling, or interpolating any missing 5m metrics observation",
+    "treating the research paper's classification result as evidence of executable trading profit",
+    "submitting live or test orders during this experiment"
+  ],
+  "research_basis": [
+    "Tran et al. (2026): realized volatility, open-interest changes, and cumulative funding predict eight-hour crypto crashes in panel tests",
+    "Alexander et al. (2023): exchange open-interest reporting can be inconsistent, so this experiment is Binance-specific and checksum-bound",
+    "Binance official public-data archive: daily USD-M metrics files and publisher checksums"
+  ]
+}

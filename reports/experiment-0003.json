@@ -1,0 +1,320 @@
+{
+  "created_at": "2026-09-18T07:26:22.254681+00:00",
+  "experiment_id": 3,
+  "hypothesis": "In completed common BTC BEAR regimes, assets below their own falling EMA200 that first close below a fixed 20-day Donchian low have positive net continuation-short expectancy; PANIC entries are prohibited.",
+  "parent_experiment": 2,
+  "reason": "Experiment 0002 MR-A failed OOS. Per roadmap, test the next independent BEAR-only short-trend hypothesis without tuning MR parameters.",
+  "reason_for_change": "Pre-registered roadmap progression from closed RANGE mean-reversion branch to independent BEAR short-trend branch; no post-result parameter selection.",
+  "result": {
+    "cost_stress": {
+      "calmar": 0.8088717907954021,
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.013380909519567588,
+        "days": 260,
+        "geometric_daily_return": 1.2451282716430256e-05,
+        "historical_var_95": 0.0,
+        "historical_var_99": 0.0035021703863337065,
+        "max_consecutive_losing_days": 2,
+        "mean_daily_return": 1.335128227730323e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.04230769230769231,
+        "positive_day_ratio": 0.011538461538461539,
+        "worst_daily_return": -0.003739823907168793
+      },
+      "daily_geometric_return": 1.2451282716430256e-05,
+      "estimated_fee_cost": 1.5838483861200001,
+      "expectancy": 0.1801421727777779,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": 0.3129652322955676,
+      "funding_paid": 0.2693504773137335,
+      "funding_received": 0.5823157096093011,
+      "max_drawdown": 0.012596534049999946,
+      "organic": {
+        "expectancy": 0.18014217277777786,
+        "losses": 11,
+        "net_profit": 3.2425591100000015,
+        "net_return": 0.0032425591100000016,
+        "profit_factor": 1.109403396701825,
+        "trades": 18,
+        "wins": 7
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL = net PnL (rounding may differ)",
+        "funding_pnl": 0.3129652322955676,
+        "net_pnl": 3.2425591100000015,
+        "price_pnl_estimate": 4.513442263824434,
+        "trading_fees": -1.5838483861200001
+      },
+      "positive_day_ratio": 0.011538461538461539,
+      "sharpe": 0.025300454000730246,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "alpha003_rebound_or_regime_exit": 13,
+          "stop_loss": 5
+        },
+        "expectancy": 0.18014217277777786,
+        "funding_pnl": 0.3129652322955676,
+        "largest_single_loss": -3.78432665,
+        "largest_winner_profit_concentration": 0.262096348566893,
+        "mae_max": 0.09176302333734832,
+        "mae_mean": 0.050517022195071926,
+        "median_holding_minutes": 15960.0,
+        "mfe_max": 0.31452329827536696,
+        "mfe_mean": 0.10423639666454804,
+        "trades": 18,
+        "worst_rebound_from_entry": 0.09176302333734832
+      },
+      "sortino": 0.10746814254784247,
+      "source": "research/results/alpha003/cost-stress/backtest-result-2026-09-18_07-25-42.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_003_SHORT_TREND",
+      "timerange": "20250101-20260901",
+      "turnover": 1.5838483861199997
+    },
+    "development": {
+      "calmar": -0.8963180647557851,
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.020947770155232578,
+        "days": 220,
+        "geometric_daily_return": -6.204165463630229e-05,
+        "historical_var_95": 0.0008396451351175847,
+        "historical_var_99": 0.0036698764331327127,
+        "max_consecutive_losing_days": 1,
+        "mean_daily_return": -6.077775641086902e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.05454545454545454,
+        "positive_day_ratio": 0.013636363636363636,
+        "worst_daily_return": -0.004378493084040925
+      },
+      "daily_geometric_return": -6.204165463630229e-05,
+      "estimated_fee_cost": 0.7585164036675,
+      "expectancy": -0.7974620135294122,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -14.445406883208392,
+      "funding_paid": 14.492094775459156,
+      "funding_received": 0.04668789225076279,
+      "max_drawdown": 0.030578163648394923,
+      "organic": {
+        "expectancy": -0.7974620135294119,
+        "losses": 12,
+        "net_profit": -13.556854230000003,
+        "net_return": -0.013556854230000002,
+        "profit_factor": 0.6233609368320688,
+        "trades": 17,
+        "wins": 5
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL = net PnL (rounding may differ)",
+        "funding_pnl": -14.445406883208392,
+        "net_pnl": -13.556854230000003,
+        "price_pnl_estimate": 1.647069056875889,
+        "trading_fees": -0.7585164036675
+      },
+      "positive_day_ratio": 0.013636363636363636,
+      "sharpe": -0.06156999533838017,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "alpha003_rebound_or_regime_exit": 10,
+          "stop_loss": 7
+        },
+        "expectancy": -0.7974620135294119,
+        "funding_pnl": -14.445406883208392,
+        "largest_single_loss": -4.35081496,
+        "largest_winner_profit_concentration": 0.5284857634839597,
+        "mae_max": 0.14394845480149687,
+        "mae_mean": 0.06483800079555983,
+        "median_holding_minutes": 9360.0,
+        "mfe_max": 0.482821075740944,
+        "mfe_mean": 0.13145803863431957,
+        "trades": 17,
+        "worst_rebound_from_entry": 0.14394845480149687
+      },
+      "sortino": -0.230598669078801,
+      "source": "research/results/alpha003/development/backtest-result-2026-09-18_07-25-28.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_003_SHORT_TREND",
+      "timerange": "20220601-20250101",
+      "turnover": 1.517032807335
+    },
+    "evaluated_at": "2026-09-18T07:26:22.254436+00:00",
+    "gate": {
+      "checks": [
+        {
+          "actual": -0.013556854230000002,
+          "name": "development_net_positive",
+          "passed": false,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.0040336921799999995,
+          "name": "oos_net_positive",
+          "passed": true,
+          "required": "> 0.0",
+          "severity": "fail"
+        },
+        {
+          "actual": 1.1384294677545803,
+          "name": "oos_profit_factor",
+          "passed": false,
+          "required": ">= 1.2",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.012372387249999974,
+          "name": "oos_max_drawdown",
+          "passed": true,
+          "required": "<= 0.15",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.0032425591100000016,
+          "name": "cost_stress_net_positive",
+          "passed": true,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "lookahead",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "recursive",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": 18,
+          "name": "oos_sample_size",
+          "passed": false,
+          "required": ">= 30",
+          "severity": "review"
+        },
+        {
+          "actual": 0.22409400999999995,
+          "name": "bear_expectancy_positive",
+          "passed": true,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.260985805339045,
+          "name": "single_trade_profit_concentration",
+          "passed": true,
+          "required": "<= 0.5",
+          "severity": "fail"
+        }
+      ],
+      "policy": {
+        "max_drawdown": 0.15,
+        "max_short_single_trade_profit_concentration": 0.5,
+        "min_oos_net_return": 0.0,
+        "min_oos_trades": 30,
+        "min_profit_factor": 1.2
+      },
+      "role": "short",
+      "status": "FAIL"
+    },
+    "validation": {
+      "calmar": 1.0244531481158525,
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.013458003363963066,
+        "days": 260,
+        "geometric_daily_return": 1.548311468790864e-05,
+        "historical_var_95": 0.0,
+        "historical_var_99": 0.0034432833299999997,
+        "max_consecutive_losing_days": 2,
+        "mean_daily_return": 1.6387084428512678e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.04230769230769231,
+        "positive_day_ratio": 0.011538461538461539,
+        "worst_daily_return": -0.003690841880076956
+      },
+      "daily_geometric_return": 1.548311468790864e-05,
+      "estimated_fee_cost": 0.7915286265299999,
+      "expectancy": 0.22409401000000018,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": 0.3129652322955676,
+      "funding_paid": 0.2693504773137335,
+      "funding_received": 0.5823157096093011,
+      "max_drawdown": 0.012372387249999974,
+      "organic": {
+        "expectancy": 0.22409400999999995,
+        "losses": 11,
+        "net_profit": 4.033692179999999,
+        "net_return": 0.0040336921799999995,
+        "profit_factor": 1.1384294677545803,
+        "trades": 18,
+        "wins": 7
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL = net PnL (rounding may differ)",
+        "funding_pnl": 0.3129652322955676,
+        "net_pnl": 4.033692179999999,
+        "price_pnl_estimate": 4.512255574234431,
+        "trading_fees": -0.7915286265299999
+      },
+      "positive_day_ratio": 0.011538461538461539,
+      "sharpe": 0.03148960712938449,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "alpha003_rebound_or_regime_exit": 13,
+          "stop_loss": 5
+        },
+        "expectancy": 0.22409400999999995,
+        "funding_pnl": 0.3129652322955676,
+        "largest_single_loss": -3.73700245,
+        "largest_winner_profit_concentration": 0.260985805339045,
+        "mae_max": 0.09176302333734832,
+        "mae_mean": 0.050517022195071926,
+        "median_holding_minutes": 15960.0,
+        "mfe_max": 0.31452329827536696,
+        "mfe_mean": 0.10423639666454804,
+        "trades": 18,
+        "worst_rebound_from_entry": 0.09176302333734832
+      },
+      "sortino": 0.13372813212392462,
+      "source": "research/results/alpha003/validation/backtest-result-2026-09-18_07-25-38.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_003_SHORT_TREND",
+      "timerange": "20250101-20260901",
+      "turnover": 1.58305725306
+    }
+  },
+  "strategy": "ALPHA_003_SHORT_TREND"
+}

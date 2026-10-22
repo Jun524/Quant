@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "entry_pricing": {
+    "price_side": "other",
+    "use_order_book": true,
+    "order_book_top": 1,
+    "price_last_balance": 0.0,
+    "check_depth_of_market": {
+      "enabled": true,
+      "bids_to_ask_delta": 0.8
+    }
+  },
+  "exit_pricing": {
+    "price_side": "other",
+    "use_order_book": true,
+    "order_book_top": 1
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "template_registered_at_utc": "2026-10-11T06:03:09Z",
+  "candidate": "ALPHA_015_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "candidate_source": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "LOCKED_TEMPLATE_NOT_AN_EXPERIMENT",
+  "hypothesis": "Using only the prior sealed daily universe and the last 720 closed one-minute returns, cross-sectional adaptive-LASSO forecasts contain enough short-horizon information spillover for an equal-weight top-quintile long and bottom-quintile short Binance USDT-M portfolio, rebalanced every ten minutes with a one-minute latency floor, to retain positive expectancy after current measured turnover costs and funding.",
+  "activation": {
+    "required_point_in_time_universe_days": 180,
+    "membership_lag_days": 1,
+    "development_days": 120,
+    "locked_validation_days": 60,
+    "kline_input_days": "each phase's evaluation days plus exactly one preceding causal-lookback UTC day",
+    "aggtrade_input_days": "evaluation days only",
+    "archive_inventory": "for every prior-day eligible symbol: membership-day and evaluation-day one-minute klines plus evaluation-day aggTrades and sealed daily funding history; reject duplicate, missing, or extra files",
+    "archive_symbol_mapping": "CCXT BASE/USDT:USDT maps exactly to Binance BASEUSDT",
+    "aggtrade_midnight_continuity": "require exact aggregate-trade ID continuation across adjacent included UTC days for each symbol",
+    "activation_lock_required": true,
+    "activation_lock_binding_added_only_after_source_replay": true
+  },
+  "model": {
+    "training_pairs": 720,
+    "minimum_symbols": 30,
+    "rolling_standardization": true,
+    "predictors": "all cross-sectional lagged one-minute returns including own lag",
+    "target": "next one-minute return",
+    "penalty_selection": "first 600 chronological pairs fit, final 120 pairs forward validation, minimum one-step return MSE over the fixed lambda-fraction grid, larger lambda wins an exact tie",
+    "penalty_selection_from_portfolio_pnl": false
+  },
+  "portfolio": {
+    "buckets": 5,
+    "long": "equal-weight top quintile",
+    "short": "equal-weight bottom quintile",
+    "gross_exposure": 1.0,
+    "net_exposure": 0.0,
+    "decision_grid": "10-minute UTC epoch grid",
+    "first_daily_decision": "00:00 UTC",
+    "last_daily_decision": "23:40 UTC",
+    "expected_decisions_per_complete_utc_day": 143,
+    "entry_latency_minutes": 1,
+    "holding_minutes": 10,
+    "return_timestamp_contract": "a kline opened at t-1 is labelled at its fully observable close boundary t; a decision at t may read returns through t",
+    "latency_interpretation": "entry at t+1 excludes the forecasted t-to-t+1 minute and tests rank persistence over the subsequent holding interval",
+    "execution_price_reference": "first verified aggTrade at or after each entry or exit boundary",
+    "maximum_execution_reference_delay_ms": 60000,
+    "missing_execution_reference_action": "reject the complete UTC day; no forward fill or kline substitution",
+    "overlapping_exposure": false,
+    "boundary_rebalance": "direct net rebalance from the expiring target to the new target at their shared boundary; first target enters from cash and final target exits to cash",
+    "diagnostic_markouts_minutes": [
+      1,
+      5,
+      10
+    ],
+    "gate_markout_minutes": 10
+  },
+  "costs": {
+    "base_all_in_basis_points_per_unit_realized_turnover": 10.0,
+    "stress_all_in_basis_points_per_unit_realized_turnover": 20.0,
+    "includes_trading_fee": true,
+    "turnover_definition": "L1 signed-weight change from boundary-marked pretrade holdings to the new target; target-to-target turnover is only a lower-bound diagnostic and no synthetic flat round trip is charged",
+    "funding_accounted_separately": true,
+    "funding_formula": "for every funding event in [entry, exit), add negative position_weight times funding_rate",
+    "development_funding_source": "sealed per-symbol per-day public funding-history API response restricted to authorized evaluation days",
+    "final_funding_reconciliation": "required against Binance monthly fundingRate ZIP and publisher CHECKSUM after locked validation is legitimately opened",
+    "paper_historical_four_basis_points_forbidden": true,
+    "cost_contract_amendment": "research/alpha015-contract-amendment-011.json",
+    "maker_credit_without_forward_fill_evidence_forbidden": true
+  },
+  "development_gate": {
+    "all_checks_required": true,
+    "statistical_contract": {
+      "daily_observation": "one complete UTC-day base-net return compounded from 143 non-overlapping intervals",
+      "newey_west_kernel": "Bartlett",
+      "newey_west_maximum_lag_days": 5,
+      "selection_bias_minimum_complete_daily_observations": 100,
+      "selection_bias_single_preregistered_trial_pbo": "NOT_APPLICABLE_SINGLE_PREREGISTERED_TRIAL only; never a promotion pass",
+      "selection_bias_multiple_trial_cscv_slices": 8
+    },
+    "checks": {
+      "source_integrity": "all 120 authorized development UTC days each expose exactly 143 same-day execution windows; prior-day memberships, one-minute grids, aggTrade IDs, archive checksums, sealed daily funding responses, and decision timestamps pass",
+      "gross_price_pnl_positive": true,
+      "base_net_pnl_positive": true,
+      "stress_net_pnl_positive": true,
+      "base_profit_factor_minimum": 1.2,
+      "stress_profit_factor_minimum": 1.0,
+      "newey_west_t_stat_base_minimum": 2.0,
+      "base_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
+      "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
+      "positive_complete_calendar_month_fraction_minimum": 0.6,
+      "largest_positive_day_share_of_total_positive_pnl_maximum": 0.2,
+      "deflated_sharpe_probability_minimum": 0.95,
+      "cscv_probability_backtest_overfitting_maximum": 0.1,
+      "lookahead_analysis": "PASS",
+      "future_row_invariance": "PASS",
+      "locked_validation_unopened": true
+    },
+    "failure_action": "FAIL and keep locked validation inaccessible; do not change bucket count, timing, lambda grid, costs, or universe after seeing returns"
+  },
+  "locked_validation_gate": {
+    "opened_only_by_source_bound_development_pass_receipt": true,
+    "all_checks_required": true,
+    "checks": {
+      "all_60_locked_days_replayed_from_publisher_bound_sources": true,
+      "all_180_days_funding_reconciled_to_monthly_publisher_checksums": true,
+      "base_net_pnl_positive": true,
+      "stress_net_pnl_positive": true,
+      "base_profit_factor_minimum": 1.2,
+      "stress_profit_factor_minimum": 1.0,
+      "newey_west_t_stat_base_minimum": 2.0,
+      "base_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
+      "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
+      "positive_complete_calendar_month_fraction_minimum": 0.5,
+      "largest_positive_day_share_of_total_positive_pnl_maximum": 0.2,
+      "no_parameter_or_universe_retuning": true
+    },
+    "pass_mapping": "REVIEW only, never direct live promotion"
+  },
+  "post_validation_requirements": [
+    "forward long-entry, long-exit, short-entry, short-exit, protective-stop, latency, and impact calibration on the selected symbols",
+    "portfolio-level 10% monthly target gate on 366 consecutive daily MTM observations",
+    "portfolio maximum drawdown, liquidation, ruin, concentration, selection-bias, and source-replay gates",
+    "explicit live-promotion receipt and separate user authorization"
+  ],
+  "prohibited": [
+    "building past membership from current listings",
+    "opening Experiment 0015 before a verified activation lock exists",
+    "acquiring or summarizing project return archives before the final preregistration receipt",
+    "using the final 60 days during development",
+    "opening a development position whose entry or exit crosses into a locked-validation UTC day",
+    "choosing 5-minute, 13-minute, decile, direction, symbols, or costs after observing results",
+    "using leverage to force the monthly target",
+    "live trading"
+  ]
+}

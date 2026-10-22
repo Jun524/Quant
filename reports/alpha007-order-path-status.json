@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-11T05:52:07.273183+00:00",
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "status": "WAITING_PRIMARY_WITH_KNOWN_FILTER_BLOCK",
+  "promotion_eligible": false,
+  "live_order_authorization": "CLOSED",
+  "network_submission": false,
+  "policy_sha256": "484ac8c998d7cf2d6fb1a0e73c178a7d5f4193202555bda0888d17853fb15ecb",
+  "implementation_sha256": "1c7f829020abd1fc33a5c42c9407703b002eb1a8b7d4a82b2a260acc752044cf",
+  "registry_binding": {
+    "valid": true,
+    "experiment_id": 7,
+    "event_id": 48
+  },
+  "checks": [
+    {
+      "name": "policy_and_implementation_registry_binding",
+      "passed": true,
+      "actual": {
+        "valid": true,
+        "experiment_id": 7,
+        "event_id": 48
+      }
+    },
+    {
+      "name": "primary_shadow_pass",
+      "passed": false,
+      "actual": "ACCUMULATING",
+      "required": "PASS"
+    },
+    {
+      "name": "primary_terminal_receipt",
+      "passed": false,
+      "actual": false,
+      "required": true
+    },
+    {
+      "name": "ten_bps_external_cost_stress",
+      "passed": false,
+      "actual": "ACCUMULATING",
+      "required": "PASS bound to current primary"
+    },
+    {
+      "name": "partial_fill_veto",
+      "passed": false,
+      "actual": "ACCUMULATING",
+      "required": "PASS bound to current primary"
+    },
+    {
+      "name": "fresh_exchange_filter_audit",
+      "passed": true,
+      "actual_age_seconds": 92.87197,
+      "required_max": 3600
+    },
+    {
+      "name": "fixed_notional_exchange_filter_feasibility",
+      "passed": false,
+      "actual": "FAIL",
+      "required": "PASS"
+    },
+    {
+      "name": "credential_free_only",
+      "passed": true,
+      "actual": false,
+      "required": false
+    }
+  ],
+  "blockers": [
+    "primary_shadow_pass",
+    "primary_terminal_receipt",
+    "ten_bps_external_cost_stress",
+    "partial_fill_veto",
+    "fixed_notional_exchange_filter_feasibility"
+  ]
+}

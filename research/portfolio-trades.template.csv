@@ -1,0 +1,1 @@
+trade_id,candidate,symbol,position_side,opened_at,closed_at,gross_price_pnl,trading_fees,funding_pnl,modeled_slippage,entry_notional,exit_notional,maximum_leverage,maximum_adverse_excursion,exit_order_role,exit_reason

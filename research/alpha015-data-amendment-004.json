@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_DATA_004_EXACT_ARCHIVE_INVENTORY",
+  "registered_at_utc": "2026-10-11T10:22:41Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_INPUT_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "rules": {
+    "symbol_mapping": "Only CCXT BASE/USDT:USDT symbols are accepted and map exactly to Binance BASEUSDT archive symbols.",
+    "membership_binding": "Every evaluation day uses only the eligible symbols in its immutable prior-UTC-day activation-lock binding.",
+    "required_files": [
+      "one-minute klines for each eligible symbol on the membership day",
+      "one-minute klines for each eligible symbol on the evaluation day",
+      "aggregate trades for each eligible symbol on the evaluation day"
+    ],
+    "inventory_policy": "Duplicate, missing, or extra dataset-symbol-day entries reject the entire phase before paths are exposed.",
+    "byte_policy": "Every file is reverified against the publisher checksum, exact filename, single ZIP member, CSV schema, and manifest digest before use.",
+    "midnight_policy": "When a symbol is included on adjacent evaluation days, its aggregate-trade ID must continue exactly across the UTC-day seam.",
+    "membership_gap_policy": "Aggregate-trade continuity is not inferred across a day on which the symbol was not eligible and therefore had no authorized archive."
+  },
+  "unchanged": [
+    "120 development and 60 locked-validation evaluation days",
+    "exactly one preceding kline day for the first 720-minute causal lookback",
+    "no preceding-day aggregate-trade archive",
+    "locked validation remains inaccessible until a source-bound development pass receipt",
+    "no return acquisition or live trading is authorized"
+  ]
+}

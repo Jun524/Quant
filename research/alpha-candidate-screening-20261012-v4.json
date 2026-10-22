@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-12T03:40:00Z",
+  "purpose": "Record an external hourly-reversal finding without opening a project trial or inspecting project candidate returns.",
+  "project_return_data_inspected_during_screening": false,
+  "sources_reviewed": [
+    {
+      "title": "Diagnostic expectations and cryptocurrency returns",
+      "authors": ["Weijia Xue", "Chunyang Zhou"],
+      "journal": "Journal of Economic Dynamics and Control",
+      "year": 2026,
+      "doi": "10.1016/j.jedc.2026.105416",
+      "url": "https://doi.org/10.1016/j.jedc.2026.105416",
+      "finding_used": "The accessible publisher record reports broad negative predictability from a prior one-hour return to subsequent one-to-four-hour returns across Binance USDT pairs, including BTC and ETH."
+    }
+  ],
+  "candidates": [
+    {
+      "name": "HOURLY_CROSS_SECTIONAL_RETURN_REVERSAL",
+      "decision": "DEFER_REPRODUCIBILITY_CONTRACT_INCOMPLETE",
+      "reason": "The accessible publication record establishes a research finding but does not disclose a complete executable strategy contract: point-in-time tradable membership, fixed signal threshold or ranking rule, number and weighting of positions, exact hold and overlap treatment, funding treatment, and executable fee/spread/slippage assumptions. Filling those choices from project returns would create a post-hoc parameter search and would overlap the sealed Alpha 002 mean-reversion family.",
+      "required_before_any_preregistration": [
+        "a primary-source supplement or author-provided protocol that fixes the selection and portfolio construction rule before project returns are read",
+        "a point-in-time historical or forward contract-status and liquidity universe matching the rule",
+        "a preregistered funding-aware execution and turnover budget",
+        "an independence review against Alpha 002 that identifies a materially different information set and horizon"
+      ]
+    }
+  ],
+  "selected_next_step": "NO_NEW_EXPERIMENT",
+  "rationale": "Do not substitute an under-specified literature result with tuned project parameters. Continue sealed forward collection and the existing point-in-time universe protocol.",
+  "live_order_authorization": "CLOSED"
+}

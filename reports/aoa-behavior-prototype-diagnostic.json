@@ -1,0 +1,44 @@
+{
+  "strategy": "AoaBehaviorPrototype",
+  "status": "REJECTED",
+  "experiment_registered": false,
+  "basis": "development diagnostic on previously seen Binance data; not out-of-sample evidence",
+  "timerange": "20220601-20260901",
+  "source": "user_data/backtest_results/backtest-result-2026-10-06_02-51-02.zip",
+  "fee_per_side": 0.0005,
+  "organic": {
+    "trades": 3042,
+    "wins": 609,
+    "losses": 2433,
+    "net_profit_usdt": -167.99614189,
+    "net_return": -0.16799614189,
+    "profit_factor": 0.5193908698,
+    "max_drawdown": 0.1708085288,
+    "median_holding_minutes": 25.0
+  },
+  "pnl_components_usdt": {
+    "price_pnl_estimate": 3.2173311737,
+    "trading_fees": -170.9477808248,
+    "funding_pnl": -0.2656922388,
+    "net_pnl": -167.99614189
+  },
+  "direction": {
+    "long_net_profit_usdt": -74.064,
+    "short_net_profit_usdt": -93.932
+  },
+  "regime_net_profit_usdt": {
+    "BULL": -72.92734653,
+    "BEAR": -63.91173738,
+    "RANGE": -8.62011158,
+    "TRANSITION": -22.5369464
+  },
+  "excursions": {
+    "mean_mfe": 0.0040817929,
+    "mean_mae": 0.0027782829,
+    "mfe_mae_ratio": 1.4691782995,
+    "covered_trades": 3042,
+    "median_time_to_mfe_minutes": 10.0,
+    "median_time_to_mae_minutes": 10.0
+  },
+  "decision": "Do not tune or promote. Retain only as a reproducible negative result and execution-research prototype."
+}

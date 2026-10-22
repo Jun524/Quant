@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_METHOD_007_TIMESTAMP_AND_EXECUTION_REFERENCE",
+  "registered_at_utc": "2026-10-11T10:29:32Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_TIMESTAMP_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "rules": {
+    "return_label": "A one-minute kline opened at t-1 is labelled at boundary t, when that kline is fully closed and observable. Close-to-close return r_t therefore uses only closes observable by t.",
+    "decision_information": "A decision stamped t may read return rows through t and no later row.",
+    "latency_interpretation": "The t+1 entry boundary intentionally excludes the one-step return from t to t+1. Experiment 0015 tests whether the cross-sectional rank persists into the following ten-minute holding interval; it does not claim to capture the already elapsed forecast minute.",
+    "execution_reference": "For each required symbol and entry or exit boundary, use the first verified aggregate trade whose transact_time is on or after the boundary.",
+    "maximum_execution_reference_delay_ms": 60000,
+    "delay_failure": "If any required symbol has no aggregate trade within 60000 milliseconds after a boundary, reject the complete UTC day rather than forward-fill or substitute a kline price.",
+    "shared_boundary": "An unchanged symbol must use the identical aggregate-trade price for the expiring and new target at a shared rebalance boundary."
+  },
+  "unchanged": [
+    "one-minute latency floor",
+    "ten-minute holding interval and 143 same-day decisions",
+    "realized-turnover base and stress cost floors",
+    "no return acquisition or live trading is authorized"
+  ]
+}

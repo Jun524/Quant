@@ -1,0 +1,545 @@
+{
+  "source": "user_data/backtest_results/backtest-result-2026-10-06_03-19-40.zip",
+  "strategy": "AoaDistilledPolicyPrototype",
+  "monthly": {
+    "basis": "complete calendar months from Freqtrade closed daily_profit; not mark-to-market equity",
+    "complete_months": 51,
+    "geometric_monthly_return": -0.00012520684601924348,
+    "arithmetic_mean_monthly_return": -0.00012100433905073362,
+    "median_monthly_return": 0.0,
+    "positive_month_ratio": 0.4117647058823529,
+    "target_month_ratio": 0.0,
+    "target": 0.1,
+    "best_month": 0.006436724752597074,
+    "worst_month": -0.008924430931138396,
+    "p10_monthly_return": -0.003959730377345802,
+    "max_consecutive_losing_months": 6,
+    "series": [
+      {
+        "month": "2022-06",
+        "return": 0.004103972389999999,
+        "profit": 4.103972389999999,
+        "start_equity": 1000.0,
+        "complete": true
+      },
+      {
+        "month": "2022-07",
+        "return": -0.007317391885734137,
+        "profit": -7.34742226,
+        "start_equity": 1004.10397239,
+        "complete": true
+      },
+      {
+        "month": "2022-08",
+        "return": 0.001641003643052729,
+        "profit": 1.63568113,
+        "start_equity": 996.7565501299999,
+        "complete": true
+      },
+      {
+        "month": "2022-09",
+        "return": 0.0030714686813317345,
+        "profit": 3.06653047,
+        "start_equity": 998.3922312599999,
+        "complete": true
+      },
+      {
+        "month": "2022-10",
+        "return": 0.00329787799179536,
+        "profit": 3.30268881,
+        "start_equity": 1001.4587617299999,
+        "complete": true
+      },
+      {
+        "month": "2022-11",
+        "return": -0.0025456244948742443,
+        "profit": -2.55774536,
+        "start_equity": 1004.7614505399998,
+        "complete": true
+      },
+      {
+        "month": "2022-12",
+        "return": -0.0019188138400013336,
+        "profit": -1.9230423399999999,
+        "start_equity": 1002.2037051799998,
+        "complete": true
+      },
+      {
+        "month": "2023-01",
+        "return": -0.005618969114170546,
+        "profit": -5.62054615,
+        "start_equity": 1000.2806628399998,
+        "complete": true
+      },
+      {
+        "month": "2023-02",
+        "return": 0.002490719612086471,
+        "profit": 2.47741946,
+        "start_equity": 994.6601166899998,
+        "complete": true
+      },
+      {
+        "month": "2023-03",
+        "return": -0.007064049777121611,
+        "profit": -7.0438291899999985,
+        "start_equity": 997.1375361499997,
+        "complete": true
+      },
+      {
+        "month": "2023-04",
+        "return": 0.005211976849993735,
+        "profit": 5.16034548,
+        "start_equity": 990.0937069599997,
+        "complete": true
+      },
+      {
+        "month": "2023-05",
+        "return": 0.000621002927327704,
+        "profit": 0.6180556800000001,
+        "start_equity": 995.2540524399998,
+        "complete": true
+      },
+      {
+        "month": "2023-06",
+        "return": 0.0025886241907774822,
+        "profit": 2.57793863,
+        "start_equity": 995.8721081199998,
+        "complete": true
+      },
+      {
+        "month": "2023-07",
+        "return": -0.00020971290519898014,
+        "profit": -0.20938785999999998,
+        "start_equity": 998.4500467499997,
+        "complete": true
+      },
+      {
+        "month": "2023-08",
+        "return": 0.0004386123988246079,
+        "profit": 0.43784072999999996,
+        "start_equity": 998.2406588899997,
+        "complete": true
+      },
+      {
+        "month": "2023-09",
+        "return": 3.2604687106400905e-05,
+        "profit": 0.0325616,
+        "start_equity": 998.6784996199997,
+        "complete": true
+      },
+      {
+        "month": "2023-10",
+        "return": 0.00147798083681667,
+        "profit": 1.4760758099999998,
+        "start_equity": 998.7110612199997,
+        "complete": true
+      },
+      {
+        "month": "2023-11",
+        "return": 0.003007948971363108,
+        "profit": 3.0085118699999995,
+        "start_equity": 1000.1871370299997,
+        "complete": true
+      },
+      {
+        "month": "2023-12",
+        "return": -0.0013181895290814,
+        "profit": -1.322402,
+        "start_equity": 1003.1956488999997,
+        "complete": true
+      },
+      {
+        "month": "2024-01",
+        "return": -0.003959730377345802,
+        "profit": -3.9671479299999994,
+        "start_equity": 1001.8732468999997,
+        "complete": true
+      },
+      {
+        "month": "2024-02",
+        "return": -0.0022688330017592824,
+        "profit": -2.26408229,
+        "start_equity": 997.9060989699997,
+        "complete": true
+      },
+      {
+        "month": "2024-03",
+        "return": -0.008924430931138396,
+        "profit": -8.88553841,
+        "start_equity": 995.6420166799996,
+        "complete": true
+      },
+      {
+        "month": "2024-04",
+        "return": -0.0017177102834649122,
+        "profit": -1.6949617499999996,
+        "start_equity": 986.7564782699997,
+        "complete": true
+      },
+      {
+        "month": "2024-05",
+        "return": -0.0049989890960277115,
+        "profit": -4.92431178,
+        "start_equity": 985.0615165199997,
+        "complete": true
+      },
+      {
+        "month": "2024-06",
+        "return": 0.0015869859265393532,
+        "profit": 1.55546395,
+        "start_equity": 980.1372047399997,
+        "complete": true
+      },
+      {
+        "month": "2024-07",
+        "return": 0.006436724752597074,
+        "profit": 6.3188854999999995,
+        "start_equity": 981.6926686899997,
+        "complete": true
+      },
+      {
+        "month": "2024-08",
+        "return": 0.00041139367072810107,
+        "profit": 0.4064617000000001,
+        "start_equity": 988.0115541899996,
+        "complete": true
+      },
+      {
+        "month": "2024-09",
+        "return": 0.00141745914934428,
+        "profit": 1.40104216,
+        "start_equity": 988.4180158899997,
+        "complete": true
+      },
+      {
+        "month": "2024-10",
+        "return": 0.00150495853548695,
+        "profit": 1.4896366399999998,
+        "start_equity": 989.8190580499996,
+        "complete": true
+      },
+      {
+        "month": "2024-11",
+        "return": 0.00029200585201214434,
+        "profit": 0.28946794,
+        "start_equity": 991.3086946899996,
+        "complete": true
+      },
+      {
+        "month": "2024-12",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-01",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-02",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-03",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-04",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-05",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-06",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-07",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-08",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-09",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-10",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-11",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2025-12",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2026-01",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2026-02",
+        "return": 0.001859386281142166,
+        "profit": 1.8437640199999996,
+        "start_equity": 991.5981626299996,
+        "complete": true
+      },
+      {
+        "month": "2026-03",
+        "return": 0.0009489827182743256,
+        "profit": 0.9427592199999998,
+        "start_equity": 993.4419266499996,
+        "complete": true
+      },
+      {
+        "month": "2026-04",
+        "return": -0.0005301418630947408,
+        "profit": -0.5271649500000001,
+        "start_equity": 994.3846858699995,
+        "complete": true
+      },
+      {
+        "month": "2026-05",
+        "return": 0.0,
+        "profit": 0.0,
+        "start_equity": 993.8575209199995,
+        "complete": true
+      },
+      {
+        "month": "2026-06",
+        "return": 0.001970041498692452,
+        "profit": 1.9579405600000006,
+        "start_equity": 993.8575209199995,
+        "complete": true
+      },
+      {
+        "month": "2026-07",
+        "return": -6.448217815835718e-05,
+        "profit": -0.06421235,
+        "start_equity": 995.8154614799995,
+        "complete": true
+      },
+      {
+        "month": "2026-08",
+        "return": -0.0021258835797088077,
+        "profit": -2.11685123,
+        "start_equity": 995.7512491299995,
+        "complete": true
+      }
+    ]
+  },
+  "organic": {
+    "trades": 477,
+    "net_profit": -6.365602100000002,
+    "net_return": -0.006365602100000002,
+    "profit_factor": 0.9591683030020822,
+    "wins": 253,
+    "losses": 224,
+    "expectancy": -0.013345077777777782
+  },
+  "max_drawdown": 0.027473470822985593,
+  "equity_basis": "closed_trade_daily_profit_not_mark_to_market",
+  "equity_evidence": null,
+  "trade_risk": {
+    "basis": "organic trades; MAE is leverage-adjusted from exported min_rate/max_rate",
+    "trades": 477,
+    "excursion_coverage_ratio": 1.0,
+    "maximum_leverage": 1.0,
+    "maximum_leverage_adjusted_mae": 0.06599393287195943,
+    "liquidation_exits": 0
+  },
+  "risk_of_ruin": {
+    "status": "AVAILABLE_PRELIMINARY",
+    "basis": "7-day contiguous block bootstrap of supplied daily returns; deterministic seed",
+    "observations": 1542,
+    "horizon_days": 365,
+    "block_days": 7,
+    "simulations": 5000,
+    "ruin_equity_fraction": 0.5,
+    "drawdown_threshold": 0.2,
+    "annual_target_return": 2.138428376721003,
+    "probability_of_ruin": 0.0,
+    "probability_drawdown_exceeds_threshold": 0.0,
+    "probability_terminal_loss": 0.5124,
+    "probability_reaching_annual_target": 0.0,
+    "terminal_return_median": -0.0002415742177276914,
+    "terminal_return_mean": -0.0002495498490377919,
+    "terminal_return_p05": -0.018583119944018504,
+    "terminal_return_p95": 0.017976114117034158,
+    "maximum_drawdown_median": 0.01112066529274841,
+    "maximum_drawdown_p95": 0.023737229457691304
+  },
+  "gate": {
+    "status": "FAIL",
+    "policy": {
+      "target_geometric_monthly_return": 0.1,
+      "minimum_complete_months": 12,
+      "minimum_organic_trades": 100,
+      "minimum_positive_month_ratio": 0.6,
+      "maximum_worst_month_loss": 0.1,
+      "maximum_drawdown": 0.2,
+      "minimum_profit_factor": 1.2,
+      "maximum_probability_of_ruin": 0.01,
+      "maximum_bootstrap_drawdown_p95": 0.2,
+      "maximum_leverage": 3.0,
+      "maximum_trade_adverse_excursion": 0.5,
+      "require_mark_to_market_equity": true,
+      "require_zero_liquidations": true,
+      "require_double_cost_positive": true
+    },
+    "checks": [
+      {
+        "name": "complete_month_sample",
+        "passed": true,
+        "actual": 51,
+        "required": 12,
+        "kind": "sample"
+      },
+      {
+        "name": "organic_trade_sample",
+        "passed": true,
+        "actual": 477,
+        "required": 100,
+        "kind": "sample"
+      },
+      {
+        "name": "geometric_monthly_return",
+        "passed": false,
+        "actual": -0.00012520684601924348,
+        "required": 0.1,
+        "kind": "performance"
+      },
+      {
+        "name": "positive_month_ratio",
+        "passed": false,
+        "actual": 0.4117647058823529,
+        "required": 0.6,
+        "kind": "risk"
+      },
+      {
+        "name": "worst_month_loss",
+        "passed": true,
+        "actual": -0.008924430931138396,
+        "required": ">= -0.1",
+        "kind": "risk"
+      },
+      {
+        "name": "max_drawdown",
+        "passed": true,
+        "actual": 0.027473470822985593,
+        "required": "<= 0.2",
+        "kind": "risk"
+      },
+      {
+        "name": "profit_factor",
+        "passed": false,
+        "actual": 0.9591683030020822,
+        "required": 1.2,
+        "kind": "performance"
+      },
+      {
+        "name": "mark_to_market_equity_available",
+        "passed": false,
+        "actual": "closed_trade_daily_profit_not_mark_to_market",
+        "required": "mark_to_market",
+        "kind": "evidence"
+      },
+      {
+        "name": "trade_excursion_evidence_complete",
+        "passed": true,
+        "actual": 1.0,
+        "required": 1.0,
+        "kind": "evidence"
+      },
+      {
+        "name": "maximum_leverage",
+        "passed": true,
+        "actual": 1.0,
+        "required": "<= 3.0",
+        "kind": "risk"
+      },
+      {
+        "name": "maximum_trade_adverse_excursion",
+        "passed": true,
+        "actual": 0.06599393287195943,
+        "required": "<= 0.5",
+        "kind": "risk"
+      },
+      {
+        "name": "bootstrap_probability_of_ruin",
+        "passed": true,
+        "actual": 0.0,
+        "required": "<= 0.01",
+        "kind": "risk"
+      },
+      {
+        "name": "bootstrap_maximum_drawdown_p95",
+        "passed": true,
+        "actual": 0.023737229457691304,
+        "required": "<= 0.2",
+        "kind": "risk"
+      },
+      {
+        "name": "liquidation_exits",
+        "passed": true,
+        "actual": 0,
+        "required": 0,
+        "kind": "risk"
+      },
+      {
+        "name": "double_cost_net_positive",
+        "passed": false,
+        "actual": -0.03279582378,
+        "required": "> 0",
+        "kind": "cost"
+      }
+    ],
+    "warning": "Closed-trade bootstrap risk is preliminary; PASS requires mark-to-market equity and is not a promise of future returns."
+  }
+}

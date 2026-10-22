@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "IMMUTABLE_PREREGISTRATION",
+  "cohort_id": "ALPHA001_FORWARD_CLEAN_COHORT_20261013",
+  "created_at_utc": "2026-10-13T04:44:00Z",
+  "candidate": "FuturesBtcRegimeRiskBudgetLong",
+  "purpose": "Start a fresh, complete forward-evidence cohort after the prior Alpha #1 entry-execution evidence contained an unreplayed observation interval. The predecessor remains sealed and excluded from promotion evidence.",
+  "predecessor": {
+    "state": "research/alpha001-forward-dryrun-state.json before clean cohort launch",
+    "entry_execution_evidence": "INELIGIBLE_FOR_PROMOTION_DUE_TO_UNREPLAYED_INTERVAL",
+    "sealed_equity_manifest": "research/equity/raw/alpha001-forward-20261009T162608Z.manifest.json",
+    "sealed_entry_execution_manifest": "research/execution/raw/alpha001-signal-entry-recovery-20261012T142709Z.manifest.json"
+  },
+  "strategy_or_risk_settings_changed": false,
+  "invariants": [
+    "Use the identical FuturesBtcRegimeRiskBudgetLong strategy and existing locked risk configuration.",
+    "Create a fresh database, MTM stream, and signal-triggered entry-execution stream at launch.",
+    "Do not replay the predecessor's uncovered log interval.",
+    "Do not count any predecessor execution row or equity observation as evidence for this cohort.",
+    "Do not submit live orders; dry-run remains credential-free."
+  ],
+  "promotion_evidence_start": "Only observations captured after this cohort's active manifests are created may be considered, and only after all separate promotion gates pass.",
+  "live_order_authorization": "CLOSED"
+}

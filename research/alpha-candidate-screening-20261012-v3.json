@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-12T05:30:00Z",
+  "purpose": "Re-screen literature-backed crypto-derivatives candidates after the capital-preservation objective replaced a mandatory monthly-return target. Do not reopen failed families as new experiments.",
+  "search_record": {
+    "workstreams": 5,
+    "sources_reviewed": 80,
+    "project_return_data_inspected_during_screening": false,
+    "hard_filters": [
+      "must be distinct from a sealed failed family",
+      "must be executable with Binance USDT-M futures alone",
+      "must state a causal decision-time signal and a defensible post-cost implementation",
+      "must not require unobserved historical order-book, membership, or proprietary data"
+    ]
+  },
+  "candidates": [
+    {
+      "name": "RANDOM_MATURITY_SPOT_PERP_BASIS_ARBITRAGE",
+      "decision": "REJECT_SCOPE_AND_FAMILY_OVERLAP",
+      "reason": "The published strategy is a long-spot/short-perpetual or reverse cash-and-carry hedge, not a Binance USDT-M-futures-only sleeve. It requires spot inventory or borrowing, cross-product margin accounting, and a threshold-selection protocol. The existing same-asset cash-and-carry experiment Alpha 012 is already sealed FAIL for insufficient post-friction opportunity; reopening it with changed thresholds would be tuning a failed family.",
+      "source": "https://exa.ai/library/publication/0pc3fw81ngj",
+      "quality": "Primary research preprint with explicit Binance hourly data and transaction-cost discussion; unsuitable for the defined futures-only scope rather than rejected as evidence."
+    },
+    {
+      "name": "SPOT_PERP_FUNDING_CARRY",
+      "decision": "REJECT_SCOPE_AND_FAMILY_OVERLAP",
+      "reason": "The strategy earns funding by shorting a perpetual against an equal spot long, so it is not a directional USDT-M-futures strategy. It overlaps the sealed Alpha 012 same-asset cash-and-carry test and cannot be admitted under a new name merely because historical pre-2023 funding was high.",
+      "source": "https://gerbil.life/papers/CarryTrade.v1.2.pdf",
+      "quality": "Academic working paper with stated Binance minute data and funding timing; useful for accounting design, not an admissible new candidate."
+    },
+    {
+      "name": "CROSS_SECTIONAL_FUTURES_BASIS_FACTOR",
+      "decision": "REJECT_FAILED_FAMILY_DUPLICATE",
+      "reason": "The paper's daily high-basis/low-basis construction is an earlier-exchange version of the cross-sectional basis/funding family. Alpha 009 failed because funding carry was not self-financing; Alpha 014 then tested a documented basis catch-up variant and failed development with negative raw price PnL, 0.68 PF, and 53.52% MTM drawdown. The source's 2017-2021 OKEx sample and 5 bp transaction-cost sensitivity are not grounds to retune a 2022-2023 Binance failure.",
+      "source": "https://api.repository.cam.ac.uk/server/api/core/bitstreams/50f9c065-2731-4ab3-bba9-3ec4dcfc7ef7/content",
+      "quality": "Peer-reviewed Journal of Futures Markets article; primary evidence, but its exchange, period, and cost model do not make it an independent modern Binance result."
+    },
+    {
+      "name": "INTRADAY_ML_DIRECTIONAL_PERPETUAL_FUTURES",
+      "decision": "REJECT_INSUFFICIENT_REPRODUCIBILITY",
+      "reason": "The located ML claims do not supply a sealed trial inventory, a causal feature/publication-time contract, funding ledger, or order-level execution evidence adequate for a safety-first implementation. Opening another generic directional model would also bypass the project's documented selection-bias gate.",
+      "source": "https://onlinelibrary.wiley.com/doi/10.1111/exsy.13414",
+      "quality": "Published application paper, but not a reproducible post-cost protocol for the required gate."
+    },
+    {
+      "name": "DAY_OF_WEEK_PERPETUAL_FUTURES_SIGNAL",
+      "decision": "REJECT_NO_COST_AWARE_DIRECTIONAL_EVIDENCE",
+      "reason": "The located calendar study uses daily spot closing prices rather than perpetual-futures execution and reports no significant day-of-week mean-return differences in its broad ANOVA tests. Regime-dependent coefficient signs therefore do not establish a stable, cost-after directional edge. Opening a weekly schedule experiment from those signs would be data-mining.",
+      "source": "https://www.mdpi.com/1911-8074/17/8/351",
+      "quality": "Peer-reviewed descriptive study, but it lacks a futures execution or transaction-cost trading test."
+    },
+    {
+      "name": "SCHEDULED_MACRO_DIRECTIONAL_PERPETUAL_FUTURES_SIGNAL",
+      "decision": "REJECT_AS_DIRECTIONAL_ALPHA_RETAIN_RISK_DIAGNOSTIC",
+      "reason": "The reviewed macro-event evidence supports changes in volatility or conditional and unstable return responses, not a consistent signed post-cost futures return. It can justify stratifying execution/stop quality around scheduled events, but cannot justify a long or short entry rule.",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3141986",
+      "quality": "Primary event-study evidence; appropriate for risk diagnostics, not a reproducible directional execution rule."
+    }
+  ],
+  "selected_next_step": "NO_ALPHA016_OPENED; preserve failed-family boundaries and continue only preregistered forward/data-provenance programmes",
+  "result": "No literature candidate passed all independence, futures-only, historical-data-provenance, and cost-reproducibility filters. This is a research result, not evidence that a return target should be met with added leverage, turnover, or adverse averaging.",
+  "live_order_authorization": "CLOSED"
+}

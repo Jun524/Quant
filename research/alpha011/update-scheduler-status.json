@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "state": "SLEEPING",
+  "pid": 5482,
+  "scheduler_started_at": "2026-10-09T16:27:15.690129+00:00",
+  "heartbeat_at": "2026-10-22T04:29:46.560996+00:00",
+  "last_finished_at": "2026-10-22T04:29:46.560996+00:00",
+  "last_exit_code": 0,
+  "next_run_at": "2026-10-22T10:29:46.560996+00:00",
+  "interval_seconds": 21600
+}

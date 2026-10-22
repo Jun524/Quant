@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "HISTORICAL_ARCHIVAL_FUNDING_2024H1_V1",
+  "status": "PREREGISTERED",
+  "purpose": "Acquire checksum-verified monthly funding records for the sealed 2024H1 diagnostic universe before any funding-inclusive historical trial is opened.",
+  "universe_artifact": "research/historical_universe/daily-membership-2024H1.json",
+  "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+  "months": {
+    "start": "2024-01-01",
+    "end_exclusive": "2024-08-01"
+  },
+  "source": {
+    "publisher": "Binance data.binance.vision",
+    "dataset": "USD-M futures monthly fundingRate",
+    "checksum_required": true
+  },
+  "missing_archive_handling": "RECORD_AND_REJECT_AFFECTED_TRIAL_HOLDING",
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED"
+}

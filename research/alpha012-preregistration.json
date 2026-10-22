@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-08T11:29:14Z",
+  "candidate": "ALPHA_012_SPOT_PERP_CASH_AND_CARRY",
+  "status": "PREREGISTERED_DEVELOPMENT_LOCKED",
+  "hypothesis_family": "same_asset_spot_perpetual_cash_and_carry",
+  "hypothesis": "When the same asset's trailing seven-day Binance USD-M funding received by shorts exceeds a fixed all-in trading-friction hurdle and the perpetual is not below spot, a fully funded long-spot/short-perpetual position with identical base quantity earns positive net basis-plus-funding carry without outright crypto direction exposure.",
+  "independence": "Alpha 009 paired different perpetual contracts and failed because residual cross-asset price exposure, not carry, produced its profit. Alpha 012 holds the same base quantity long in spot and short in that asset's perpetual, so price PnL is exactly the change in same-asset basis before execution friction.",
+  "research_basis": [
+    {
+      "source": "He, Manela, Ross and von Wachter, Fundamentals of Perpetual Futures",
+      "url": "https://arxiv.org/abs/2212.06888",
+      "relevance": "Funding transfers and trading frictions define no-arbitrage bounds between perpetual and spot prices; observed deviations can support an arbitrage portfolio but are not riskless under constraints."
+    },
+    {
+      "source": "Schmeling, Schrimpf and Todorov, Crypto Carry",
+      "url": "https://www.bis.org/publ/work1087.pdf",
+      "relevance": "Crypto carry is time-varying and linked to scarce arbitrage capital, trend-chasing demand and funding-liquidity risk."
+    },
+    {
+      "source": "Binance public data repository",
+      "url": "https://github.com/binance/binance-public-data/",
+      "relevance": "Official spot/futures market-data archives and publisher checksums are the required source before any locked validation can open."
+    }
+  ],
+  "data": {
+    "development_timerange": "2022-01-01T00:00:00Z inclusive to 2024-01-01T00:00:00Z exclusive",
+    "locked_validation_timerange": "2024-01-01T00:00:00Z inclusive to 2026-09-01T00:00:00Z exclusive",
+    "development_source": "Existing local Binance 1h spot, USD-M perpetual, mark-price and funding-rate feather files; previously seen data means development can reject but cannot authorize live use.",
+    "validation_rule": "Locked validation remains unread unless every development gate passes. Before opening it, reacquire and checksum-bind official Binance archives; immutable manifests must cover every input file.",
+    "survivorship_control": "Universe is fixed ex ante to BTC and ETH only; no coin may be added or removed based on results."
+  },
+  "fixed_signal": {
+    "universe": ["BTCUSDT", "ETHUSDT"],
+    "decision_schedule": "00:00 UTC each day while flat",
+    "funding_lookback_days": 7,
+    "funding_score": "sum of actual funding events with timestamp in (decision - 7 days, decision]",
+    "minimum_funding_score": 0.004,
+    "basis_filter": "perpetual 00:00 open / spot 00:00 open - 1 must be >= 0",
+    "selection": "eligible asset with the highest funding score; alphabetical symbol breaks an exact tie",
+    "entry": "next 1h candle open at 01:00 UTC with adverse modeled slippage on both legs",
+    "position": "buy spot and short the same base quantity of the selected USD-M perpetual",
+    "spot_capital_fraction": 0.45,
+    "futures_initial_margin_fraction": "same base quantity at 1x isolated leverage; entry perpetual notional must fit within the remaining 55% of equity",
+    "leverage": 1.0,
+    "maximum_concurrent_spreads": 1,
+    "maximum_holding_days": 7,
+    "early_exit": "after at least 24 hours, if the sum of funding events in the trailing 24 hours at a 00:00 UTC decision is <= 0, exit at the next 01:00 open",
+    "emergency_exit": "if an hourly perpetual high is at least 20% above the executed short entry, exit both legs in that hour; use the adverse 20% short-stop price or a worse perpetual candle open and the spot candle low because exact intrabar synchronization is unavailable",
+    "modeled_liquidation": "a perpetual candle open at least 80% above the executed 1x isolated short entry is classified as liquidation and hard-fails the experiment",
+    "funding_timestamp_tie_rule": "include an adverse negative funding event at an entry/exit timestamp tie but exclude an ambiguous positive funding credit",
+    "position_adjustment": false,
+    "overlap": false
+  },
+  "capital_and_cost_model": {
+    "starting_equity_usdt": 1000,
+    "spot_fee_per_fill_bps": 10,
+    "futures_fee_per_fill_bps": 5,
+    "base_slippage_per_leg_per_fill_bps": 2,
+    "double_fee_stress": "20 bps spot and 10 bps futures per fill",
+    "slippage_stress_per_leg_per_fill_bps": 5,
+    "funding": "short receives positive and pays negative actual funding using contemporaneous mark price times fixed base quantity",
+    "price_pnl_identity": "quantity * ((spot_exit - spot_entry) - (perpetual_exit - perpetual_entry)); this is same-asset basis change, not outright direction",
+    "opportunity_cost": "reported separately as zero cash yield in the base case; no unmodeled lending yield is credited",
+    "liquidation_policy": "any modeled liquidation, non-positive equity, missing leg/funding/mark data, or capital requirement above current equity is a hard failure"
+  },
+  "development_gate": {
+    "natural_closed_spreads_minimum": 20,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.20,
+    "geometric_monthly_return_minimum": 0.0025,
+    "actual_funding_pnl_positive": true,
+    "basis_plus_funding_exceeds_base_fees_and_slippage": true,
+    "double_fee_net_positive": true,
+    "five_bps_per_leg_per_fill_slippage_net_positive": true,
+    "maximum_drawdown_maximum": 0.10,
+    "liquidations": 0,
+    "largest_winner_profit_concentration_maximum": 0.35,
+    "thirty_day_block_bootstrap_probability_of_loss_maximum": 0.10
+  },
+  "locked_validation_gate": {
+    "natural_closed_spreads_minimum": 24,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.25,
+    "geometric_monthly_return_minimum": 0.0025,
+    "actual_funding_pnl_positive": true,
+    "basis_plus_funding_exceeds_base_fees_and_slippage": true,
+    "double_fee_net_positive": true,
+    "five_bps_per_leg_per_fill_slippage_net_positive": true,
+    "maximum_drawdown_maximum": 0.10,
+    "liquidations": 0,
+    "largest_winner_profit_concentration_maximum": 0.30,
+    "thirty_day_block_bootstrap_probability_of_loss_maximum": 0.05
+  },
+  "prohibited": [
+    "opening or summarizing the locked validation interval before every development gate passes",
+    "changing the funding window, 40bp hurdle, basis filter, selection rule, entry/exit time, seven-day hold, 20% emergency stop, costs, sizing or universe after development results are observed",
+    "crediting spot lending, staking, maker rebates or VIP fee discounts not present in the preregistered base case",
+    "calling the spread risk-free; exchange, custody, isolated-margin, basis, funding-reversal, execution and operational risks remain",
+    "deploying this two-market strategy through the futures-only live stack even if development passes",
+    "using leverage to force the portfolio's 10% monthly objective"
+  ]
+}

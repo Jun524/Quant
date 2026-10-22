@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-12T05:45:00Z",
+  "purpose": "Assess whether a historical Binance USD-M universe can be upgraded from archival data availability to point-in-time trading eligibility for Alpha 015 or any broad cross-sectional candidate.",
+  "sources_reviewed": 30,
+  "findings": [
+    {
+      "source": "https://github.com/binance/binance-public-data/blob/master/README.md",
+      "finding": "Binance Vision provides dated futures market-data files and integrity checksums, but its public symbol-discovery helper queries the current exchangeInfo endpoint.",
+      "use": "Supports historical price/volume availability and file integrity, not dated eligibility."
+    },
+    {
+      "source": "https://dev.binance.vision/t/historical-snapshots-of-exchangeinfo-endpoint/12905",
+      "finding": "Binance Developer Community states that historical snapshots of the futures exchangeInfo endpoint are not available and advises users to capture them prospectively.",
+      "use": "Rules out treating current or reconstructed exchangeInfo as contemporaneous contract status."
+    },
+    {
+      "source": "https://pypi.org/project/binance-futures-availability/1.5.0/",
+      "finding": "A third-party availability tracker can derive daily symbol-file availability and volume from Binance Vision archives.",
+      "use": "Useful descriptive diagnostic only; a present archive file does not prove contract status, listing constraints, or decision-time eligibility."
+    }
+  ],
+  "verdict": "POINT_IN_TIME_ELIGIBILITY_NOT_AVAILABLE_FROM_VERIFIED_SOURCES",
+  "allowed_next_actions": [
+    "retain the existing archive as diagnostic-only with its file checksums and next-open execution coverage",
+    "continue prospective append-only universe capture until the preregistered 180-day criterion is reached",
+    "evaluate an external dated contract-status vendor only after its historical publication-time and revision rules are independently documented"
+  ],
+  "forbidden_shortcuts": [
+    "using today's exchangeInfo as an historical membership list",
+    "equating a Vision data file with eligible contract status",
+    "opening Alpha 015 on a survivorship-selected current-symbol panel"
+  ],
+  "live_order_authorization": "CLOSED"
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_FUNDING_AVAILABILITY_ONLY",
+  "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+  "holding_days": 1,
+  "periods": [
+    {
+      "period": "development",
+      "funding_symbol_month_requirements": 24675,
+      "covered_requirements": 24675,
+      "uncovered_requirements": 0,
+      "coverage_ratio": 1.0,
+      "sample_uncovered": [],
+      "status": "PASS"
+    },
+    {
+      "period": "locked_historical_validation",
+      "funding_symbol_month_requirements": 10006,
+      "covered_requirements": 10006,
+      "uncovered_requirements": 0,
+      "coverage_ratio": 1.0,
+      "sample_uncovered": [],
+      "status": "PASS"
+    }
+  ],
+  "total_requirements": 34681,
+  "total_covered_requirements": 34681,
+  "coverage_ratio": 1.0,
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED",
+  "warning": "Funding availability does not calculate funding PnL or validate a strategy; every trial must still replay events for its exact holding interval.",
+  "artifact_path": "research/historical_universe/daily-membership-2024H1.json",
+  "manifest_path": "research/historical_funding/manifest-2024H1.json"
+}

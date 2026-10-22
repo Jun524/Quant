@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_UNIVERSE_SOURCE_RECONCILIATION",
+  "checks": [
+    {
+      "name": "policy_day_coverage",
+      "passed": true,
+      "required": 213,
+      "actual": 213
+    },
+    {
+      "name": "selected_rows_reconciled",
+      "passed": true,
+      "required": 35159,
+      "actual": 35159
+    },
+    {
+      "name": "nonempty_selected_universe",
+      "passed": true,
+      "required": "> 0",
+      "actual": 282
+    },
+    {
+      "name": "diagnostic_only",
+      "passed": true,
+      "required": "DIAGNOSTIC_ONLY",
+      "actual": "DIAGNOSTIC_ONLY"
+    }
+  ],
+  "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+  "days": 213,
+  "selected_symbol_days": 35159,
+  "unique_selected_symbols": 282,
+  "minimum_daily_selected_symbols": 0,
+  "median_daily_selected_symbols": 184,
+  "maximum_daily_selected_symbols": 259,
+  "mismatch_days": [],
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED"
+}

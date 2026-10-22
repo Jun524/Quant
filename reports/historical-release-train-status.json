@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_RELEASE_GOVERNANCE_ONLY",
+  "checks": [
+    {
+      "name": "schema_version",
+      "passed": true,
+      "required": 1,
+      "actual": 1
+    },
+    {
+      "name": "preregistered",
+      "passed": true,
+      "required": "PREREGISTERED",
+      "actual": "PREREGISTERED"
+    },
+    {
+      "name": "live_order_authorization_closed",
+      "passed": true,
+      "required": "CLOSED",
+      "actual": "CLOSED"
+    },
+    {
+      "name": "promotion_capability",
+      "passed": true,
+      "required": "DIAGNOSTIC_ONLY",
+      "actual": "DIAGNOSTIC_ONLY"
+    },
+    {
+      "name": "partition_states",
+      "passed": true,
+      "required": [
+        "SEALED_BASELINE",
+        "WITHHELD_UNTOUCHED"
+      ],
+      "actual": [
+        "SEALED_BASELINE",
+        "WITHHELD_UNTOUCHED",
+        "WITHHELD_UNTOUCHED",
+        "WITHHELD_UNTOUCHED"
+      ]
+    },
+    {
+      "name": "baseline_audit_pass",
+      "passed": true,
+      "required": "PASS",
+      "actual": "PASS"
+    },
+    {
+      "name": "baseline_digest_bound",
+      "passed": true,
+      "required": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+      "actual": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+    },
+    {
+      "name": "candidate_preregistration_before_release",
+      "passed": true,
+      "required": "REQUIRED_BEFORE_WITHHELD_PARTITION_ACCESS",
+      "actual": "REQUIRED_BEFORE_WITHHELD_PARTITION_ACCESS"
+    },
+    {
+      "name": "one_partition_per_evaluation",
+      "passed": true,
+      "required": "EXACTLY_ONE_RELEASED_PARTITION",
+      "actual": "EXACTLY_ONE_RELEASED_PARTITION"
+    },
+    {
+      "name": "no_retuning_after_release",
+      "passed": true,
+      "required": "FORBIDDEN",
+      "actual": "FORBIDDEN"
+    }
+  ],
+  "baseline": {
+    "id": "ARCHIVAL_2024H1_BASELINE",
+    "start": "2024-01-01",
+    "end_exclusive": "2024-08-01",
+    "state": "SEALED_BASELINE",
+    "state_valid": true,
+    "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+  },
+  "next_withheld_partition": {
+    "id": "ARCHIVAL_2024H2_WITHHELD",
+    "start": "2024-08-01",
+    "end_exclusive": "2025-01-01",
+    "state": "WITHHELD_UNTOUCHED",
+    "state_valid": true,
+    "universe_sha256": null
+  },
+  "remaining_withheld_partitions": [
+    "ARCHIVAL_2024H2_WITHHELD",
+    "ARCHIVAL_2025H1_WITHHELD",
+    "ARCHIVAL_2025H2_WITHHELD"
+  ],
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED",
+  "warning": "This receipt controls historical access order. It is not a strategy result or a live-trading approval.",
+  "policy_path": "research/historical-release-train-policy.json",
+  "baseline_artifact_path": "research/historical_universe/daily-membership-2024H1.json"
+}

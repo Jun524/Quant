@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "HISTORICAL_RELEASE_TRAIN_V1",
+  "status": "PREREGISTERED",
+  "purpose": "Use a sealed archival baseline now, then release later historical windows one at a time only after a candidate is independently preregistered.",
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "partitions": [
+    {
+      "id": "ARCHIVAL_2024H1_BASELINE",
+      "start": "2024-01-01",
+      "end_exclusive": "2024-08-01",
+      "state": "SEALED_BASELINE",
+      "universe_artifact": "research/historical_universe/daily-membership-2024H1.json",
+      "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+    },
+    {
+      "id": "ARCHIVAL_2024H2_WITHHELD",
+      "start": "2024-08-01",
+      "end_exclusive": "2025-01-01",
+      "state": "WITHHELD_UNTOUCHED"
+    },
+    {
+      "id": "ARCHIVAL_2025H1_WITHHELD",
+      "start": "2025-01-01",
+      "end_exclusive": "2025-07-01",
+      "state": "WITHHELD_UNTOUCHED"
+    },
+    {
+      "id": "ARCHIVAL_2025H2_WITHHELD",
+      "start": "2025-07-01",
+      "end_exclusive": "2026-01-01",
+      "state": "WITHHELD_UNTOUCHED"
+    }
+  ],
+  "release_rules": {
+    "candidate_preregistration": "REQUIRED_BEFORE_WITHHELD_PARTITION_ACCESS",
+    "evaluation_scope": "EXACTLY_ONE_RELEASED_PARTITION",
+    "post_release_retuning": "FORBIDDEN",
+    "baseline_mutation": "FORBIDDEN",
+    "future_partition_access": "FORBIDDEN_UNTIL_PREVIOUS_PARTITION_VERDICT_IS_SEALED",
+    "required_source_integrity": "PUBLISHER_CHECKSUM",
+    "required_cost_policy": "HISTORICAL_ARCHIVAL_COST_ACCOUNTING_V1"
+  },
+  "limitations": [
+    "All partitions remain archival diagnostic evidence because they lack independent contemporaneous contract-status, spread, and orderbook-depth sources.",
+    "Passing a withheld archival window cannot replace the separately required 180-day forward confirmation."
+  ],
+  "live_order_authorization": "CLOSED"
+}

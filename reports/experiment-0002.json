@@ -1,0 +1,223 @@
+{
+  "created_at": "2026-09-18T06:45:47.856127+00:00",
+  "experiment_id": 2,
+  "hypothesis": "In common BTC RANGE, a 1h 1.5σ/6h -3%/RSI 32 oversold long reverts to its 24h center before 24 hours.",
+  "parent_experiment": null,
+  "reason": "Pre-registered Alpha #2 MR-A; fixed entry, exit, and regime conditions.",
+  "reason_for_change": null,
+  "result": {
+    "cost_stress": {
+      "calmar": -3.1422653247603427,
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.00289026577702781,
+        "days": 222,
+        "geometric_daily_return": -5.366045302945821e-05,
+        "historical_var_95": 0.0,
+        "historical_var_99": 0.0028089881155054985,
+        "max_consecutive_losing_days": 1,
+        "mean_daily_return": -5.345971959601527e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.018018018018018018,
+        "positive_day_ratio": 0.009009009009009009,
+        "worst_daily_return": -0.00555923762
+      },
+      "daily_geometric_return": -5.366045302945821e-05,
+      "estimated_fee_cost": 1.1814519616899997,
+      "expectancy": -1.3158068966666665,
+      "forced_exit": {
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": 0.06487962117928825,
+      "funding_paid": 0.0034609295381539795,
+      "funding_received": 0.06834055071744223,
+      "max_drawdown": 0.011842262069999948,
+      "organic": {
+        "losses": 6,
+        "net_profit": -11.84226207,
+        "net_return": -0.01184226207,
+        "profit_factor": 0.28928829292065156,
+        "trades": 9,
+        "wins": 3
+      },
+      "positive_day_ratio": 0.009009009009009009,
+      "sharpe": -0.17326449271822825,
+      "sortino": -24.55804994533794,
+      "source": "/tmp/research-alpha2-v1.Z26RSx/stress/backtest-result-2026-09-18_06-44-59.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_002_MEAN_REVERSION_A",
+      "timerange": "20250101-20260901",
+      "turnover": 1.1814519616899997
+    },
+    "development": {
+      "calmar": 0.8226991816819985,
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.0038053248897476116,
+        "days": 341,
+        "geometric_daily_return": 3.7822671057341495e-06,
+        "historical_var_95": 0.0,
+        "historical_var_99": 0.00043032575153849215,
+        "max_consecutive_losing_days": 2,
+        "mean_daily_return": 3.836463119468032e-06,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.011730205278592375,
+        "positive_day_ratio": 0.008797653958944282,
+        "worst_daily_return": -0.002742315574786734
+      },
+      "daily_geometric_return": 3.7822671057341495e-06,
+      "estimated_fee_cost": 0.57597156186,
+      "expectancy": 0.1433980811111112,
+      "forced_exit": {
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": 0.007066441158570549,
+      "funding_paid": 0.005845547913958516,
+      "funding_received": 0.012911989072529067,
+      "max_drawdown": 0.0031714612373146536,
+      "organic": {
+        "losses": 4,
+        "net_profit": 1.29058273,
+        "net_return": 0.0012905827299999999,
+        "profit_factor": 1.2045861615266453,
+        "trades": 9,
+        "wins": 5
+      },
+      "positive_day_ratio": 0.008797653958944282,
+      "sharpe": 0.01465590641951142,
+      "sortino": 0.022845153027414924,
+      "source": "/tmp/research-alpha2-v1.Z26RSx/development/backtest-result-2026-09-18_06-44-53.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_002_MEAN_REVERSION_A",
+      "timerange": "20220601-20250101",
+      "turnover": 1.15194312372
+    },
+    "evaluated_at": "2026-09-18T06:45:47.855713+00:00",
+    "gate": {
+      "checks": [
+        {
+          "actual": 0.0012905827299999999,
+          "name": "development_net_positive",
+          "passed": true,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": -0.01125212622,
+          "name": "oos_net_positive",
+          "passed": false,
+          "required": "> 0.0",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.3085271080441233,
+          "name": "oos_profit_factor",
+          "passed": false,
+          "required": ">= 1.2",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.011252126220000037,
+          "name": "oos_max_drawdown",
+          "passed": true,
+          "required": "<= 0.15",
+          "severity": "fail"
+        },
+        {
+          "actual": -0.01184226207,
+          "name": "cost_stress_net_positive",
+          "passed": false,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "lookahead",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "recursive",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": 9,
+          "name": "oos_sample_size",
+          "passed": false,
+          "required": ">= 30",
+          "severity": "review"
+        }
+      ],
+      "policy": {
+        "max_drawdown": 0.15,
+        "min_oos_net_return": 0.0,
+        "min_oos_trades": 30,
+        "min_profit_factor": 1.2
+      },
+      "status": "FAIL"
+    },
+    "validation": {
+      "calmar": -3.1422653247603187,
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.002957932677667014,
+        "days": 222,
+        "geometric_daily_return": -5.0971269905941696e-05,
+        "historical_var_95": 0.0,
+        "historical_var_99": 0.0027420355985518126,
+        "max_consecutive_losing_days": 1,
+        "mean_daily_return": -5.077648232601372e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.018018018018018018,
+        "positive_day_ratio": 0.009009009009009009,
+        "worst_daily_return": -0.00542895973
+      },
+      "daily_geometric_return": -5.0971269905941696e-05,
+      "estimated_fee_cost": 0.5904309129224999,
+      "expectancy": -1.2502362466666668,
+      "forced_exit": {
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": 0.06487962117928825,
+      "funding_paid": 0.0034609295381539795,
+      "funding_received": 0.06834055071744223,
+      "max_drawdown": 0.011252126220000037,
+      "organic": {
+        "losses": 6,
+        "net_profit": -11.252126220000001,
+        "net_return": -0.01125212622,
+        "profit_factor": 0.3085271080441233,
+        "trades": 9,
+        "wins": 3
+      },
+      "positive_day_ratio": 0.009009009009009009,
+      "sharpe": -0.16456051801973406,
+      "sortino": -24.063842968555885,
+      "source": "/tmp/research-alpha2-v1.Z26RSx/validation/backtest-result-2026-09-18_06-44-56.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_002_MEAN_REVERSION_A",
+      "timerange": "20250101-20260901",
+      "turnover": 1.1808618258449999
+    }
+  },
+  "strategy": "ALPHA_002_MEAN_REVERSION_A"
+}

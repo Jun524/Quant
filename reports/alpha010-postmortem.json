@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "candidate": "ALPHA_010_LEVERAGE_CROWDING_CRASH_SHORT",
+  "source_report": "reports/alpha010-development.json",
+  "source_sha256": "6f410eace8e29f9becfec7d30a0419d3f8f0c056372d7fb7905e6baa8dcf5234",
+  "verdict": "FAIL_REMAINS_SEALED",
+  "locked_oos_opened": false,
+  "post_result_parameter_changes": false,
+  "failure_attribution": "NO_SIGNAL_EDGE_BROAD_BASED",
+  "evidence": {
+    "trades": 95,
+    "compounded_net_return": -0.4643261051765615,
+    "profit_factor": 0.4210824697143954,
+    "maximum_drawdown": 0.49409988944794425,
+    "price_return_sum": -0.4786947892856398,
+    "trading_fee_drag_sum": 0.09525844695351245,
+    "slippage_drag_sum": 0.038199117739256945,
+    "funding_return_sum": 0.00922019,
+    "three_percent_crash_precision_lift": 1.1386212008895478,
+    "yearly": {
+      "2021": {
+        "trades": 4,
+        "sum_net_return": -0.09510295956692516,
+        "mean_net_return": -0.02377573989173129,
+        "wins": 1,
+        "losses": 3
+      },
+      "2022": {
+        "trades": 21,
+        "sum_net_return": -0.0717594867680444,
+        "mean_net_return": -0.003417118417525924,
+        "wins": 8,
+        "losses": 13
+      },
+      "2023": {
+        "trades": 32,
+        "sum_net_return": -0.2914465152027743,
+        "mean_net_return": -0.009107703600086697,
+        "wins": 12,
+        "losses": 20
+      },
+      "2024": {
+        "trades": 38,
+        "sum_net_return": -0.14462320244066532,
+        "mean_net_return": -0.003805873748438561,
+        "wins": 18,
+        "losses": 20
+      }
+    },
+    "exit_reason_groups": {
+      "protective_stop": {
+        "trades": 11,
+        "sum_net_return": -0.4557992038407679,
+        "mean_net_return": -0.04143629125825163
+      },
+      "time_exit": {
+        "trades": 84,
+        "sum_net_return": -0.14713296013764135,
+        "mean_net_return": -0.0017515828587814446
+      }
+    },
+    "every_year_negative": true,
+    "every_exit_family_negative": true,
+    "price_edge_negative_before_costs": true
+  },
+  "research_action": "Do not tune Alpha #10 thresholds, stop, holding horizon, or costs. Reopen this family only with a new externally motivated mechanism and a new trial number."
+}

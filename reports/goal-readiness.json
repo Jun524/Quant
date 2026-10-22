@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "objective": "Binance USDT-M futures portfolio: capital preservation and positive cost-after return are required; 10% net geometric monthly return is aspirational",
+  "status": "RESEARCH_ATTENTION_REQUIRED",
+  "objective_proven": false,
+  "live_order_authorization": "CLOSED",
+  "research_health": "ATTENTION_REQUIRED",
+  "thresholds": {
+    "target_geometric_monthly_return": 1e-12,
+    "minimum_complete_months": 12,
+    "minimum_organic_trades": 100,
+    "minimum_positive_month_ratio": 0.6,
+    "maximum_worst_month_loss": 0.05,
+    "maximum_drawdown": 0.1,
+    "minimum_profit_factor": 1.2,
+    "maximum_probability_of_ruin": 0.005,
+    "maximum_probability_terminal_loss": 0.05,
+    "minimum_probability_reaching_annual_target": 0.0,
+    "maximum_bootstrap_drawdown_p95": 0.1,
+    "maximum_leverage": 1.0,
+    "maximum_trade_adverse_excursion": 0.2,
+    "require_mark_to_market_equity": true,
+    "require_zero_liquidations": true,
+    "require_double_cost_positive": true,
+    "require_slippage_stress_positive": true,
+    "require_funding_stress_positive": true,
+    "require_locked_forward_evidence": true,
+    "portfolio": {
+      "minimum_sleeves": 2,
+      "maximum_sleeves": 5,
+      "maximum_single_sleeve_weight": 0.7,
+      "maximum_gross_allocation": 1.0,
+      "minimum_common_daily_observations": 252,
+      "maximum_absolute_pairwise_correlation": 0.8,
+      "maximum_single_sleeve_positive_pnl_share": 0.75,
+      "maximum_gross_leverage": 1.0,
+      "maximum_absolute_net_leverage": 1.0,
+      "maximum_portfolio_trade_leverage_adjusted_mae": 0.2,
+      "minimum_portfolio_daily_mtm_profit_factor": 1.2,
+      "minimum_execution_observations_per_scope": 30,
+      "minimum_passive_fills_per_scope": 10,
+      "minimum_selection_bias_observations": 252,
+      "minimum_deflated_sharpe_probability": 0.95,
+      "maximum_probability_backtest_overfitting": 0.1,
+      "selection_bias_cscv_slices": 8,
+      "minimum_portfolio_risk_daily_returns": 365,
+      "portfolio_risk_horizon_days": 365,
+      "portfolio_risk_short_block_days": 7,
+      "portfolio_risk_long_block_days": 28,
+      "portfolio_risk_simulations_per_block": 5000,
+      "portfolio_risk_ruin_equity_fraction": 0.5,
+      "portfolio_risk_drawdown_threshold": 0.1,
+      "portfolio_risk_annual_target_return": 2.138428376721003,
+      "portfolio_risk_binomial_confidence_level": 0.95,
+      "portfolio_risk_seed": 1701,
+      "maximum_portfolio_probability_of_ruin": 0.005,
+      "maximum_portfolio_probability_terminal_loss": 0.05,
+      "minimum_portfolio_probability_reaching_annual_target": 0.0,
+      "maximum_portfolio_bootstrap_drawdown_p95": 0.1,
+      "maximum_portfolio_historical_drawdown": 0.1,
+      "maximum_simultaneous_cost_stress_drawdown": 0.1,
+      "portfolio_risk_deterministic_daily_repeats": 3,
+      "portfolio_risk_deterministic_weekly_repeats": 4,
+      "portfolio_risk_deterministic_four_week_repeats": 2,
+      "maximum_portfolio_deterministic_stress_drawdown": 0.1
+    }
+  },
+  "return_target": {
+    "aspirational_net_geometric_monthly_return": 0.1,
+    "promotion_requirement": false,
+    "required_direction": "positive_cost_after_return",
+    "warning": "Ten percent per month is an ambition, not a promise, a sizing instruction, or a reason to increase leverage or turnover."
+  },
+  "research_cadence": {
+    "historical_research": "Start immediately from sealed historical data; do not wait for a new forward window to begin a diagnostic.",
+    "forward_review_days": [
+      30,
+      60,
+      90
+    ],
+    "forward_review_rule": "At each checkpoint, stop failed candidates and continue only intact, cost-aware candidates. A checkpoint is not a live-promotion authorization.",
+    "promotion_rule": "There is no universal 180-day wait. Promotion remains conditional on the required independent evidence, integrity, cost, drawdown, and ruin gates.",
+    "frozen_exception": "Alpha 015 retains its separately preregistered 180-day point-in-time-universe requirement and cannot be shortened without a new, separately registered method."
+  },
+  "experiment_counts": {
+    "total": 14,
+    "ACCUMULATING": 2,
+    "FAIL": 11,
+    "PASS": 0,
+    "REVIEW": 1
+  },
+  "active_forward_candidates": [
+    {
+      "experiment_id": 7,
+      "strategy": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+      "status": "ACCUMULATING"
+    },
+    {
+      "experiment_id": 11,
+      "strategy": "ALPHA_011_QUARTER_HOUR_FLOW_CONTINUATION",
+      "status": "ACCUMULATING"
+    }
+  ],
+  "portfolio_promotion_status": "NOT_OPENED",
+  "portfolio_promotion_reported_status": "NOT_OPENED",
+  "portfolio_receipt_integrity": {
+    "status": "NOT_OPENED",
+    "failures": []
+  },
+  "phases": [
+    {
+      "name": "forward_research_operations",
+      "status": "ATTENTION",
+      "actual": "ATTENTION_REQUIRED",
+      "required": "HEALTHY"
+    },
+    {
+      "name": "independent_locked_forward_sleeves",
+      "status": "NOT_OPENED",
+      "actual": 0,
+      "required": 2,
+      "note": "Registry PASS count is informational; only the portfolio gate verifies locked-forward sleeve evidence.",
+      "checks": []
+    },
+    {
+      "name": "combined_monthly_objective",
+      "status": "NOT_OPENED",
+      "actual": "NOT_OPENED",
+      "required": "> 0 cost-after geometric monthly return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end. Monthly 10% remains aspirational and is reported separately.",
+      "checks": []
+    },
+    {
+      "name": "combined_downside_and_diversification",
+      "status": "NOT_OPENED",
+      "actual": "NOT_OPENED",
+      "required": "MDD <= 10%, intratrade leverage-adjusted MAE <= 20%, trade-overlap exposure reconciliation, bootstrap ruin <= 0.5%, deterministic worst-block recurrence MDD <= 10%, zero liquidations, 1x leverage/correlation/concentration limits",
+      "checks": []
+    },
+    {
+      "name": "combined_cost_and_execution_paths",
+      "status": "NOT_OPENED",
+      "actual": "NOT_OPENED",
+      "required": "positive simultaneous fee+slippage+funding stress, per-trade accounting costs covering preregistered scope budgets, and every entry/exit/stop scope PASS",
+      "checks": []
+    },
+    {
+      "name": "selection_bias_control",
+      "status": "NOT_OPENED",
+      "actual": "NOT_OPENED",
+      "required": "complete trial inventories; DSR probability >= 95%; CSCV PBO <= 10%",
+      "checks": []
+    },
+    {
+      "name": "multi_strategy_live_adapter",
+      "status": "DEFERRED_NOT_BUILT",
+      "required": "build only after a preregistered portfolio passes all research gates",
+      "note": "The current live preflight is intentionally Alpha #1-specific."
+    },
+    {
+      "name": "live_order_authorization",
+      "status": "CLOSED",
+      "required": "separate live preflight after portfolio promotion PASS"
+    }
+  ],
+  "current_single_candidate_evidence": {
+    "candidate": "FuturesBtcRegimeRiskBudgetLong",
+    "forward_status": "ACCUMULATING",
+    "monthly_gate_status": "REVIEW",
+    "complete_months": 0,
+    "natural_closed_trades": 0,
+    "current_bias_audit_pass": true,
+    "entry_execution_evidence_continuity": "CONTINUOUS",
+    "entry_execution_promotion_evidence_eligible": false,
+    "not_portfolio_proof": true
+  },
+  "supporting_non_promotion_gates": {
+    "alpha007_exchange_filter_feasibility": {
+      "status": "FAIL",
+      "promotion_eligible": false
+    },
+    "alpha007_order_path_conformance": {
+      "status": "WAITING_PRIMARY_WITH_KNOWN_FILTER_BLOCK",
+      "promotion_eligible": false
+    },
+    "alpha007_partial_fill_veto": {
+      "status": "ACCUMULATING",
+      "promotion_eligible": false
+    },
+    "alpha007_ten_bps_cost_stress": {
+      "status": "ACCUMULATING",
+      "promotion_eligible": false
+    },
+    "alpha015_candidate_readiness": {
+      "status": "WAITING_POINT_IN_TIME_UNIVERSE",
+      "promotion_eligible": false
+    },
+    "alpha015_frozen_calibration_reference": {
+      "status": "PASS",
+      "promotion_eligible": false
+    },
+    "alpha015_prior_day_activation_lock": {
+      "status": "WAITING_POINT_IN_TIME_UNIVERSE",
+      "promotion_eligible": false
+    },
+    "execution_calibration": {
+      "status": "CALIBRATION_PASS",
+      "promotion_eligible": false
+    },
+    "execution_calibration_stability": {
+      "status": "READY_FOR_DESCRIPTIVE_COMPARISON",
+      "promotion_eligible": false
+    },
+    "liquidation_risk_overlay": {
+      "status": "ACCUMULATING",
+      "promotion_eligible": false
+    },
+    "point_in_time_universe": {
+      "status": "ACCUMULATING",
+      "promotion_eligible": false
+    },
+    "portfolio_activation_readiness": {
+      "status": "WAITING_INDEPENDENT_SLEEVES",
+      "promotion_eligible": false
+    },
+    "aoa_locked_holdout": {
+      "status": "HISTORICAL_HOLDOUT_COMPLETE_NO_ACTIVITY",
+      "promotion_eligible": false,
+      "organic_trades": 0,
+      "sample_role": "post_period_locked_unseen_holdout_not_prospective_forward"
+    },
+    "historical_evidence_policy": {
+      "status": "PASS",
+      "promotion_eligible": false,
+      "kind": "HISTORICAL_EVIDENCE_GOVERNANCE_ONLY",
+      "historical_point_in_time_available_now": false,
+      "historical_open_interest_decision_feature_blocked": true
+    },
+    "historical_cost_policy": {
+      "status": "PASS",
+      "promotion_eligible": false,
+      "kind": "HISTORICAL_COST_GOVERNANCE_ONLY"
+    },
+    "historical_next_open_coverage": {
+      "status": "PASS",
+      "promotion_eligible": false,
+      "kind": "HISTORICAL_NEXT_OPEN_DATA_COVERAGE_ONLY",
+      "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+    },
+    "historical_one_day_funding_coverage": {
+      "status": "PASS",
+      "promotion_eligible": false,
+      "kind": "HISTORICAL_FUNDING_AVAILABILITY_ONLY",
+      "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+    },
+    "historical_funding_ledger_replay": {
+      "status": "PASS",
+      "promotion_eligible": false,
+      "kind": "HISTORICAL_FUNDING_LEDGER_REPLAY_ONLY",
+      "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe"
+    }
+  },
+  "ordered_blockers": [
+    "No eligible portfolio yet: 0 research PASS candidates; at least 2 independently locked-forward PASS sleeves are required.",
+    "Alpha 007's frozen fixed-notional order path is not exchange-filter feasible; it remains research-only and cannot be repaired by silently changing its order size.",
+    "No preregistered portfolio candidate or combined locked-forward promotion report exists.",
+    "The multi-strategy live adapter and portfolio-specific live preflight are intentionally not built before a portfolio PASS.",
+    "Live order authorization remains closed; calibration and dry-run evidence cannot authorize orders."
+  ],
+  "interpretation": "The 10% monthly target is aspirational rather than a promotion requirement. Positive cost-after returns and the stricter capital-preservation gates remain mandatory. This readiness report never promotes calibration, backtests, or partial forward samples.",
+  "generated_at_utc": "2026-10-19T06:35:16.990022+00:00",
+  "sources": [
+    {
+      "path": "reports/platform-scoreboard.json",
+      "present": true,
+      "sha256": "4dbdfde24208f48ca2f5a6339cd2be4648b5b30805ba43c93d458d5655651142"
+    },
+    {
+      "path": "reports/portfolio-promotion.json",
+      "present": false,
+      "sha256": null
+    },
+    {
+      "path": "reports/alpha001-forward.json",
+      "present": true,
+      "sha256": "462cb1654f1417cc9bc7bf8dd9eef652c927e11891403ea9721f1961e4dbbc0d"
+    },
+    {
+      "path": "reports/alpha001-bias-audit.json",
+      "present": true,
+      "sha256": "db89a3d02b5aa5a03fa2d0ae5098c35c886802f75d675657abbacfa1fe17c01e"
+    },
+    {
+      "path": "reports/aoa-forward-locked.json",
+      "present": true,
+      "sha256": "f0577d06346c84d20e5bec8910ff67ef1d9f6d14d65681aa2338604ad92c1cb8"
+    },
+    {
+      "path": "research/historical-research-policy.json",
+      "present": true,
+      "sha256": "a57e01045ec45313e9650e5048bb46aaa1b75ced8ef7064a41d599c8822b36fd"
+    },
+    {
+      "path": "research/historical-cost-accounting-policy.json",
+      "present": true,
+      "sha256": "1a750d3b6b705b8aa48025a5c5658bb91c60cef7414c1b828f1736ccf8d6d95d"
+    },
+    {
+      "path": "reports/historical-execution-coverage.json",
+      "present": true,
+      "sha256": "b8f66b3227f32d648646da213ed56def77b41c77b8a11e6f6a3b7d696065f37a"
+    },
+    {
+      "path": "reports/historical-funding-coverage.json",
+      "present": true,
+      "sha256": "765ed640be360c04981d1cdd59b9b03b153b78ba4de9917f205377e39d55290c"
+    },
+    {
+      "path": "reports/historical-funding-ledger-audit.json",
+      "present": true,
+      "sha256": "ebd21f7ea0a454aa175b27ad0f05ed17a045cae64f6d3f3a66018a9b1a5ed8b0"
+    },
+    {
+      "path": "research/capital-preservation-objective.json",
+      "present": true,
+      "sha256": "7df813952138fee6833bc3fc0a8e9ca41e1c1f18da3c452d354e96f853904f7a"
+    },
+    {
+      "path": "research/promotion-policy.json",
+      "present": true,
+      "sha256": "ad4c0196bc9ce93a88cde7a201db55b80c9b91a2dd45b47acedac18a0e1eec4d"
+    },
+    {
+      "path": "research/portfolio-promotion-policy.json",
+      "present": true,
+      "sha256": "7cb92f522b8079fdca8c06c10410216a0769b6df0fa8276b444bf1ec35f786e8"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-10T10:00:00Z",
+  "purpose": "Re-screen independent alpha families after Alpha 014 failed, while refusing to create Experiment 0016 from weak, overlapping, or provenance-conflicted evidence.",
+  "search_record": {
+    "workstreams": 8,
+    "sources_reviewed": 78,
+    "topics": [
+      "post-cost perpetual-futures alpha",
+      "liquidation and jump continuation",
+      "scheduled macro announcements",
+      "volatility-state prediction",
+      "cost-aware machine learning",
+      "short-horizon reversal",
+      "cross-crypto information diffusion",
+      "selection and multiple-testing bias"
+    ],
+    "source_priority": "official exchange records, original papers, publisher pages, and author manuscripts",
+    "project_return_data_inspected_during_screening": false
+  },
+  "candidates": [
+    {
+      "name": "COST_AWARE_BTC_XGBOOST",
+      "decision": "REJECT_AS_REPLICATION_BASIS",
+      "reason": "The paper reports Binance USD-M hourly data beginning in December 2017, but Binance's official history says its futures platform and first BTCUSDT perpetual product launched in September 2019. The sample provenance is therefore impossible as labelled. Code and seeds are not public, funding/liquidations/dynamic spreads/order-book execution are omitted, and corrected Sharpe superiority over buy-and-hold is not established.",
+      "retain": "Keep the lambda-times-round-trip-cost prediction filter as an execution-design pattern only; do not treat the reported return as alpha evidence.",
+      "sources": [
+        "https://arxiv.org/abs/2606.00060",
+        "https://www.binance.com/en/support/announcement/detail/360033314152",
+        "https://www.binance.com/en/blog/all/421499824684900356"
+      ]
+    },
+    {
+      "name": "FOMC_CPI_DIRECTIONAL_FUTURES_ALPHA",
+      "decision": "REJECT_ALPHA_RETAIN_RISK_GUARD",
+      "reason": "Primary evidence supports event-linked volatility and liquidity changes more consistently than a stable signed direction after costs. Scheduled events can therefore tighten or suppress exposure, but are not opened as an independent directional alpha.",
+      "retain": "Future execution audits should stratify slippage, spread, and stop gaps around preregistered macro windows."
+    },
+    {
+      "name": "LIQUIDATION_SHOCK_CONTINUATION",
+      "decision": "DEFER_TO_EXISTING_RISK_OVERLAY",
+      "reason": "The sign and horizon vary by event severity and market state, while Binance's public force-order stream is censored. Opening a return alpha would duplicate the already accumulating liquidation telemetry protocol before its coverage is complete.",
+      "retain": "Continue RISK_OVERLAY_001 without altering its frozen protocol."
+    },
+    {
+      "name": "VOLATILITY_STATE_BREAKOUT_OR_REVERSAL",
+      "decision": "REJECT_CURRENTLY",
+      "reason": "The mechanisms overlap failed volatility breakout and mean-reversion families. A new threshold or direction search after those failures would be hidden continuation of the same trials rather than an independent hypothesis."
+    },
+    {
+      "name": "WIDE_CROSS_SECTION_SHORT_HORIZON_REVERSAL",
+      "decision": "DEFER_POINT_IN_TIME_UNIVERSE",
+      "reason": "Any defensible replication requires delisted instruments, historical eligibility, and a broad contemporaneous universe. The current surviving-symbol panel would create survivorship and selection bias and overlaps the failed Alpha 002 family."
+    },
+    {
+      "name": "MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+      "decision": "DEFER_HIGH_PRIORITY_UNCHANGED",
+      "reason": "It remains the strongest distinct candidate, but Experiment 0015 cannot be opened before 180 consecutive sealed point-in-time universe days and the existing activation policy authorizes it."
+    }
+  ],
+  "selected_next_step": "PLATFORM_SELECTION_BIAS_AND_MULTI_BLOCK_RISK_GATE_V5",
+  "experiment_0016_open": false,
+  "selection_rationale": "With many completed and screened trials but no new provenance-clean independent edge, the highest-value improvement is to make the full attempted-trial inventory, Deflated Sharpe Ratio, and CSCV Probability of Backtest Overfitting mandatory for every sleeve and combined portfolio before promotion.",
+  "methodology_sources": [
+    "https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf",
+    "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2326253",
+    "https://academic.oup.com/rfs/article/29/1/5/1843824"
+  ],
+  "guard": "This screening neither authorizes return-data access for Alpha 015 nor modifies any active forward protocol or live-order setting."
+}

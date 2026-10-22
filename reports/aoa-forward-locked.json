@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "candidate": "AoaDistilledPolicyPrototype",
+  "status": "HISTORICAL_HOLDOUT_COMPLETE_NO_ACTIVITY",
+  "promotion_eligible": false,
+  "live_order_authorization": "CLOSED",
+  "sample_role": "post_period_locked_unseen_holdout_not_prospective_forward",
+  "integrity": {
+    "status": "PASS",
+    "frozen_artifacts_current": true,
+    "exact_timerange": "20260901-20260916",
+    "registered_at_utc": "2026-10-06T04:36:28+00:00",
+    "sample_started_at_utc": "2026-09-01T00:00:00+00:00",
+    "sample_ended_at_utc": "2026-09-16T00:00:00+00:00",
+    "registration_precedes_sample": false,
+    "fee_per_fill": 0.0005,
+    "fee_binding": "Freqtrade --notes plus metadata hash binding; zero trades make fee arithmetic inapplicable",
+    "embedded_strategy_matches_frozen_sha256": true,
+    "embedded_config_research_only": true,
+    "unexpected_live_order_submission": false
+  },
+  "sources": {
+    "preregistration": {
+      "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/research/aoa-forward-preregistration.json",
+      "sha256": "6cddb0b3eecaa1270e0a47c434f9b37002bbb9cda72b329d433cceeba933d3e9"
+    },
+    "frozen_artifacts": [
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/strategies/AoaDistilledPolicyPrototype.py",
+        "sha256": "9efc916ac123225553525841389a09905c46fa47a23c711785a818720639fa47"
+      },
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/research/aoa-behavior-model-spec.json",
+        "sha256": "925f39921defb1862dc7c9c9e91958e21f6b3ac6ec0fa273643c1c18a64fb3ff"
+      },
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/config.futures.aoa-distilled.research.json",
+        "sha256": "cff40d58f36722a2fc68b4aa51b24323fa47274e0f218ec893089c45557f1c11"
+      }
+    ],
+    "backtest": {
+      "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/backtest_results/backtest-result-2026-10-10_14-56-21.zip",
+      "sha256": "b781a667acadae6bc477d47591276f4df0fb5881105b9434667737610f6872d0"
+    },
+    "backtest_metadata": {
+      "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/backtest_results/backtest-result-2026-10-10_14-56-21.meta.json",
+      "sha256": "79d5179d8a8dada34fa559ba81ea6c4c5648d808da83224b5b7871e4dd603a89"
+    },
+    "market_data": [
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/data/binance/futures/BTC_USDT_USDT-5m-futures.feather",
+        "bytes": 14831746,
+        "sha256": "d8b27511a563fa79ad61df2e7ff6820f97bc7165752382598d3329ecdbe2501c"
+      },
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/data/binance/futures/BTC_USDT_USDT-1h-futures.feather",
+        "bytes": 1338586,
+        "sha256": "0f2e55ab1c985a26304df2e2cdc741aa12717cd43577458d1c80bdc47bfa7e8b"
+      },
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/data/binance/futures/BTC_USDT_USDT-1d-futures.feather",
+        "bytes": 68866,
+        "sha256": "5aad4af043443e77dbe00f058baaf27445eab4a33cb8b5748e2ecbab729685f0"
+      },
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/data/binance/futures/BTC_USDT_USDT-1h-funding_rate.feather",
+        "bytes": 66210,
+        "sha256": "20b48e8f6b146a6be91c6e56628ff70a1357aea547eea3084558aa95bab02701"
+      },
+      {
+        "path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/user_data/data/binance/futures/BTC_USDT_USDT-1h-mark.feather",
+        "bytes": 1522378,
+        "sha256": "69a8bb4195e0a2f0f9f8d04ac80bd53269541631a822aee9830c12016eb0c0eb"
+      }
+    ]
+  },
+  "metrics": {
+    "organic_trades": 0,
+    "forced_exits": 0,
+    "net_pnl": 0.0,
+    "net_return": 0.0,
+    "profit_factor": null,
+    "maximum_drawdown": 0.0,
+    "complete_months": 0
+  },
+  "decision": {
+    "pass_allowed": false,
+    "fail_fast_triggered": false,
+    "minimum_organic_trades_for_future_promotion": 100,
+    "minimum_calendar_months_for_future_promotion": 12,
+    "interpretation": "The locked 15-day holdout produced no signals that became trades. It was registered after the interval ended, so it is not prospective forward evidence. It neither supports nor refutes profitability and cannot be promoted."
+  },
+  "generated_at_utc": "2026-10-10T15:01:59.868969+00:00"
+}

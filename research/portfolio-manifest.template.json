@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "candidate": "REPLACE_WITH_PORTFOLIO_CANDIDATE",
+  "selection_bias_family_id": "REPLACE_WITH_PORTFOLIO_SELECTION_FAMILY",
+  "selection_bias_inventory_id": "REPLACE_WITH_EXACT_SEALED_INVENTORY_ID",
+  "registered_at_utc": "REPLACE_BEFORE_LOCKED_SAMPLE",
+  "portfolio_promotion_policy_sha256": "REPLACE_WITH_64_HEX_CHARACTERS",
+  "sleeves": [
+    {
+      "candidate": "REPLACE_WITH_SLEEVE_CANDIDATE",
+      "selection_bias_family_id": "REPLACE_WITH_SLEEVE_SELECTION_FAMILY",
+      "selection_bias_inventory_id": "REPLACE_WITH_EXACT_SEALED_INVENTORY_ID",
+      "allocation_weight": 0.5,
+      "symbols": ["BTCUSDT"],
+      "position_sides": ["long"],
+      "orders": {
+        "entry": {
+          "order_type": "maker_limit",
+          "fee_bps": 2.0,
+          "maximum_all_in_drag_bps": 10.0,
+          "trigger_kind": "strategy_entry_attempt"
+        },
+        "exit": {
+          "order_type": "aggressive_limit",
+          "fee_bps": 5.0,
+          "maximum_all_in_drag_bps": 15.0,
+          "trigger_kind": "strategy_exit_attempt"
+        },
+        "protective_stop": {
+          "order_type": "market",
+          "fee_bps": 5.0,
+          "maximum_all_in_drag_bps": 30.0,
+          "trigger_kind": "strategy_stop_attempt"
+        }
+      }
+    },
+    {
+      "candidate": "REPLACE_WITH_SECOND_SLEEVE_CANDIDATE",
+      "selection_bias_family_id": "REPLACE_WITH_SECOND_SLEEVE_SELECTION_FAMILY",
+      "selection_bias_inventory_id": "REPLACE_WITH_EXACT_SEALED_INVENTORY_ID",
+      "allocation_weight": 0.5,
+      "symbols": ["BTCUSDT"],
+      "position_sides": ["short"],
+      "orders": {
+        "entry": {
+          "order_type": "maker_limit",
+          "fee_bps": 2.0,
+          "maximum_all_in_drag_bps": 10.0,
+          "trigger_kind": "strategy_entry_attempt"
+        },
+        "exit": {
+          "order_type": "aggressive_limit",
+          "fee_bps": 5.0,
+          "maximum_all_in_drag_bps": 15.0,
+          "trigger_kind": "strategy_exit_attempt"
+        },
+        "protective_stop": {
+          "order_type": "market",
+          "fee_bps": 5.0,
+          "maximum_all_in_drag_bps": 30.0,
+          "trigger_kind": "strategy_stop_attempt"
+        }
+      }
+    }
+  ],
+  "warning": "Copy and seal this manifest before the locked sample. Replacing selection-bias family or inventory IDs after observing returns invalidates promotion."
+}

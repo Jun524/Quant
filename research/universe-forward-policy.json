@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "policy": "BINANCE_USDTM_POINT_IN_TIME_UNIVERSE_V1",
+  "registered_at_utc": "2026-10-09T16:58:25Z",
+  "sample_status_at_registration": "not_started",
+  "eligible_start_date": "2026-10-10",
+  "exchange": "binanceusdm",
+  "market": "USDT-M perpetual futures",
+  "sampling": {
+    "start_utc": "00:30:00",
+    "window_seconds": 900,
+    "backfill_allowed": false,
+    "maximum_one_eligible_snapshot_per_utc_day": true,
+    "all_usdt_perpetual": true,
+    "depth_pairs": 50,
+    "maximum_collection_duration_seconds": 900,
+    "detailed_candle_limit": 501,
+    "minimum_detailed_coverage_ratio": 0.9
+  },
+  "readiness": {
+    "required_consecutive_days": 180,
+    "maximum_latest_age_days": 1,
+    "require_current_protocol": true,
+    "require_unbroken_manifest_chain": true,
+    "require_raw_sha256": true,
+    "missing_days_are_not_interpolated": true
+  },
+  "interpretation": "This sample prevents future cross-sectional research from reconstructing today's surviving liquid universe in the past. READY is data coverage only, not evidence of alpha."
+}

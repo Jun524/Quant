@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V1",
+  "status": "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS",
+  "scope": "New historical research candidates only. This does not alter a sealed forward protocol, an existing experiment verdict, or live authorization.",
+  "live_order_authorization": "CLOSED",
+  "return_objective": {
+    "aspirational_net_geometric_monthly_return": 0.1,
+    "promotion_requirement": false,
+    "required_direction": "positive_cost_after_return",
+    "warning": "Ten percent per month is an ambition, not a promise, a sizing instruction, or a reason to increase leverage or turnover."
+  },
+  "research_cadence": {
+    "historical_research": "Start immediately from sealed historical data; do not wait for a new forward window to begin a diagnostic.",
+    "forward_review_days": [30, 60, 90],
+    "forward_review_rule": "At each checkpoint, stop failed candidates and continue only intact, cost-aware candidates. A checkpoint is not a live-promotion authorization.",
+    "promotion_rule": "There is no universal 180-day wait. Promotion remains conditional on the required independent evidence, integrity, cost, drawdown, and ruin gates.",
+    "frozen_exception": "Alpha 015 retains its separately preregistered 180-day point-in-time-universe requirement and cannot be shortened without a new, separately registered method."
+  },
+  "capital_preservation_requirements": {
+    "minimum_organic_trades": 100,
+    "minimum_profit_factor": 1.2,
+    "maximum_historical_drawdown": 0.1,
+    "maximum_worst_complete_month_loss": 0.05,
+    "maximum_planned_leverage": 1.0,
+    "maximum_planned_account_risk_per_trade": 0.0025,
+    "maximum_simultaneous_positions": 2,
+    "adverse_position_adds": "FORBIDDEN",
+    "liquidation_exits": 0,
+    "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
+    "modeled_slippage_bps": 5.0,
+    "maximum_combined_cost_stress_drawdown": 0.1,
+    "adverse_funding_stress_net_return": "> 0 after removing favorable funding and doubling paid funding",
+    "lookahead_analysis": "PASS",
+    "recursive_analysis": "PASS"
+  },
+  "evidence_sequence": [
+    "fixed historical development diagnostic",
+    "one untouched historical release partition without parameter changes",
+    "separate forward confirmation before any promotion"
+  ],
+  "non_negotiables": [
+    "Do not retune a failed strategy until it passes.",
+    "Do not use observed historical gains as a forecast.",
+    "Do not submit live orders without separate explicit authorization."
+  ]
+}

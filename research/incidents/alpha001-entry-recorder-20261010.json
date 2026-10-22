@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "incident_id": "ALPHA001_ENTRY_RECORDER_PROTOCOL_DRIFT_20261010",
+  "observed_at_utc": "2026-10-10T09:57:42Z",
+  "resolved_at_utc": "2026-10-10T09:59:11Z",
+  "component": "Alpha #1 signal-triggered public-L2 entry execution recorder",
+  "cause": "An attempted risk-gate improvement temporarily changed three files that belong to the active Alpha #1 forward protocol. The recorder correctly failed closed when it detected the protocol hash change.",
+  "affected_protocol_files_restored": {
+    "quant/research/forward_dryrun.py": "a13b5569bf9c86bd5280fc2161fece79f6f0ec36c801717d7ae81a8005c8183f",
+    "quant/research/monthly_target.py": "b2480ab712b08c8ea5ce975e983c77f7e0cf9f6ed58d4a7501ee0c6582c20618",
+    "quant/research/risk.py": "cba75ebb83291cf43178cd3c1b73fb7d6ba5a062205af1a9ffdfa2417834ca13"
+  },
+  "failed_segment": {
+    "manifest": "research/execution/raw/alpha001-signal-entry-20261009T162608Z.manifest.json",
+    "status": "FAILED",
+    "orders": 0,
+    "trigger_log_last_offset": 667660,
+    "preserved": true,
+    "promotion_eligible": false
+  },
+  "recovery_segment": {
+    "manifest": "research/execution/raw/alpha001-signal-entry-20261010T100000Z.manifest.json",
+    "source": "research/execution/raw/alpha001-signal-entry-20261010T100000Z.jsonl",
+    "pid": 22777,
+    "trigger_log_start_offset": 667660,
+    "starts_at_exact_failed_segment_last_offset": true,
+    "status_after_recovery": "ACTIVE",
+    "protocol_current": true,
+    "orders_at_resolution": 0
+  },
+  "impact": {
+    "forward_bot_stopped": false,
+    "mark_to_market_recorder_stopped": false,
+    "trades_during_incident": 0,
+    "entry_trigger_byte_gap": false,
+    "historical_failed_segment_deleted_or_rewritten": false,
+    "live_order_authorization": "CLOSED"
+  },
+  "verification": {
+    "alpha001_operational_health": "RUNNING_HEALTHY",
+    "research_health": "HEALTHY",
+    "protocol_current": true,
+    "entry_execution_manifest_valid": true,
+    "replayed_trigger_log_from_offset": 667660,
+    "replayed_trigger_log_through_offset": 668215,
+    "matching_entry_triggers_in_replayed_range": 0
+  },
+  "prevention": "Future risk-gate revisions must be implemented in portfolio-only protocol files while an Alpha #1 sample is active. Active protocol files are hash-frozen and must be checked before editing."
+}

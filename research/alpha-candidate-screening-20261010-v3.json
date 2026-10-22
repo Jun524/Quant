@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-10T14:58:00Z",
+  "purpose": "Test whether cross-venue spot or regulated-futures price discovery supports an independent, immediately executable Binance USD-M alpha family.",
+  "project_return_data_inspected_during_screening": false,
+  "candidate": "EXTERNAL_VENUE_PRICE_DISCOVERY_TO_BINANCE_PERPETUAL",
+  "decision": "REJECT_CURRENTLY_DO_NOT_OPEN_EXPERIMENT_0016",
+  "evidence": [
+    {
+      "finding": "Minute-level BitMEX derivatives led major Bitcoin spot exchanges in the studied historical sample.",
+      "implication": "A generic spot-to-perpetual follower rule has the wrong presumed direction.",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3353583"
+    },
+    {
+      "finding": "High-frequency evidence identifies Binance spot and perpetual markets as the primary source of Bitcoin price discovery across the venues studied.",
+      "implication": "Coinbase-to-Binance continuation is not supported as a broad unconditional mechanism; a reported New York fixing exception is too narrow to preregister without a separate event study and cost budget.",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4983566"
+    },
+    {
+      "finding": "A 2026 Binance-Hyperliquid study reports Binance leading at the venue level, with only a selected minority of Hyperliquid wallets anticipating it.",
+      "implication": "A public aggregate Hyperliquid feed is not an independent leading signal; selecting wallets would introduce a large hidden multiple-testing problem.",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6993378"
+    },
+    {
+      "finding": "CME futures have been reported to lead Bitcoin price formation under some high-frequency estimators and periods, while other papers find mixed or time-varying leadership.",
+      "implication": "The sign is not stable enough to transfer directly, and an executable replication requires synchronized licensed tick data, trading-hours controls, latency measurement, and current Binance execution evidence.",
+      "sources": [
+        "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012165",
+        "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4145789"
+      ]
+    },
+    {
+      "finding": "Official CME historical and streaming market data are separate licensed products; an official daily history listing was not a substitute for synchronized tick inputs.",
+      "implication": "The present project cannot make a causal, executable CME-to-Binance claim from free delayed or daily data.",
+      "sources": [
+        "https://www.cmegroup.com/market-data/browse-data/cryptocurrency-data.html",
+        "https://datamine.new.cmegroup.com/catalog/dataset/5bd5390bb1ee2fa5a1875c1ddffbcd49"
+      ]
+    }
+  ],
+  "rejection_reasons": [
+    "The dominant empirical direction is often Binance-to-other-venue rather than the proposed external-venue-to-Binance direction.",
+    "Reported leadership is estimator-, venue-, liquidity-, event-, and period-dependent.",
+    "Any remaining effect is high-frequency and must exceed two Binance execution legs, latency, spread, fees, and adverse selection.",
+    "Wallet or event-window selection after observing results would create another undisclosed trial family.",
+    "A CME version lacks the synchronized licensed tick source needed for a faithful causal replication."
+  ],
+  "retained_research_value": [
+    "Cross-venue disagreement can be retained as an execution-risk or stale-price diagnostic, not a return alpha.",
+    "If licensed synchronized CME ticks become available, preregister venue alignment, clock handling, latency, session boundaries, and a gross-edge floor before reading returns."
+  ],
+  "selected_next_step": "SEAL_AOA_HISTORICAL_HOLDOUT_RESULT_AND_CONTINUE_EXISTING_UNCHANGED_FORWARD_CAMPAIGNS",
+  "experiment_0016_open": false,
+  "guard": "No strategy parameters, active forward protocols, return archives, or live-order settings were changed by this screening."
+}

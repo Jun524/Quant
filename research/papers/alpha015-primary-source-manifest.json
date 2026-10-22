@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "retrieved_at_utc": "2026-10-11T06:03:09Z",
+  "title": "Cross-cryptocurrency return predictability",
+  "authors": [
+    "Li Guo",
+    "Bo Sang",
+    "Jun Tu",
+    "Yu Wang"
+  ],
+  "publication": "Journal of Economic Dynamics and Control 163 (2024), 104863",
+  "doi": "10.1016/j.jedc.2024.104863",
+  "publisher_url": "https://www.sciencedirect.com/science/article/pii/S0165188924000551",
+  "repository_record": "https://research-information.bris.ac.uk/en/publications/37d99f40-3d1b-471f-b823-db0973111234",
+  "oai_identifier": "oai:research-information.bris.ac.uk:openaire/37d99f40-3d1b-471f-b823-db0973111234",
+  "oai_endpoint": "https://research-information.bris.ac.uk/ws/oai",
+  "repository_file_url": "https://research-information.bris.ac.uk/ws/files/416503708/CryptoCrossPredictability.pdf",
+  "license": "CC BY 4.0",
+  "local_archive": {
+    "path": "research/papers/guo-sang-tu-wang-2024-cross-cryptocurrency-return-predictability-aam.pdf",
+    "sha256": "da4c8573eecf41bb027474d0b0b95b0e7713f4d957fdd1c49b2cdf8eeaba6686",
+    "bytes": 1853685,
+    "pdf_pages": 90,
+    "encrypted": false,
+    "version": "accepted author manuscript"
+  },
+  "verified_methodology": {
+    "pdf_page_25": "Rolling half-day (720-minute) adaptive-LASSO forecasts and equal-weight top-minus-bottom quintiles across 30 coins.",
+    "pdf_pages_37_38": "Futures analysis uses 10-minute rebalancing as the primary practical interval, reports a 5-minute robustness case, and warns that execution delay can erode high-frequency profits.",
+    "pdf_page_64_table_xvi": "Primary futures table uses quintiles, half-day and one-day windows, a 10-minute rebalance, and the paper's historical 4-bp taker cost assumption.",
+    "pdf_page_88_table_ax": "Five-minute rebalancing is an appendix robustness analysis, not a parameter search instruction.",
+    "unresolved_in_source": "The manuscript defines adaptive-LASSO weights but does not specify a sufficiently reproducible lambda-selection procedure for this platform."
+  },
+  "research_boundary": "This source contains no observation from the project's future 180-day point-in-time universe and does not authorize return-data acquisition or live trading."
+}

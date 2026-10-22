@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "candidate": "FuturesBtcRegimeRiskBudgetLong",
+  "kind": "HISTORICAL_COST_STRESS_DIAGNOSTIC_ONLY",
+  "generated_at_utc": "2026-10-12T03:52:26Z",
+  "source": {
+    "result_path": "user_data/backtest_results/backtest-result-2026-10-12_03-52-26.zip",
+    "result_sha256": "536c37cab736541f23fd90d6513b8e418f9b2167f8771fa9c12dc05fbd284e8f",
+    "metadata_path": "user_data/backtest_results/backtest-result-2026-10-12_03-52-26.meta.json",
+    "metadata_sha256": "70c704eb3f2e055e5b192e8a59384f56d725e2a69f1b5a39abad3934b73b4e78"
+  },
+  "execution_assumptions": {
+    "timeframe": "4h",
+    "detail_timeframe": "1h",
+    "timerange_requested": "20210101-",
+    "timerange_evaluated": "2021-09-08T00:00:00Z--2026-09-17T00:00:00Z",
+    "fee_per_side": 0.001,
+    "protections_enabled": true,
+    "cache": "none"
+  },
+  "organic_closed_trades": {
+    "trades": 31,
+    "wins": 9,
+    "losses": 22,
+    "net_profit_usdt": 99.305258,
+    "net_profit_fraction_of_start": 0.099305258,
+    "profit_factor": 2.2869,
+    "force_exits": 0,
+    "maximum_reported_drawdown_fraction": 0.0329
+  },
+  "interpretation": {
+    "status": "REVIEW_ONLY_INSUFFICIENT_FOR_MONTHLY_TARGET",
+    "promotion_eligible": false,
+    "live_order_authorization": "CLOSED",
+    "reason": "The result is a historical diagnostic under a modeled 10-bps-per-side fee. It has only 31 organic trades over more than five years and a total net return of about 9.9%, so it cannot establish the 10% net geometric monthly objective or replace locked-forward execution evidence."
+  }
+}

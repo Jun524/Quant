@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-11T19:07:00Z",
+  "purpose": "Check whether newly published perpetual-futures research warrants a distinct Experiment 0016 without inspecting project return data.",
+  "project_return_data_inspected_during_screening": false,
+  "sources_reviewed": [
+    {
+      "title": "The Quarter-Hour Effect: Periodic Algorithmic Trading and Return Predictability in Cryptocurrency Futures",
+      "authors": "Chan Kim and Peter Reinhard Hansen",
+      "url": "https://arxiv.org/abs/2607.09426",
+      "finding_used": "The paper reports that quarter-hour opening order imbalance forecasts four-to-twelve-hour futures returns across six Binance perpetual contracts."
+    },
+    {
+      "title": "How Much Sharpe is Illusory? Quantifying Backtest Overfitting in Crypto Factor Strategies",
+      "author": "Sergey Nefedov",
+      "url": "https://ssrn.com/abstract=7350238",
+      "finding_used": "The paper motivates pre-committed configurations, explicit costs, and selection-bias corrections; it is not used as return evidence."
+    }
+  ],
+  "candidates": [
+    {
+      "name": "QUARTER_HOUR_OPENING_ORDER_IMBALANCE",
+      "decision": "RETAIN_EXISTING_ALPHA_011_ONLY",
+      "reason": "Alpha 011 already fixed the same core information set before its first forward observation: ten-second order imbalance after 00:15 and 12:15 UTC boundaries, a one-second availability buffer, 12-hour non-overlapping holding, actual funding, and taker fee/slippage stress. A second trial would duplicate the family and create avoidable multiple-testing risk.",
+      "existing_protocol": "research/alpha011-preregistration.json",
+      "required_next_evidence": "Continue Alpha 011's preregistered forward collection; do not open a duplicate experiment or alter its boundaries, window, horizon, costs, or gates."
+    },
+    {
+      "name": "DAILY_PRICE_VOLUME_FACTOR_SORTS",
+      "decision": "DEFER",
+      "reason": "The available daily archive reconstruction can support a future point-in-time diagnostic, but no independently reproducible signal rule, turnover specification, and funding-aware execution protocol was identified in this screen. Opening a factor search now would violate the pre-commitment objective.",
+      "required_next_evidence": "A complete method source and a separate preregistration after the historical universe audit passes."
+    }
+  ],
+  "selected_next_step": "NO_NEW_EXPERIMENT; keep Alpha 011 and the historical-universe reconstruction protocols unchanged.",
+  "live_order_authorization": "CLOSED"
+}

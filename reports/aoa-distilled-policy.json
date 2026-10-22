@@ -1,0 +1,93 @@
+{
+  "as_of": "2026-10-06",
+  "strategy": "AoaDistilledPolicyPrototype",
+  "status": "RESEARCH_ONLY_EXECUTION_BLOCKED",
+  "experiment_registered": false,
+  "reason_not_registered": "The Binance 2022-06-01 through 2026-09-01 interval was already seen and is not locked OOS.",
+  "source_split": {
+    "train": "2018-03-01/2019-12-31",
+    "threshold_calibration": "2020-01-01/2020-12-31",
+    "locked_source_test": "2021-01-01/2021-12-31"
+  },
+  "source_teacher_metrics": {
+    "action_average_precision": 0.8,
+    "action_roc_auc": 0.896,
+    "action_precision": 0.631,
+    "action_recall": 0.906,
+    "direction_accuracy": 0.5726,
+    "direction_roc_auc": 0.623,
+    "high_confidence_direction_trades": 36,
+    "high_confidence_direction_accuracy": 0.6389,
+    "profitability_filter_improved_pf": false
+  },
+  "binance_seen_data": {
+    "timerange": "20220601-20260901",
+    "all_taker_fee": {
+      "fee_per_filled_side": 0.0005,
+      "result": "user_data/backtest_results/backtest-result-2026-10-06_03-19-40.zip",
+      "trades": 477,
+      "net_pnl": -6.3656021,
+      "net_return": -0.0063656021,
+      "profit_factor": 0.959168303,
+      "max_drawdown": 0.027473471,
+      "price_pnl_estimate": 23.071162303,
+      "trading_fees": -29.539216727,
+      "funding_pnl": 0.102452324
+    },
+    "observed_maker_mix_fee": {
+      "assumed_maker_share": 0.734,
+      "maker_fee": 0.0002,
+      "taker_fee": 0.0005,
+      "blended_fee_per_filled_side": 0.00028,
+      "result": "user_data/backtest_results/backtest-result-2026-10-06_03-19-56.zip",
+      "trades": 483,
+      "net_pnl": 2.08968062,
+      "net_return": 0.002089681,
+      "profit_factor": 1.013453336,
+      "max_drawdown": 0.023360706,
+      "sharpe": 0.025604458,
+      "price_pnl_estimate": 18.789004437,
+      "trading_fees": -16.80608375,
+      "funding_pnl": 0.106759933,
+      "breakeven_fee_bps": 3.148154027,
+      "remaining_slippage_budget_bps": 0.348154027,
+      "mean_trade_pnl": 0.004326461,
+      "normal_95pct_mean_trade_pnl_interval": [-0.085307349, 0.093960271],
+      "long_pnl": 14.01293432,
+      "short_pnl": -11.9232537,
+      "stop_loss_pnl": -106.90564928,
+      "state_exit_pnl": 99.33322567,
+      "max_hold_pnl": 9.66210423,
+      "year_pnl": {
+        "2022": 3.56238857,
+        "2023": 4.79717785,
+        "2024": -7.79124738,
+        "2025": 0.0,
+        "2026_through_09_01": 1.52136158
+      }
+    }
+  },
+  "rejected_iteration": {
+    "change": "60-minute loss timeout derived from source losing-trade duration",
+    "result": "user_data/backtest_results/backtest-result-2026-10-06_03-04-24.zip",
+    "trades": 1241,
+    "net_return": -0.0774,
+    "profit_factor": 0.655,
+    "action": "reverted"
+  },
+  "bias_checks": {
+    "lookahead": {
+      "status": "PASS",
+      "signals_checked": 30,
+      "biased_entry_signals": 0,
+      "biased_exit_signals": 0
+    },
+    "recursive": {
+      "status": "PASS_AT_2400_STARTUP_CANDLES",
+      "tested_startup_candles": [300, 600, 1200, 2400],
+      "action_probability_displayed_variance_at_2400": 0.0,
+      "direction_probability_displayed_variance_at_2400": 0.0
+    }
+  },
+  "live_state_changed": false
+}

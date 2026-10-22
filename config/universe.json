@@ -1,0 +1,14 @@
+{
+  "universe_policy": {
+    "min_quote_volume_24h": 10000000.0,
+    "min_listing_age_days": 30,
+    "min_candles": 500,
+    "max_spread_bps": 15.0,
+    "min_orderbook_depth": 50000.0
+  },
+  "collection_policy": {
+    "default_scope": "configured five-pair research universe",
+    "full_market_scope": "use --all-usdt-perpetual; top depth-ranked contracts receive orderbook, funding, and open-interest enrichment",
+    "write_mode": "append-only immutable batch per UTC collection timestamp"
+  }
+}

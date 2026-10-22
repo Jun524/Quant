@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-09T11:32:49Z",
+  "policy": "MONTHLY_TARGET_FORWARD_EVIDENCE_V2",
+  "reason": "A complete-month count alone does not prove that observations were collected after preregistration; repeated strategy trials require a locked forward sample and explicit downside/target bootstrap checks before promotion.",
+  "required_evidence": {
+    "sample_role": "locked_forward",
+    "pre_registered": true,
+    "parameter_changes_after_start": 0,
+    "minimum_complete_months": 12,
+    "minimum_organic_trades": 100
+  },
+  "bootstrap_gate": {
+    "maximum_probability_terminal_loss": 0.10,
+    "minimum_probability_reaching_annual_target": 0.50,
+    "maximum_probability_of_ruin": 0.01,
+    "maximum_drawdown_p95": 0.20
+  },
+  "execution_gate": {
+    "evidence_kind": "public_l2_shadow",
+    "order_scope": "entry_long_only",
+    "required_side": "buy",
+    "required_trigger_kind": "alpha001_live_order_attempt",
+    "maximum_trigger_to_probe_delay_seconds": 10,
+    "entry_price_side": "same",
+    "require_exact_freqtrade_limit_price_replay": true,
+    "exit_price_side": "other",
+    "maximum_shadow_notional_usdt": 50.0,
+    "entry_timeout_seconds": 300,
+    "post_fill_markout_seconds": 300,
+    "maximum_entry_execution_drag_bps": 10.0,
+    "minimum_orders": 100,
+    "minimum_filled_orders": 30,
+    "live_whitelist_exact_match_required": true,
+    "minimum_orders_per_symbol": 20,
+    "minimum_filled_orders_per_symbol": 6,
+    "minimum_maker_share": 0.70,
+    "maximum_effective_fee_bps": 2.8,
+    "filled_markout_coverage": 1.0,
+    "unfilled_opportunity_coverage": 1.0,
+    "conservative_all_in_execution_drag_must_be_below_preregistered_gross_edge": true,
+    "maximum_receipt_age_days": 30,
+    "raw_rows_sha256_required": true,
+    "current_protocol_binding_required": true,
+    "all_current_protocol_execution_segments_required": true
+  },
+  "interpretation": "These are promotion gates, not forecasts or guarantees. Historical development backtests remain diagnostic and cannot PASS the live-promotion objective.",
+  "research_basis": [
+    "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2460551",
+    "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2326253"
+  ]
+}

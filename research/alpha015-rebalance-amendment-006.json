@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_METHOD_006_DIRECT_BOUNDARY_REBALANCE",
+  "registered_at_utc": "2026-10-11T10:29:32Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_TURNOVER_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "rule": {
+    "first_boundary": "At 00:01 UTC, move from cash to the first target and charge its full L1 turnover.",
+    "intermediate_boundaries": "At each shared exit/entry boundary, mark the expiring positions at the verified common boundary prices and rebalance directly from those pretrade signed weights to the new target using net symbol-level changes; do not fabricate a separate flat exit and re-entry.",
+    "last_boundary": "After the final holding interval exits at 23:51 UTC, move the complete portfolio to cash and charge full liquidation turnover.",
+    "turnover": "Sum absolute signed-weight changes from marked pretrade weights to the new target across the union of symbols, including entry from and final marked exit to zero. A target-to-target calculation that ignores price drift is only a diagnostic lower bound.",
+    "position_overlap": "There is exactly one target portfolio on each half-open holding interval; old and new targets do not overlap in time even though the boundary rebalance is netted.",
+    "cost_application": "Apply the fixed base and stress all-in rates once to realized L1 turnover. Never charge a synthetic exit plus entry when a direct net rebalance is possible."
+  },
+  "supersedes": [
+    "wording in amendment 002 that could be read as forcing the portfolio flat before every new target",
+    "any implementation that charges two units of turnover at every ten-minute boundary regardless of unchanged holdings"
+  ],
+  "unchanged": [
+    "10-minute decision grid and holding interval",
+    "one-minute latency floor",
+    "same-day UTC boundary rule",
+    "base 5 bp and stress 10 bp per unit of realized turnover",
+    "no return acquisition or live trading is authorized"
+  ]
+}

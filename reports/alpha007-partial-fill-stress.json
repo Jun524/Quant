@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "policy": "ALPHA007_PARTIAL_FILL_VETO_V1",
+  "policy_sha256": "c491f618a5589f871efa82d7e996825daa169bce938486e8f5b893ed6c4819e1",
+  "registry_binding": {
+    "experiment_id": 7,
+    "event_id": 47,
+    "event_created_at": "2026-10-11T05:44:07.365493+00:00",
+    "before_locked_oos": true,
+    "locked_oos_start": null
+  },
+  "primary_report_sha256": "1d634021abb440bbdfbbcf4aa64f40a7de51c9d17710cf8590ba248971232217",
+  "source_manifest_count": 782,
+  "source_manifest_inventory_sha256": "0e62b493bcf6c3530712c492e5cc215ac4ae69abd436c0b99383729e92b0fbb7",
+  "evaluator_sha256": {
+    "partial_fill_stress": "b3be6011d4defafc11fb59f53b57d35e2dff9fe89d9a9e55b8192c85def227a3",
+    "report_builder": "05709cb5c34f457a41bd380abc6e88cb364e727e479a6d4712bbbdeb3e8a7d01",
+    "frozen_primary_evaluator": "7f7ea1401e8563a5e1140bb7e10896b46aa5b5fad37ff5ac3efdfb82d248154b"
+  },
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "status": "ACCUMULATING",
+  "promotion_eligible": false,
+  "primary_status": "ACCUMULATING",
+  "complete_days": 2,
+  "base": {
+    "eligible_orders": 0,
+    "execution_available_orders": 0,
+    "execution_coverage_ratio": 0.0,
+    "executed_exposures": 0,
+    "partial_fill_orders": 0,
+    "fully_filled_orders": 0,
+    "exit_quote_coverage_ratio": 0.0,
+    "mean_submitted_notional_contribution": null,
+    "executed_notional_weighted_net_return": null,
+    "hour_block_bootstrap_95pct_lower_contribution": null
+  },
+  "latency_100ms": {
+    "eligible_orders": 0,
+    "execution_available_orders": 0,
+    "execution_coverage_ratio": 0.0,
+    "executed_exposures": 0,
+    "partial_fill_orders": 0,
+    "fully_filled_orders": 0,
+    "exit_quote_coverage_ratio": 0.0,
+    "mean_submitted_notional_contribution": null,
+    "executed_notional_weighted_net_return": null,
+    "hour_block_bootstrap_95pct_lower_contribution": null
+  },
+  "by_side": {
+    "buy": {
+      "eligible_orders": 0,
+      "mean_submitted_notional_contribution": null
+    },
+    "sell": {
+      "eligible_orders": 0,
+      "mean_submitted_notional_contribution": null
+    }
+  },
+  "partial_fill_total_contribution": 0,
+  "checks": [
+    {
+      "name": "primary_alpha007_pass",
+      "passed": false,
+      "actual": "ACCUMULATING",
+      "required": "PASS"
+    },
+    {
+      "name": "complete_days",
+      "passed": false,
+      "actual": 2,
+      "required": 17
+    },
+    {
+      "name": "base_execution_coverage",
+      "passed": false,
+      "actual": 0.0,
+      "required": 1.0
+    },
+    {
+      "name": "latency_execution_coverage",
+      "passed": false,
+      "actual": 0.0,
+      "required_min": 0.95
+    },
+    {
+      "name": "base_exit_quote_coverage",
+      "passed": false,
+      "actual": 0.0,
+      "required": 1.0
+    },
+    {
+      "name": "latency_exit_quote_coverage",
+      "passed": false,
+      "actual": 0.0,
+      "required": 1.0
+    },
+    {
+      "name": "executed_exposures",
+      "passed": false,
+      "actual": 0,
+      "required": 200
+    },
+    {
+      "name": "base_mean_contribution",
+      "passed": false,
+      "actual": null,
+      "required": "> 0"
+    },
+    {
+      "name": "base_hour_block_bootstrap",
+      "passed": false,
+      "actual": null,
+      "required": "> 0"
+    },
+    {
+      "name": "latency_mean_contribution",
+      "passed": false,
+      "actual": null,
+      "required": "> 0"
+    },
+    {
+      "name": "partial_fill_total_contribution",
+      "passed": true,
+      "actual": 0,
+      "required": ">= 0"
+    },
+    {
+      "name": "long_eligible_orders",
+      "passed": false,
+      "actual": 0,
+      "required": 30
+    },
+    {
+      "name": "long_mean_contribution",
+      "passed": false,
+      "actual": null,
+      "required": "> 0"
+    },
+    {
+      "name": "short_eligible_orders",
+      "passed": false,
+      "actual": 0,
+      "required": 30
+    },
+    {
+      "name": "short_mean_contribution",
+      "passed": false,
+      "actual": null,
+      "required": "> 0"
+    }
+  ],
+  "warning": "This auxiliary result can veto but never rescue or promote Alpha #7."
+}

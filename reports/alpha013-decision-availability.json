@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "kind": "FUNDING_DECISION_AVAILABILITY_AUDIT",
+  "preregistration_sha256": "278589e5166379c37b27c7207c15b59192b0adbe68620a7d99d5c7124f7e29ba",
+  "status": "CAUSAL_AVAILABILITY_VETO",
+  "promotion_eligible": false,
+  "live_order_authorization": "CLOSED",
+  "elapsed_decisions": 1,
+  "verified_decisions": [],
+  "failures": [
+    {
+      "decision_at": "2026-10-19T04:00:00+00:00",
+      "reason": "missing_receipt"
+    }
+  ],
+  "limitation": "Funding history fetched after a decision is not accepted as evidence that the value was available before entry.",
+  "generated_at_utc": "2026-10-19T05:55:12.932633+00:00",
+  "preregistration_path": "/Users/jun/Desktop/\u110f\u116f\u11ab\u1110\u1173/research/alpha013-preregistration.json"
+}

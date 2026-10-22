@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_ACTIVATION_001_PRIOR_DAY_CALENDAR_BINDING",
+  "registered_at_utc": "2026-10-11T05:57:14Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_AMENDMENT",
+  "base_policy": {
+    "path": "research/alpha015-activation-policy.json",
+    "sha256": "c323181b2a486851cd510eb9bfa49edbfe2bb33f7cf5947a639ab9a13b3af3cc"
+  },
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "clarification": {
+    "universe_snapshot_days": 180,
+    "evaluation_days": 180,
+    "development_days": 120,
+    "locked_validation_days": 60,
+    "mapping": "Evaluation day D uses only the sealed point-in-time universe snapshot from D-1.",
+    "calendar_shift": "The first evaluation day is one UTC day after the first formation snapshot; the final evaluation day is one UTC day after the final formation snapshot.",
+    "manifest_binding": "Every evaluation day must bind the exact prior-day snapshot SHA-256, manifest SHA-256, protocol fingerprint, and eligible-symbol set before any return archive is acquired.",
+    "write_once": "The activation lock is immutable after creation; a different recomputation is an integrity failure."
+  },
+  "unchanged": [
+    "180 consecutive point-in-time universe snapshots remain the activation threshold",
+    "the final 60 evaluation days remain inaccessible to development",
+    "no return archive may be acquired before readiness and preregistration",
+    "this amendment does not authorize Experiment 0015 or live trading"
+  ],
+  "reason": "A date-only 120/60 calendar could be constructed without proving that each trading day used its exact prior-day sealed universe. This amendment closes that survivorship and membership-lag gap without changing a performance parameter."
+}

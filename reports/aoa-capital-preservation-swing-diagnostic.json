@@ -1,0 +1,67 @@
+{
+  "as_of": "2026-10-12",
+  "candidate": "AoaCapitalPreservationSwing",
+  "status": "FAIL_HISTORICAL_DIAGNOSTIC",
+  "promotion_eligible": false,
+  "live_order_authorization": "CLOSED",
+  "scope": "Historical, already-seen diagnostic only. It is not a locked OOS result and must not be retuned after this verdict.",
+  "hypothesis": "Apply only the reproducible risk discipline from the public AOA archive to a low-turnover BTC-regime long swing: one-times leverage, 0.25% planned account risk, no adverse additions, and a 3% portfolio circuit breaker.",
+  "fixed_inputs": {
+    "strategy": {
+      "path": "user_data/strategies/AoaCapitalPreservationSwing.py",
+      "sha256": "e472e73c97765e324890fc25d24fbe3eba0fcb361d9b8a50c2bc63a10e13c6ab"
+    },
+    "research_config": {
+      "path": "user_data/config.futures.aoa-capital-preservation.research.json",
+      "sha256": "366a4eb41a244e94cd3637dff1cdca586f066274122773a2ef8406c613f0ea35"
+    },
+    "objective": {
+      "path": "research/capital-preservation-objective.json",
+      "sha256": "dc8c4e8b1a96c1aa1b3d1b0091bbdb17e4bac33156ff8cd009052272828e1ed9"
+    },
+    "execution": {
+      "timeframe": "4h",
+      "detail_timeframe": "1h",
+      "pairs": ["BTC/USDT:USDT", "ETH/USDT:USDT", "BNB/USDT:USDT", "SOL/USDT:USDT", "XRP/USDT:USDT"],
+      "leverage": 1.0,
+      "planned_account_risk_per_trade": 0.0025,
+      "adverse_position_adds": false,
+      "fee_per_side_base": 0.0005,
+      "fee_per_side_stress": 0.001,
+      "modeled_slippage_bps_per_order_notional": 5.0,
+      "adverse_funding_stress": "remove favorable funding and double paid funding"
+    }
+  },
+  "results": {
+    "development_20210908_20240101": {
+      "base_result": "user_data/backtest_results/backtest-result-2026-10-12_05-49-46.zip",
+      "double_fee_result": "user_data/backtest_results/backtest-result-2026-10-12_05-50-05.zip",
+      "all_closed_trade_result": {"trades": 13, "net_return": 0.061769, "max_drawdown": 0.019875},
+      "organic_natural_exits_base": {"trades": 11, "net_return": -0.019875, "profit_factor": 0.0, "max_drawdown": 0.019875},
+      "organic_natural_exits_double_fee_plus_5bp_slippage": {"trades": 11, "net_return": -0.020441, "profit_factor": 0.0, "conservative_cost_stress_drawdown_upper_bound": 0.020441, "adverse_funding_net_return": -0.021423},
+      "critical_note": "The displayed +6.18% all-closed result contains two end-of-sample force exits worth about +8.16% of starting equity. The natural-exit result is negative."
+    },
+    "post_development_20240101_20260917": {
+      "base_result": "user_data/backtest_results/backtest-result-2026-10-12_05-50-15.zip",
+      "double_fee_result": "user_data/backtest_results/backtest-result-2026-10-12_05-50-28.zip",
+      "organic_natural_exits_base": {"trades": 20, "net_return": 0.016911, "profit_factor": 1.6233, "max_drawdown": 0.011098},
+      "organic_natural_exits_double_fee_plus_5bp_slippage": {"trades": 20, "net_return": 0.015809, "profit_factor": 1.5696, "conservative_cost_stress_drawdown_upper_bound": 0.01178, "adverse_funding_net_return": 0.011883}
+    }
+  },
+  "integrity_checks": {
+    "lookahead_analysis": {"status": "PASS", "signals_checked": 30, "biased_entry_signals": 0, "biased_exit_signals": 0},
+    "recursive_analysis": {"status": "PASS_AT_1500_STARTUP_CANDLES", "startup_candles_checked": [800, 1000, 1200, 1500], "maximum_reported_variance_at_1500": 0.0}
+  },
+  "verdict": {
+    "failed_gates": [
+      "development organic return is negative",
+      "development organic profit factor is below 1.20",
+      "development combined double-fee plus 5bp modeled-slippage organic return is negative",
+      "development adverse-funding stress return is negative",
+      "31 organic trades across both diagnostics is below the 100-trade minimum",
+      "all evaluated history was already seen and therefore cannot be claimed as locked OOS"
+    ],
+    "action": "ARCHIVE_WITHOUT_RETUNING",
+    "reason": "The risk overlay limits reported drawdown but does not create sufficient cost-after edge. Do not alter the channel, stop, regime, or circuit-breaker numbers to rescue this candidate."
+  }
+}

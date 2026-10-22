@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-22T04:43:23.389426+00:00",
+  "candidate": "RISK_OVERLAY_001_OBSERVED_LIQUIDATION_SHOCK",
+  "status": "ACCUMULATING_DEVELOPMENT",
+  "role": "risk overlay research, not a standalone alpha and not promotion evidence",
+  "feed_complete": false,
+  "eligible_start": "2026-10-10T05:00:00+00:00",
+  "valid_current_protocol_chunks": 287,
+  "invalid_chunks": [],
+  "complete_utc_days": [
+    "2026-10-11",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-17",
+    "2026-10-18",
+    "2026-10-19",
+    "2026-10-20",
+    "2026-10-21"
+  ],
+  "complete_utc_days_count": 11,
+  "development_days_required": 60,
+  "development_days_remaining": 49,
+  "locked_validation_opened": false,
+  "observed_liquidation_snapshot_rows": 33036,
+  "mark_price_rows": 5165435,
+  "open_interest_rows": 17219,
+  "daily_coverage": [
+    {
+      "date": "2026-10-10",
+      "covered_seconds": 68297.70571899999,
+      "coverage_ratio": 0.7904827050810184,
+      "complete": false
+    },
+    {
+      "date": "2026-10-11",
+      "covered_seconds": 86266.23866800002,
+      "coverage_ratio": 0.9984518364351854,
+      "complete": true
+    },
+    {
+      "date": "2026-10-12",
+      "covered_seconds": 86262.326486,
+      "coverage_ratio": 0.998406556550926,
+      "complete": true
+    },
+    {
+      "date": "2026-10-13",
+      "covered_seconds": 86263.021303,
+      "coverage_ratio": 0.9984145984143519,
+      "complete": true
+    },
+    {
+      "date": "2026-10-14",
+      "covered_seconds": 86264.901512,
+      "coverage_ratio": 0.9984363600925925,
+      "complete": true
+    },
+    {
+      "date": "2026-10-15",
+      "covered_seconds": 86263.460095,
+      "coverage_ratio": 0.998419677025463,
+      "complete": true
+    },
+    {
+      "date": "2026-10-16",
+      "covered_seconds": 86262.52843699999,
+      "coverage_ratio": 0.9984088939467591,
+      "complete": true
+    },
+    {
+      "date": "2026-10-17",
+      "covered_seconds": 86264.76293499999,
+      "coverage_ratio": 0.9984347561921295,
+      "complete": true
+    },
+    {
+      "date": "2026-10-18",
+      "covered_seconds": 86266.947006,
+      "coverage_ratio": 0.9984600347916667,
+      "complete": true
+    },
+    {
+      "date": "2026-10-19",
+      "covered_seconds": 86261.95729700002,
+      "coverage_ratio": 0.9984022835300927,
+      "complete": true
+    },
+    {
+      "date": "2026-10-20",
+      "covered_seconds": 86263.25254100001,
+      "coverage_ratio": 0.9984172747800927,
+      "complete": true
+    },
+    {
+      "date": "2026-10-21",
+      "covered_seconds": 86264.798284,
+      "coverage_ratio": 0.9984351653240742,
+      "complete": true
+    }
+  ],
+  "performance_calculated": false
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-10T04:31:00Z",
+  "amended_before_first_sample_at_utc": "2026-10-10T04:35:00Z",
+  "amendment_reason": "Locked episode, outcome, and past-only baseline semantics before the 05:00 UTC eligible start; signal thresholds and gates were unchanged.",
+  "candidate": "RISK_OVERLAY_001_OBSERVED_LIQUIDATION_SHOCK",
+  "status": "PREREGISTERED_FORWARD_ONLY_TELEMETRY",
+  "role": "risk overlay research, not a standalone alpha and not promotion evidence",
+  "hypothesis": "A large observable Binance forced-liquidation snapshot shock, normalized by contemporaneous open-interest notional and confirmed by a same-direction mark-price move, identifies a short-lived high-tail-risk state in which suppressing new entries for 30 minutes may reduce adverse excursion.",
+  "eligible_start_utc": "2026-10-10T05:00:00Z",
+  "fixed_universe": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "BNBUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "data": {
+    "liquidation_stream": "!forceOrder@arr",
+    "mark_price_stream": "!markPrice@arr@1s",
+    "open_interest_endpoint": "/fapi/v1/openInterest",
+    "open_interest_poll_seconds": 300,
+    "important_limitation": "Binance publishes only the latest liquidation order snapshot per symbol within each 1000ms interval. The feed is censored and must never be described as total liquidation volume or a complete event tape.",
+    "displayed_notional": "average price multiplied by accumulated filled quantity in the published snapshot",
+    "duplicate_rule": "identical symbol, side, trade time, original quantity, accumulated quantity, and average price fingerprints are counted once per collector chunk",
+    "missing_data": "never backfill or interpolate; exclude incomplete UTC days"
+  },
+  "fixed_trigger_for_later_evaluation": {
+    "lookback_seconds": 60,
+    "minimum_observed_snapshot_notional_to_open_interest_notional": 0.001,
+    "minimum_same_direction_mark_return_abs": 0.005,
+    "sell_snapshot_direction": "negative mark return and long-liquidation stress",
+    "buy_snapshot_direction": "positive mark return and short-liquidation stress",
+    "entry_freeze_minutes": 30,
+    "overlapping_triggers": "extend the freeze to 30 minutes after the latest qualifying trigger"
+  },
+  "fixed_evaluation_contract": {
+    "episode_start": "first qualifying trigger for a symbol outside an existing freeze",
+    "episode_extension": "a qualifying trigger inside the freeze extends freeze_end but does not create a new sample",
+    "outcome": "maximum absolute mark-price excursion from episode_start over the next 30 minutes",
+    "one_percent_adverse_move": "outcome is at least 0.01",
+    "matched_baseline": "same symbol and exact UTC clock time 7 days earlier; if unavailable, try 14, 21, then 28 days earlier",
+    "baseline_constraints": "past-only, within a complete selected development day, not inside any qualifying freeze, causal mark no more than two seconds old, and complete 30-minute outcome",
+    "development_slice": "first 60 complete eligible UTC days only; later rows remain unopened",
+    "half_split": "chronological midpoint of matched non-overlapping development episodes",
+    "price_timestamp": "exchange event_time_ms; local received_at is retained for latency diagnostics only"
+  },
+  "development_gate": {
+    "complete_utc_days": 60,
+    "minimum_stream_coverage_per_day": 0.95,
+    "minimum_nonoverlapping_triggers": 100,
+    "triggered_30m_absolute_return_median_at_least_matched_baseline_multiple": 1.5,
+    "triggered_30m_one_percent_adverse_move_rate_minus_matched_baseline_minimum": 0.05,
+    "both_halves_show_higher_tail_risk": true,
+    "single_symbol_trigger_concentration_maximum": 0.60
+  },
+  "locked_validation_gate": {
+    "complete_utc_days": 30,
+    "minimum_nonoverlapping_triggers": 50,
+    "triggered_30m_absolute_return_median_at_least_matched_baseline_multiple": 1.25,
+    "triggered_30m_one_percent_adverse_move_rate_minus_matched_baseline_minimum": 0.03,
+    "both_halves_show_higher_tail_risk": true,
+    "single_symbol_trigger_concentration_maximum": 0.60
+  },
+  "locked_validation_contract": {
+    "opening": "requires a current-protocol development PASS report and an immutable SHA-256 lock receipt",
+    "validation_start": "00:00 UTC on the calendar day after the lock receipt is created",
+    "quarantine": "complete days observed after the development slice but before validation_start cannot enter validation",
+    "validation_slice": "first 30 complete UTC days on or after validation_start",
+    "baseline_pool": "selected validation days only; development and quarantine days cannot be used as matched baselines",
+    "repeat_open": "the lock receipt cannot be overwritten or moved",
+    "pass_effect": "risk-overlay evidence only; never authorizes orders or changes a strategy automatically"
+  },
+  "prohibited": [
+    "calling the feed complete liquidation volume",
+    "changing thresholds after eligible collection starts",
+    "using pre-registration or incomplete-day observations in a gate",
+    "turning the overlay into a directional trade without a new preregistration",
+    "using the telemetry as strategy profitability or live-promotion evidence"
+  ],
+  "sources": [
+    {
+      "title": "Binance USD-M Futures Liquidation Order Streams",
+      "url": "https://developers.binance.info/en/docs/catalog/core-trading-derivatives-trading-usd-s-m-futures/api/ws-streams/market",
+      "relevance": "Official endpoint, response fields, 1000ms update speed, and latest-snapshot censoring rule."
+    },
+    {
+      "title": "Liquidation, Leverage and Optimal Margin in Bitcoin Futures Markets",
+      "url": "https://arxiv.org/abs/2102.04591",
+      "relevance": "Forced liquidations are economically material and motivate a risk-state test, not an assumed trading edge."
+    },
+    {
+      "title": "Counting Fills Misrepresents Liquidations",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7189219",
+      "relevance": "Economic liquidation episodes and published fill records are not interchangeable; event counts require explicit measurement caveats."
+    }
+  ]
+}

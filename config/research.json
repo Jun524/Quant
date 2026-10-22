@@ -1,0 +1,10 @@
+{
+  "research_policy": {
+    "min_oos_trades": 30,
+    "min_profit_factor": 1.2,
+    "max_drawdown": 0.15,
+    "min_oos_net_return": 0.0,
+    "max_short_single_trade_profit_concentration": 0.5
+  },
+  "promotion_rule": "A PASS records research eligibility only. It never changes the default strategy, dry_run, leverage, or live configuration."
+}

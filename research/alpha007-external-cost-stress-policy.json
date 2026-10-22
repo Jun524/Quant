@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-10T04:39:01Z",
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "policy": "ALPHA007_EXTERNAL_EXECUTION_COST_STRESS_V1",
+  "role": "additive platform feasibility gate; does not amend, rerun, or rescue the preregistered 7bp hypothesis",
+  "base_round_trip_cost_bps": 7.0,
+  "stressed_entry_cost_bps": 5.0,
+  "unchanged_exit_cost_bps": 5.0,
+  "stressed_round_trip_cost_bps": 10.0,
+  "additional_deduction_bps": 3.0,
+  "source_calibration": {
+    "report": "reports/execution-calibration.json",
+    "report_sha256": "da2404f428c62b35b7fab4e799f5019a173650522fc25e8d034fc014be42b6cf",
+    "raw_sha256": "1be17dc0c9e04c14396c77c00ceeaa9227f609a1d8b8ae3d59f876c74e60d7ca",
+    "manifest_sha256": "2f9b07da0efe9c9959acf9cccd8410453587020f46276b9cf7afe1b12676272a",
+    "btc_observed_all_in_entry_drag_bps": 4.770456927439614,
+    "rounded_entry_stress_bps": 5.0,
+    "fee_already_included": true,
+    "promotion_evidence": false
+  },
+  "locked_requirements": {
+    "primary_alpha007_status_pass": true,
+    "ten_bps_net_60s_mean_positive": true,
+    "ten_bps_hour_block_bootstrap_95pct_lower_positive": true,
+    "ten_bps_plus_100ms_latency_mean_positive": true
+  },
+  "interpretation": "This one-window calibration cannot prove future execution quality. It may only make the gate stricter. Passing it does not authorize live trading; failing it blocks promotion."
+}

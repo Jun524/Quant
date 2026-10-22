@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_DATA_008_AUTHORIZED_STREAMING_ACQUISITION",
+  "registered_at_utc": "2026-10-11T11:24:00Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_ACQUISITION_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "rules": {
+    "authorization_order": "Before creating an Alpha 015 data directory, lock, plan, receipt, temporary file, or network request, recompute readiness and require a verified Experiment 0015 preregistration and activation lock that authorize development-only acquisition.",
+    "scope": "Construct the exact development-only file inventory from immutable prior-day universe bindings. Locked-validation dates are not planned, probed, or downloaded.",
+    "size_preflight": "Obtain an exact HEAD Content-Length inventory for every planned publisher archive before downloading any return bytes. Require free space of at least 1.25 times estimated payload plus a fixed 25 GiB reserve.",
+    "transport": "Download each archive to a same-filesystem temporary file, require its GET Content-Length to equal the sealed HEAD measurement, stream no more than the fixed compressed-size limit, fsync it, then verify the publisher CHECKSUM before archive validation and atomic sealing.",
+    "integrity": "The publisher CHECKSUM, exact archive filename, single expected CSV member, schema, UTC day, aggregate-trade continuity, and canonical funding response remain mandatory. A partial, corrupt, mismatched, or unplanned file is never recorded as completed.",
+    "resumability": "Use one non-blocking acquisition lock and replayable progress receipts bound to the exact plan. A completed batch is write-once only after all expected files pass the existing phase-bundle validation.",
+    "execution_boundary": "This amendment governs research data transport only. It does not alter signals, timing, universe membership, costs, model parameters, evaluation gates, validation access, or live-trading authorization."
+  },
+  "unchanged": [
+    "120 development and 60 locked-validation evaluation days",
+    "the final 60 days remain inaccessible before a source-bound development pass",
+    "no return archive is acquired before verified preregistration",
+    "live order authorization remains CLOSED"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "max_open_trades": 5,
+  "stake_amount": "unlimited",
+  "dry_run_wallet": 1000,
+  "pairlists": [{"method": "StaticPairList"}],
+  "exchange": {
+    "pair_whitelist": [
+      "BTC/USDT:USDT",
+      "ETH/USDT:USDT",
+      "BNB/USDT:USDT",
+      "SOL/USDT:USDT",
+      "XRP/USDT:USDT"
+    ]
+  }
+}

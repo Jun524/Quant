@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_METHOD_002_PRIMARY_SOURCE_ALIGNMENT",
+  "registered_at_utc": "2026-10-11T06:03:09Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_SINGLE_METHOD_AMENDMENT",
+  "bindings": {
+    "base_activation_policy_sha256": "c323181b2a486851cd510eb9bfa49edbfe2bb33f7cf5947a639ab9a13b3af3cc",
+    "prior_day_calendar_amendment_sha256": "f4966539a5a80c063a24f252d202d201af9456b37a61f5e79565374048383690",
+    "primary_source_manifest_path": "research/papers/alpha015-primary-source-manifest.json",
+    "primary_source_pdf_path": "research/papers/guo-sang-tu-wang-2024-cross-cryptocurrency-return-predictability-aam.pdf",
+    "primary_source_pdf_sha256": "da4c8573eecf41bb027474d0b0b95b0e7713f4d957fdd1c49b2cdf8eeaba6686"
+  },
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "effective_transfer_choices": {
+    "training_window_minutes": 720,
+    "minimum_symbols_each_decision": 30,
+    "portfolio_buckets": 5,
+    "long_bucket": "equal-weight top quintile",
+    "short_bucket": "equal-weight bottom quintile",
+    "rebalance_minutes": 10,
+    "entry_latency_minutes": 1,
+    "overlap": false,
+    "decision_grid": "non-overlapping 10-minute UTC epoch grid",
+    "decision_information": "closed one-minute returns through t",
+    "entry": "no earlier than the t+1 minute boundary",
+    "exit": "close the whole cross-sectional portfolio 10 minutes after entry before the next portfolio",
+    "diagnostic_markouts_minutes": [
+      1,
+      5,
+      10
+    ],
+    "gate_horizon_minutes": 10,
+    "penalty_selection": "Retain the independently preregistered 600/120 chronological one-step-return-MSE rule because the primary source does not specify a reproducible lambda-selection procedure.",
+    "execution_cost": "Retain the current measured realized-turnover floor of 5 bp per fill and 10 bp stress; do not substitute the paper's historical 4-bp fee assumption."
+  },
+  "supersedes": [
+    "the base policy's decile portfolio interpretation",
+    "the base policy's 13-minute holding and diagnostic horizon",
+    "any description of 13 minutes as paper-motivated"
+  ],
+  "not_a_claim_of_exact_replication": [
+    "the paper uses a fixed top-30 universe while this project uses lagged point-in-time membership",
+    "the paper's lambda selection is not sufficiently specified",
+    "the paper's historical fee assumption is replaced by current measured costs",
+    "this project enforces a one-minute execution-latency floor and non-overlapping portfolios"
+  ],
+  "prohibited": [
+    "choosing between 5-minute and 10-minute gates after observing project returns",
+    "testing the superseded 13-minute or decile variant as an unregistered extra trial",
+    "using the paper's reported performance as evidence that Experiment 0015 will pass",
+    "acquiring project return archives before every readiness and activation-lock check passes",
+    "live trading"
+  ]
+}

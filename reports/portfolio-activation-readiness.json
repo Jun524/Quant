@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "candidate": "BINANCE_USDTM_MULTI_STRATEGY_PORTFOLIO",
+  "status": "WAITING_INDEPENDENT_SLEEVES",
+  "preregistration_authorized": false,
+  "portfolio_return_data_authorized": false,
+  "live_order_authorization": "CLOSED",
+  "eligible_registry_pass_sleeves": [],
+  "eligible_registry_pass_families": [],
+  "minimum_independent_sleeves": 2,
+  "minimum_complete_locked_forward_months": 12,
+  "checks": {
+    "policy_deferred_not_portfolio": true,
+    "live_order_authorization_closed": true,
+    "minimum_independent_sleeves_valid": true,
+    "distinct_family_requirement_valid": true,
+    "locked_forward_month_requirement_valid": true,
+    "registry_schema_valid": true,
+    "independent_sleeve_count": false,
+    "distinct_independent_families": false
+  },
+  "next_action": "Continue independent sleeve research; do not open a portfolio sample or submit orders.",
+  "warning": "Registry PASS is not promotion evidence. Portfolio promotion remains unavailable until its separately preregistered locked-forward, source-replayed, execution, risk, and selection-bias gates pass."
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_NEXT_OPEN_DATA_COVERAGE_ONLY",
+  "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+  "periods": [
+    {
+      "period": "development",
+      "start": "2024-01-31",
+      "end": "2024-05-29",
+      "selected_symbol_days": 24675,
+      "next_open_covered_symbol_days": 24675,
+      "missing_next_open_symbol_days": 0,
+      "coverage_ratio": 1.0,
+      "sample_missing": [],
+      "status": "PASS"
+    },
+    {
+      "period": "locked_historical_validation",
+      "start": "2024-05-30",
+      "end": "2024-07-28",
+      "selected_symbol_days": 10006,
+      "next_open_covered_symbol_days": 10006,
+      "missing_next_open_symbol_days": 0,
+      "coverage_ratio": 1.0,
+      "sample_missing": [],
+      "status": "PASS"
+    }
+  ],
+  "total_selected_symbol_days": 34681,
+  "total_next_open_covered_symbol_days": 34681,
+  "coverage_ratio": 1.0,
+  "funding_coverage": "NOT_EVALUATED; a future trial must obtain checksum-verified funding archives or reject its affected holding days",
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED",
+  "warning": "This receipt proves archive availability for next-open simulation only; it contains no strategy signal or return claim.",
+  "artifact_path": "research/historical_universe/daily-membership-2024H1.json",
+  "policy_path": "research/historical-universe-reconstruction-policy.json"
+}

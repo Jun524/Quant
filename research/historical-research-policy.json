@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "status": "ACTIVE",
+  "purpose": "Use available historical data immediately to reject weak hypotheses without converting survivorship-biased diagnostics into live-trading evidence.",
+  "live_order_authorization": "CLOSED",
+  "feature_availability_contract": {
+    "decision_feature_rule": "A historical decision feature requires both an event timestamp and evidence that it was available no later than the decision timestamp.",
+    "historical_open_interest": {
+      "availability_status": "UNVERIFIED_PUBLICATION_TIME",
+      "allowed_as_historical_decision_feature": false,
+      "allowed_uses": [
+        "descriptive archive quality checks",
+        "postmortem explanation for already sealed failed trials"
+      ],
+      "unblock_requirements": [
+        "source-specific publication or receive timestamp",
+        "timestamp-to-decision availability rule",
+        "gap and revision audit",
+        "preregistered execution delay"
+      ]
+    },
+    "forward_open_interest": {
+      "allowed_as_forward_decision_feature": true,
+      "required_evidence": [
+        "source endpoint",
+        "local UTC receive timestamp",
+        "append-only raw capture",
+        "preregistered decision delay"
+      ]
+    }
+  },
+  "lanes": [
+    {
+      "id": "ARCHIVAL_DIAGNOSTIC",
+      "role": "Immediate historical development, stress, and rejection work on a fixed preregistered universe.",
+      "promotion_capability": "DIAGNOSTIC_ONLY",
+      "publisher_checksum_required": true,
+      "costs_preregistered": true,
+      "survivorship_disclosure_required": true,
+      "prohibited": [
+        "treating a surviving-symbol result as point-in-time OOS evidence",
+        "opening live trading",
+        "retuning a failed protocol"
+      ]
+    },
+    {
+      "id": "HISTORICAL_POINT_IN_TIME_REPLICATION",
+      "role": "Historical OOS is eligible for research comparison only when each decision-day membership is proven by a contemporaneously timestamped source.",
+      "promotion_capability": "RESEARCH_ONLY_UNTIL_SEPARATE_FORWARD_CONFIRMATION",
+      "membership_source_required": true,
+      "current_symbol_fallback": "FORBIDDEN",
+      "availability": "BLOCKED_BY_MISSING_HISTORICAL_MEMBERSHIP_SOURCE",
+      "required_source_fields": [
+        "observed_at_utc",
+        "contract_listing_and_status",
+        "liquidity_measurement",
+        "membership_rule",
+        "publisher_or_archival_integrity_binding"
+      ]
+    },
+    {
+      "id": "FORWARD_CONFIRMATION",
+      "role": "The surviving candidate must be tested using only data collected after its immutable preregistration and prior-day point-in-time membership snapshots.",
+      "minimum_consecutive_days": 180,
+      "promotion_capability": "REVIEW_ONLY",
+      "separate_requirements": [
+        "cost_and_funding_reconciliation",
+        "execution_and_slippage_validation",
+        "portfolio_mark_to_market_risk_gates",
+        "explicit_user_authorization_before_any_live_order"
+      ]
+    }
+  ]
+}

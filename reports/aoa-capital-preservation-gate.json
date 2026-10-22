@@ -1,0 +1,230 @@
+{
+  "candidate": "AoaCapitalPreservationSwing",
+  "kind": "HISTORICAL_CAPITAL_PRESERVATION_DIAGNOSTIC_ONLY",
+  "inputs": {
+    "objective": {
+      "path": "research/capital-preservation-objective.json",
+      "sha256": "b2b60070d6e6261ea4754596b527a31ad54e7a8a37767028d5ce4a106dc70688"
+    },
+    "development": {
+      "path": "user_data/backtest_results/backtest-result-2026-10-12_05-49-46.zip",
+      "sha256": "764bba7ef87d0e7320298075ac8440ce17a1927c54286274de74b0f37a74e1c2"
+    },
+    "development_stress": {
+      "path": "user_data/backtest_results/backtest-result-2026-10-12_05-50-05.zip",
+      "sha256": "9e49daf39e58346d1dbc5a31e65068c53941b6024252285a678682a04f545ab8"
+    },
+    "post_development": {
+      "path": "user_data/backtest_results/backtest-result-2026-10-12_05-50-15.zip",
+      "sha256": "31bd36c9214958266d374163d5c0106651ff5c2ff9e8a515ff3e1224aa11981d"
+    },
+    "post_development_stress": {
+      "path": "user_data/backtest_results/backtest-result-2026-10-12_05-50-28.zip",
+      "sha256": "74a37f1f11803b142d71b666722750b9a5b5059443aa72ef6b7e118318fc205b"
+    }
+  },
+  "execution_contract": {
+    "leverage": 1.0,
+    "planned_account_risk_per_trade": 0.0025,
+    "maximum_simultaneous_positions": 2,
+    "adverse_position_adds": false
+  },
+  "stress_contract": {
+    "fee_multiple": 2.0,
+    "modeled_slippage_bps_per_order_notional": 5.0,
+    "adverse_funding": "remove favorable funding and double paid funding"
+  },
+  "gate": {
+    "status": "FAIL",
+    "promotion_eligible": false,
+    "sample_role": "historical_diagnostic",
+    "checks": [
+      {
+        "name": "objective_active",
+        "passed": true,
+        "required": "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS",
+        "actual": "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS",
+        "kind": "governance"
+      },
+      {
+        "name": "live_order_authorization_closed",
+        "passed": true,
+        "required": "CLOSED",
+        "actual": "CLOSED",
+        "kind": "governance"
+      },
+      {
+        "name": "development_organic_net_positive",
+        "passed": false,
+        "required": "> 0",
+        "actual": -0.019874990000000002,
+        "kind": "performance"
+      },
+      {
+        "name": "development_profit_factor",
+        "passed": false,
+        "required": ">= 1.2",
+        "actual": 0.0,
+        "kind": "performance"
+      },
+      {
+        "name": "development_combined_fee_slippage_model",
+        "passed": true,
+        "required": 5.0,
+        "actual": 5.0,
+        "kind": "cost"
+      },
+      {
+        "name": "development_combined_fee_slippage_net_positive",
+        "passed": false,
+        "required": "> 0",
+        "actual": -0.02044104518615,
+        "kind": "cost"
+      },
+      {
+        "name": "development_combined_cost_stress_drawdown",
+        "passed": true,
+        "required": "<= 0.1 conservative upper bound",
+        "actual": 0.020441045186149993,
+        "kind": "cost"
+      },
+      {
+        "name": "development_adverse_funding_net_positive",
+        "passed": false,
+        "required": "> 0 after removing favorable funding and doubling paid funding",
+        "actual": -0.02142328903965025,
+        "kind": "cost"
+      },
+      {
+        "name": "post_development_organic_net_positive",
+        "passed": true,
+        "required": "> 0",
+        "actual": 0.01691082785,
+        "kind": "performance"
+      },
+      {
+        "name": "post_development_profit_factor",
+        "passed": true,
+        "required": ">= 1.2",
+        "actual": 1.6233265482872712,
+        "kind": "performance"
+      },
+      {
+        "name": "post_development_combined_fee_slippage_model",
+        "passed": true,
+        "required": 5.0,
+        "actual": 5.0,
+        "kind": "cost"
+      },
+      {
+        "name": "post_development_combined_fee_slippage_net_positive",
+        "passed": true,
+        "required": "> 0",
+        "actual": 0.015809141822269997,
+        "kind": "cost"
+      },
+      {
+        "name": "post_development_combined_cost_stress_drawdown",
+        "passed": true,
+        "required": "<= 0.1 conservative upper bound",
+        "actual": 0.011780190975796443,
+        "kind": "cost"
+      },
+      {
+        "name": "post_development_adverse_funding_net_positive",
+        "passed": true,
+        "required": "> 0 after removing favorable funding and doubling paid funding",
+        "actual": 0.01188337738387385,
+        "kind": "cost"
+      },
+      {
+        "name": "organic_trade_sample",
+        "passed": false,
+        "required": 100,
+        "actual": 31,
+        "kind": "sample"
+      },
+      {
+        "name": "maximum_historical_drawdown",
+        "passed": true,
+        "required": "<= 0.1",
+        "actual": {
+          "development": 0.019874990000000026,
+          "post_development": 0.011098488450387264
+        },
+        "kind": "risk"
+      },
+      {
+        "name": "worst_complete_month_loss",
+        "passed": true,
+        "required": ">= -0.05",
+        "actual": {
+          "development": -0.0027093575173098255,
+          "post_development": -0.006475482575236781
+        },
+        "kind": "risk"
+      },
+      {
+        "name": "planned_leverage",
+        "passed": true,
+        "required": "<= 1.0",
+        "actual": 1.0,
+        "kind": "risk"
+      },
+      {
+        "name": "planned_risk_per_trade",
+        "passed": true,
+        "required": "<= 0.0025",
+        "actual": 0.0025,
+        "kind": "risk"
+      },
+      {
+        "name": "simultaneous_positions",
+        "passed": true,
+        "required": "<= 2",
+        "actual": 2,
+        "kind": "risk"
+      },
+      {
+        "name": "adverse_position_adds_forbidden",
+        "passed": true,
+        "required": false,
+        "actual": false,
+        "kind": "risk"
+      },
+      {
+        "name": "liquidation_exits",
+        "passed": true,
+        "required": 0,
+        "actual": {
+          "development": 0,
+          "post_development": 0
+        },
+        "kind": "risk"
+      },
+      {
+        "name": "lookahead_analysis",
+        "passed": true,
+        "required": "PASS",
+        "actual": "PASS",
+        "kind": "integrity"
+      },
+      {
+        "name": "recursive_analysis",
+        "passed": true,
+        "required": "PASS",
+        "actual": "PASS",
+        "kind": "integrity"
+      }
+    ],
+    "failures": [
+      "development_organic_net_positive",
+      "development_profit_factor",
+      "development_combined_fee_slippage_net_positive",
+      "development_adverse_funding_net_positive",
+      "organic_trade_sample"
+    ],
+    "aspirational_monthly_target": 0.1,
+    "warning": "A historical diagnostic cannot authorize live trading or replace separately locked forward evidence."
+  }
+}

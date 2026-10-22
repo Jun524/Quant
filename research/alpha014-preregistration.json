@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-10T07:36:54Z",
+  "amended_before_first_computable_return_at_utc": "2026-10-10T07:42:00Z",
+  "candidate": "ALPHA_014_CROSS_SECTIONAL_PERP_BASIS_CATCHUP",
+  "status": "PREREGISTERED_DEVELOPMENT_ONLY_TRANSFER_TEST",
+  "hypothesis_family": "cross_sectional_funding_dispersion",
+  "hypothesis": "Among five liquid Binance USDT markets, the perpetual contract with the largest contemporaneous spot-minus-perpetual log basis outperforms the contract with the smallest basis over the following 24 hours strongly enough for an equal-notional long-high-basis/short-low-basis spread to remain profitable after actual funding, taker fees, and modeled slippage.",
+  "provenance": {
+    "parent_experiments": [9, 13],
+    "post_hoc_transfer_hypothesis": true,
+    "family_trial": 3,
+    "independent_alpha": false,
+    "reason": "Perpetual premium and funding are mechanically related, so this is a daily price-basis transfer test inside the same broad crowding/funding-dispersion family, not an independent source of diversification.",
+    "screening_record": "research/alpha-candidate-screening-20261010.json"
+  },
+  "research_basis": [
+    {
+      "source": "Chi, Hao, Hu and Ran (2023), An empirical investigation on risk factors in cryptocurrency futures",
+      "url": "https://api.repository.cam.ac.uk/server/api/core/bitstreams/50f9c065-2731-4ab3-bba9-3ec4dcfc7ef7/content",
+      "finding": "On 12 OKEx current-quarter futures from 2017 to 2021, daily high-minus-low basis portfolios were strongest at a one-day horizon and survived the paper's five-basis-point transaction-cost assumption.",
+      "transfer_limit": "Current-quarter contracts converge at expiry; Binance perpetuals instead use funding. The mechanism and reported magnitude must not be assumed to transfer."
+    },
+    {
+      "source": "Schmeling, Schrimpf and Todorov, Crypto Carry",
+      "url": "https://www.bis.org/publ/work1087.pdf",
+      "finding": "Crypto basis is persistent but risky and constrained by arbitrage capital and funding liquidity.",
+      "transfer_limit": "The paper primarily studies fixed-maturity carry, not the directional perpetual cross-section tested here."
+    },
+    {
+      "source": "Binance public data repository",
+      "url": "https://github.com/binance/binance-public-data/",
+      "finding": "Official archives are the required source for any prospective successor test.",
+      "transfer_limit": "The local historical feather files are discovery-quality and are not publisher-manifest-bound evidence for live promotion."
+    }
+  ],
+  "development": {
+    "timerange": "2022-01-01T00:00:00Z inclusive to 2024-01-01T00:00:00Z exclusive",
+    "first_eligible_decision": "2022-01-02T00:00:00Z",
+    "boundary_amendment": "The first attempted run stopped before ranking or PnL because the 2021-12-31 23:00 spot signal candle is absent. The first decision is therefore the earliest one with all five completed 23:00 signal candles; no return was observed before this amendment.",
+    "role": "historical transfer diagnostic; it may reject the idea but can never authorize live trading",
+    "data_source": "existing local Binance spot, USD-M perpetual, mark-price and funding-rate 1h feather files",
+    "survivorship_warning": "The five symbols are today's surviving liquid names, not a point-in-time universe.",
+    "historical_validation": "none; if development passes, the only permitted successor is a newly preregistered forward test using the point-in-time universe after its coverage gate matures"
+  },
+  "fixed_signal_and_execution": {
+    "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT"],
+    "decision_schedule": "00:00 UTC every day beginning 2022-01-02, the first boundary with all required prior signal candles",
+    "signal_prices": "the close of the fully completed 23:00-00:00 UTC spot and perpetual 1h candles",
+    "basis_score": "natural_log(spot_close) - natural_log(perpetual_close)",
+    "long": "highest basis score; alphabetical symbol breaks an exact tie",
+    "short": "lowest basis score; alphabetical symbol breaks an exact tie",
+    "entry": "next 1h candle open at 01:00 UTC, one full hour after the decision boundary",
+    "holding_period_hours": 24,
+    "exit": "01:00 UTC the following day unless an individual leg reaches its adverse 10% protection stop",
+    "hard_stop_per_leg": 0.10,
+    "modeled_liquidation_adverse_move": 0.80,
+    "leg_notional_fraction_of_current_equity": 0.20,
+    "gross_notional_fraction": 0.40,
+    "leverage": 1.0,
+    "maximum_concurrent_spreads": 1,
+    "position_adjustment": false,
+    "minimum_basis_spread": null,
+    "parameter_search": false
+  },
+  "cost_and_accounting": {
+    "starting_equity_usdt": 1000,
+    "base_fee_per_fill": 0.0005,
+    "base_slippage_per_fill": 0.0002,
+    "double_fee_stress_per_fill": 0.001,
+    "slippage_stress_per_fill": 0.0005,
+    "funding": "actual funding event rate times contemporaneous mark-price notional; a long pays positive funding and a short receives it",
+    "profit_factor_unit": "closed daily two-leg spread",
+    "mark_to_market": "hourly with adverse exit slippage and fees",
+    "liquidation_or_nonpositive_equity": "hard failure"
+  },
+  "development_gate": {
+    "closed_daily_spreads_minimum": 700,
+    "closed_legs_minimum": 1400,
+    "net_return_positive": true,
+    "raw_relative_price_pnl_positive": true,
+    "price_pnl_after_base_fees_and_slippage_positive": true,
+    "profit_factor_minimum": 1.20,
+    "geometric_monthly_return_minimum": 0.005,
+    "positive_month_ratio_minimum": 0.60,
+    "double_fee_net_positive": true,
+    "five_bps_slippage_net_positive": true,
+    "first_half_net_positive": true,
+    "second_half_net_positive": true,
+    "maximum_mark_to_market_drawdown_maximum": 0.15,
+    "largest_winning_day_concentration_maximum": 0.10,
+    "zero_liquidations": true
+  },
+  "interpretation": {
+    "pass": "Only authorizes design of a fresh point-in-time forward protocol; does not count as OOS or live evidence.",
+    "fail": "Closes family trial 3 without threshold, time, universe, stop, cost, or sizing changes.",
+    "monthly_target": "The 0.5% development sleeve hurdle is not the platform's 10% portfolio objective. Leverage may not be used to bridge that gap."
+  },
+  "prohibited": [
+    "describing Alpha 014 as independent from Alpha 009 or Alpha 013",
+    "opening a historical validation interval after seeing development",
+    "changing the daily schedule, basis definition, direction, 24-hour hold, stop, costs, sizing, or five-symbol universe after seeing results",
+    "adding a basis threshold or funding filter after seeing results",
+    "dropping a losing day, symbol, or leg",
+    "using the fixed surviving-symbol sample as live-promotion evidence",
+    "raising leverage to manufacture the 10% monthly objective",
+    "placing real orders"
+  ]
+}

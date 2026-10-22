@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_FUNDING_LEDGER_REPLAY_ONLY",
+  "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+  "samples": [
+    {
+      "period": "development",
+      "decision_day": "2024-01-31",
+      "entry_day": "2024-02-01",
+      "symbol": "1000BONKUSDT",
+      "events": 6,
+      "long_funding_return": -0.00030000000000000003,
+      "short_funding_return": 0.00030000000000000003,
+      "sign_symmetry": true
+    },
+    {
+      "period": "locked_historical_validation",
+      "decision_day": "2024-05-30",
+      "entry_day": "2024-05-31",
+      "symbol": "1000BONKUSDT",
+      "events": 6,
+      "long_funding_return": -0.00030000000000000003,
+      "short_funding_return": 0.00030000000000000003,
+      "sign_symmetry": true
+    }
+  ],
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED",
+  "warning": "These are deterministic funding-ledger replays, not strategy returns."
+}

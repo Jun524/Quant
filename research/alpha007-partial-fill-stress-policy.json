@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-11T05:39:50Z",
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "policy": "ALPHA007_PARTIAL_FILL_VETO_V1",
+  "role": "additive execution-feasibility veto; it cannot amend, rerun, or rescue the preregistered primary hypothesis",
+  "position_accounting": {
+    "include_every_positive_estimated_fill_quantity": true,
+    "unfilled_orders_contribute_zero": true,
+    "entry_price": "preregistered post-only limit price",
+    "exit_time": "60 seconds after the order decision, including the 100ms latency decision when applicable",
+    "exit_price": "first locally available executable best bid for long or best ask for short, maximum five-second gap",
+    "partial_remainder": "cancel at the preregistered three-second timeout; retain and close the filled quantity",
+    "round_trip_cost_bps": 10.0,
+    "contribution_basis": "fill_fraction multiplied by net return, so every eligible signal consumes one equal submitted-notional opportunity"
+  },
+  "locked_requirements": {
+    "primary_alpha007_status_pass": true,
+    "complete_days_minimum": 17,
+    "base_execution_coverage_ratio": 1.0,
+    "latency_execution_coverage_ratio_minimum": 0.95,
+    "exit_quote_coverage_ratio": 1.0,
+    "executed_exposures_minimum": 200,
+    "base_mean_submitted_notional_contribution_positive": true,
+    "base_hour_block_bootstrap_95pct_lower_positive": true,
+    "latency_mean_submitted_notional_contribution_positive": true,
+    "partial_fill_total_contribution_nonnegative": true,
+    "minimum_eligible_orders_per_side": 30,
+    "long_mean_submitted_notional_contribution_positive": true,
+    "short_mean_submitted_notional_contribution_positive": true
+  },
+  "interpretation": "The primary report ignores partial fills. This fixed auxiliary replay charges every estimated positive fill and may only veto promotion. PASS remains non-promotional and still does not establish exchange acknowledgement or live fill quality."
+}

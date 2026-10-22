@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "kind": "VERSIONED_EXECUTION_CALIBRATION_INVENTORY_ONLY",
+  "status": "READY_FOR_DESCRIPTIVE_COMPARISON",
+  "minimum_receipts": 2,
+  "valid_receipts": 3,
+  "receipts": [
+    {
+      "path": "/Users/jun/Desktop/퀀트/reports/execution-calibration-alpha001-entry-20261013T044659Z.json",
+      "status": "CALIBRATION_PASS",
+      "manifest_path": "research/execution/raw/alpha001-entry-20261013T044659Z.manifest.json",
+      "raw_path": "research/execution/raw/alpha001-entry-20261013T044659Z.jsonl",
+      "first_submitted_at": "2026-10-13T04:46:59.222494+00:00",
+      "last_observed_at": "2026-10-13T06:44:07.639139+00:00",
+      "orders": 100,
+      "measured_scopes": [
+        "long_entry"
+      ],
+      "fill_rate_by_qty": 0.8995124918979258,
+      "conservative_all_in_execution_drag_bps": 2.7280252173061026,
+      "worst_symbol_observed_all_in_drag_bps": 4.789645234711852,
+      "descriptive_research_stress_floor_bps": 5.0
+    },
+    {
+      "path": "/Users/jun/Desktop/퀀트/reports/execution-calibration-alpha001-entry-20261013T065131Z.json",
+      "status": "CALIBRATION_PASS",
+      "manifest_path": "research/execution/raw/alpha001-entry-20261013T065131Z.manifest.json",
+      "raw_path": "research/execution/raw/alpha001-entry-20261013T065131Z.jsonl",
+      "first_submitted_at": "2026-10-13T06:51:31.243732+00:00",
+      "last_observed_at": "2026-10-13T08:57:25.342437+00:00",
+      "orders": 100,
+      "measured_scopes": [
+        "long_entry"
+      ],
+      "fill_rate_by_qty": 0.8011381464326484,
+      "conservative_all_in_execution_drag_bps": 7.3308870256606316,
+      "worst_symbol_observed_all_in_drag_bps": 8.541682402594633,
+      "descriptive_research_stress_floor_bps": 9.0
+    },
+    {
+      "path": "/Users/jun/Desktop/퀀트/reports/execution-calibration-alpha001-entry-20261014T085730Z.json",
+      "status": "CALIBRATION_PASS",
+      "manifest_path": "research/execution/raw/alpha001-entry-20261014T085730Z.manifest.json",
+      "raw_path": "research/execution/raw/alpha001-entry-20261014T085730Z.jsonl",
+      "first_submitted_at": "2026-10-14T08:57:30.360414+00:00",
+      "last_observed_at": "2026-10-14T11:05:15.575738+00:00",
+      "orders": 100,
+      "measured_scopes": [
+        "long_entry"
+      ],
+      "fill_rate_by_qty": 0.7526383231344169,
+      "conservative_all_in_execution_drag_bps": 4.015299513973494,
+      "worst_symbol_observed_all_in_drag_bps": 5.148876692509798,
+      "descriptive_research_stress_floor_bps": 6.0
+    }
+  ],
+  "failures": [],
+  "temporal_independence": {
+    "minimum_separation_hours": 24.0,
+    "observed_inter_receipt_gaps_hours": [
+      0.12322349805555556,
+      24.0013938825
+    ],
+    "maximum_inter_receipt_gap_hours": 24.0013938825,
+    "temporally_separated_pair_available": true,
+    "latest_observed_at": "2026-10-14T11:05:15.575738+00:00",
+    "next_eligible_independent_window_start_at": "2026-10-15T11:05:15.575738+00:00",
+    "warning": "Temporal separation reduces same-window dependence; it does not prove regime coverage or profitability."
+  },
+  "descriptive_cost_dispersion": {
+    "receipt_count": 3,
+    "minimum_observed_all_in_entry_drag_bps": 2.7280252173061026,
+    "maximum_observed_all_in_entry_drag_bps": 7.3308870256606316,
+    "range_bps": 4.602861808354529,
+    "maximum_observed_descriptive_stress_floor_bps": 9.0,
+    "automatic_cost_model_mutation": false,
+    "warning": "Observed receipt dispersion is descriptive only. Do not average, select the minimum, or replace a preregistered cost model from this field."
+  },
+  "execution_path_coverage": {
+    "required_scopes": [
+      "long_entry",
+      "long_exit",
+      "short_entry",
+      "short_exit",
+      "protective_stop"
+    ],
+    "observed_scopes": [
+      "long_entry"
+    ],
+    "missing_scopes": [
+      "long_exit",
+      "protective_stop",
+      "short_entry",
+      "short_exit"
+    ],
+    "complete": false,
+    "status": "INCOMPLETE",
+    "warning": "Public shadow observations do not replace exchange acknowledgements or authorize live orders."
+  },
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "automatic_cost_model_mutation": false,
+  "live_order_authorization": "CLOSED",
+  "warning": "Multiple short public-L2 windows still cannot establish alpha profitability or complete execution-path evidence."
+}

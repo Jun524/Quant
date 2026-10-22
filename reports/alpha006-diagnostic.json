@@ -1,0 +1,66 @@
+{
+  "candidate": "ALPHA_006_CROSS_SECTIONAL_SWING",
+  "status": "FAIL_DEVELOPMENT",
+  "validation_opened": false,
+  "source": "user_data/backtest_results/backtest-result-2026-10-06_10-14-46.zip",
+  "timerange": "20210101-20240101",
+  "effective_backtest_start": "2021-04-11T00:00:00Z",
+  "trades": 96,
+  "net_return": 0.00996062008,
+  "profit_factor": 1.0485110573,
+  "sharpe": 0.0319645621,
+  "max_drawdown": 0.0575233486,
+  "long": {
+    "trades": 47,
+    "net_pnl": 6.02077044,
+    "net_return": 0.00602077044
+  },
+  "short": {
+    "trades": 49,
+    "net_pnl": 3.93984964,
+    "net_return": 0.00393984964
+  },
+  "pnl_components": {
+    "price_pnl_estimate": 18.9577521744,
+    "trading_fees": -4.254476146,
+    "funding_pnl": -4.7426559484,
+    "net_pnl": 9.96062008
+  },
+  "monthly": {
+    "basis": "complete calendar months across the backtest coverage, including inactive months",
+    "complete_months": 32,
+    "geometric_monthly_return": 0.0007146761,
+    "median_monthly_return": -0.0014755722,
+    "positive_month_ratio": 0.375,
+    "target_10pct_month_ratio": 0.0,
+    "best_month": 0.0290984421,
+    "worst_month": -0.0107986489
+  },
+  "trade_shape": {
+    "wins": 32,
+    "losses": 64,
+    "weekly_exit_trades": 44,
+    "stop_loss_trades": 52,
+    "largest_winner_gross_profit_concentration": 0.1222281687,
+    "top_five_winners_gross_profit_concentration": 0.4408542475
+  },
+  "naive_leverage_rejection": {
+    "scale_needed_to_reach_10pct_geometric_monthly": 139.9235326759,
+    "naive_scaled_drawdown": 8.0488701514,
+    "warning": "This linear scaling is not tradable and ignores liquidation, nonlinear fees, funding, slippage and changed protection paths."
+  },
+  "net_pnl_by_close_year": {
+    "2021": -24.84373189,
+    "2022": 38.83401165,
+    "2023": -4.02965968
+  },
+  "development_gate": {
+    "trades_minimum_60": true,
+    "net_return_positive": true,
+    "price_pnl_positive": true,
+    "profit_factor_minimum_1_10": false
+  },
+  "monthly_target_gate": "REVIEW because 96 trades are below the separate 100-trade monthly-objective sample floor; performance checks also fail",
+  "post_result_changes_made": false,
+  "execution_note": "Freqtrade 2026.8 was run in a workspace-local Python 3.12 environment after Docker Desktop's VM failed; strategy, config, data, fee and protections were unchanged."
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "HISTORICAL_UNIVERSE_RECONSTRUCTION_2024H1",
+  "status": "PREREGISTERED",
+  "purpose": "Reconstruct day-level, point-in-time diagnostic membership from Binance official USD-M monthly 1d archives before any new historical alpha is evaluated.",
+  "calendar": {
+    "archive_start": "2024-01-01",
+    "archive_end_exclusive": "2024-08-01",
+    "formation_days": 30,
+    "development_start": "2024-01-31",
+    "development_end": "2024-05-29",
+    "locked_historical_validation_start": "2024-05-30",
+    "locked_historical_validation_end": "2024-07-28"
+  },
+  "source": {
+    "publisher": "Binance data.binance.vision",
+    "dataset": "USD-M futures monthly 1d klines",
+    "checksum_required": true,
+    "catalog": "research/historical_universe/source-symbol-catalog.json",
+    "catalog_scope": "all USDT archive prefixes; no current exchangeInfo fallback"
+  },
+  "selection": {
+    "min_listing_age_days": 30,
+    "min_continuous_days": 30,
+    "min_quote_volume_1d": 10000000,
+    "selection_timing": "daily candle close using only current and prior archive rows"
+  },
+  "limitations": [
+    "No historical bid-ask spread or orderbook-depth filter is available from the selected source.",
+    "Archive presence is not an independent proof of historical contract status.",
+    "This reconstruction can support diagnostic historical research only, never live promotion."
+  ],
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED"
+}

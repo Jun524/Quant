@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "status": "ACCUMULATING",
+  "as_of": "2026-10-19T06:39:39.439464+00:00",
+  "eligible_start": "2026-10-10",
+  "current_protocol_days": 10,
+  "valid_days": [
+    "2026-10-10",
+    "2026-10-11",
+    "2026-10-12",
+    "2026-10-13",
+    "2026-10-14",
+    "2026-10-15",
+    "2026-10-16",
+    "2026-10-17",
+    "2026-10-18",
+    "2026-10-19"
+  ],
+  "legacy_protocol_days": [],
+  "diagnostic_days": [],
+  "missing_due_days": [],
+  "duplicate_days": [],
+  "invalid_snapshots": [],
+  "chain_failures": [],
+  "consecutive_days_ending_latest": 10,
+  "required_consecutive_days": 180,
+  "latest_age_days": 0,
+  "latest": {
+    "date": "2026-10-19",
+    "observed_at": "2026-10-19T00:30:02.456912+00:00",
+    "path": "research/universe_snapshots/universe-20261019T003002Z.json",
+    "instruments": 878,
+    "eligible": 37,
+    "depth_collected": 50
+  },
+  "protocol_sha256": {
+    "research/universe-forward-policy.json": "64aa6615005b1206ce796009406135a583319d69773da4ae0afcb5f7a908689f",
+    "scripts/collect_universe_snapshot.py": "1d2ed81eb14ee1459acf4b17ca8f58a3477d620863e2bd39f677f98e4fb64971",
+    "scripts/run_universe_scheduler.py": "bdf02e4085fb3cd746f2f447de83bb9274bf00687e86ba591ea75a76ddbe0efb",
+    "quant/data/universe.py": "71254ecb9298d84fbbd7c44f3e485845606fdf85648de284af6fe23ed19de724",
+    "quant/data/snapshots.py": "2ed3e31e7072eee6337a686c943f66b5d20ff84fea29481afe678f3ecb23f2c0",
+    "quant/data/universe_history.py": "55e2f0ed2f1e59f5de0b0d875b6216584dfb3e6f6aec66399d220f5c7d37de76",
+    "quant/data/universe_protocol.py": "5170360a4a7a797eb89eec7423dd95e82e9c443943b449261299ba58576981c3"
+  },
+  "warning": "READY proves point-in-time universe coverage only; it does not prove strategy edge.",
+  "scheduler": {
+    "schema_version": 1,
+    "state": "WAITING_WINDOW",
+    "pid": 15456,
+    "scheduler_started_at": "2026-10-10T04:25:51.548715+00:00",
+    "heartbeat_at": "2026-10-19T06:35:36.503507+00:00",
+    "scheduled_date": "2026-10-20",
+    "window_start": "2026-10-20T00:30:00+00:00",
+    "window_end": "2026-10-20T00:45:00+00:00",
+    "last_finished_at": "2026-10-19T00:30:33.426677+00:00",
+    "last_exit_code": 0,
+    "next_run_at": "2026-10-20T00:30:00+00:00",
+    "poll_seconds": 300,
+    "health": "RUNNING_HEALTHY",
+    "running": true,
+    "heartbeat_age_seconds": 243.002397,
+    "sleep_guard": {
+      "available": true,
+      "watched_pid": 15456,
+      "required_assertions": [
+        "i",
+        "m",
+        "s"
+      ],
+      "running": true,
+      "guards": [
+        {
+          "pid": 15457,
+          "assertions": [
+            "i",
+            "m",
+            "s"
+          ],
+          "valid": true
+        }
+      ]
+    }
+  }
+}

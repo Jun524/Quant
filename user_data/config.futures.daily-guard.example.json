@@ -1,0 +1,6 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "strategy": "FuturesBtcRegimeDailyGuardLong",
+  "dry_run": true,
+  "initial_state": "stopped"
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "ACQUISITION_COMPLETE",
+  "universe_sha256": "90b5654f3afddb1c25b118a4a4030a7278ffc3bcfa9e69d624f2e0bb2ef75dbe",
+  "expected_archives": 1974,
+  "verified_present_archives": 1890,
+  "verified_not_found_archives": 84,
+  "resolved_archives": 1974,
+  "remaining_archives": 0,
+  "batch": {
+    "downloaded": 0,
+    "not_found": 0,
+    "cached": 0,
+    "cached_missing": 0
+  },
+  "promotion_capability": "DIAGNOSTIC_ONLY",
+  "live_order_authorization": "CLOSED"
+}

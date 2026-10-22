@@ -1,0 +1,42 @@
+{
+  "candidate": "ALPHA_005_FUNDING_EXTREME_REVERSAL",
+  "status": "FAIL_DEVELOPMENT",
+  "validation_opened": false,
+  "source": "user_data/backtest_results/backtest-result-2026-10-06_10-04-03.zip",
+  "timerange": "20210101-20240101",
+  "trades": 1009,
+  "net_return": 0.016953263,
+  "profit_factor": 1.019297113,
+  "sharpe": 0.109826335,
+  "max_drawdown": 0.070315838,
+  "long_pnl": 90.589,
+  "short_pnl": -73.635,
+  "pnl_components": {
+    "price_pnl_estimate": 108.812071567,
+    "trading_fees": -111.220521305,
+    "funding_pnl": 19.361712638,
+    "net_pnl": 16.9532629
+  },
+  "monthly": {
+    "complete_months": 35,
+    "geometric_monthly_return": 0.000368065,
+    "median_monthly_return": -0.004362464,
+    "positive_month_ratio": 0.342857143,
+    "target_10pct_month_ratio": 0.0,
+    "best_month": 0.040088057,
+    "worst_month": -0.021872329
+  },
+  "frictionless_reconciliation_upper_bound": {
+    "price_plus_funding_pnl": 128.173784205,
+    "approximate_geometric_monthly_return": 0.003451663,
+    "naive_scale_to_10pct_monthly": 28.971538202,
+    "naive_scaled_drawdown": 2.037157992,
+    "warning": "This is not a tradable counterfactual; fee changes can alter trade and protection paths."
+  },
+  "failed_preregistered_checks": [
+    "profit_factor >= 1.10",
+    "geometric monthly return >= 10%",
+    "positive month ratio >= 60%"
+  ],
+  "post_result_changes_made": false
+}

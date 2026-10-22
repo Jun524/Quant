@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-06T11:45:00Z",
+  "candidate": "ALPHA_009_CROSS_SECTIONAL_FUNDING_CARRY",
+  "status": "FAIL_DEVELOPMENT",
+  "hypothesis_family": "market_relative_perpetual_funding_carry",
+  "hypothesis": "When the trailing seven-day funding differential between the highest- and lowest-funding major USD-M perpetual exceeds all modeled round-trip friction, a weekly equal-notional short-high/long-low spread earns positive net carry without requiring the outright crypto market direction.",
+  "independence": "Alpha 005 traded an instrument's own extreme funding as an eight-hour reversal signal. Alpha 009 ranks instruments once per week, holds both opposing legs for seven days, and requires a preregistered carry spread above its friction budget.",
+  "data_status": "Static five-asset Binance history is project-seen and survivor-biased; development can reject but cannot grant final OOS approval.",
+  "universe": ["BTC", "ETH", "BNB", "SOL", "XRP"],
+  "official_mechanics": {
+    "funding_history": "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-History",
+    "interpretation": "positive funding is paid by longs to shorts; historical payments are modeled using contemporaneous mark notional"
+  },
+  "rules": {
+    "decision_time": "Monday 04:00 UTC using funding timestamps at or before the decision",
+    "execution_time": "next 1h candle open at Monday 05:00 UTC",
+    "score": "sum of the prior seven calendar days of funding events",
+    "long": "lowest score",
+    "short": "highest score",
+    "minimum_score_spread": 0.0025,
+    "leg_notional_fraction_of_current_equity": 0.20,
+    "gross_notional_fraction": 0.40,
+    "maximum_holding_days": 7,
+    "hard_stop_per_leg": 0.10,
+    "leverage": 1.0,
+    "position_adjustment": false
+  },
+  "costs": {
+    "fee_per_fill": 0.0005,
+    "slippage_per_fill": 0.0002,
+    "funding": "each actual event on contemporaneous mark notional",
+    "minimum_spread_reason": "25 bps must cover two legs' round-trip fees and slippage before price-basis risk"
+  },
+  "development_timerange": "20210101-20240101",
+  "locked_timerange": "20240101-20260901",
+  "development_gate": {
+    "eligible_weeks_minimum": 30,
+    "closed_legs_minimum": 60,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.10,
+    "funding_pnl_positive": true,
+    "funding_pnl_exceeds_fees_and_slippage": true,
+    "closed_weekly_maximum_drawdown": 0.20
+  },
+  "observed_result": {
+    "report_file": "reports/alpha009-diagnostic.json",
+    "eligible_weeks": 106,
+    "closed_legs": 212,
+    "stopped_legs": 80,
+    "net_return": 0.6357289381,
+    "profit_factor": 1.2630411931,
+    "maximum_closed_weekly_drawdown": 0.1433003624,
+    "raw_price_pnl": 637.1568130707,
+    "funding_pnl": 80.0563905752,
+    "fees_and_slippage": -81.4842655723,
+    "carry_surplus_after_friction": -1.4278749971,
+    "failed_gate": "funding PnL must exceed fees and slippage",
+    "interpretation": "The positive total result came from residual price exposure, primarily SOL and BNB longs, not from the preregistered funding carry edge.",
+    "locked_timerange_opened": false,
+    "post_result_rule_changes": false
+  },
+  "prohibited": [
+    "opening the locked timerange before the development gate passes",
+    "changing the seven-day window, 25bp spread, execution hour, holding period, stops, costs, sizing, or universe after seeing development",
+    "dropping a losing leg or asset after seeing results",
+    "claiming exact market neutrality from equal notional crypto legs",
+    "using leverage to force the monthly target"
+  ]
+}

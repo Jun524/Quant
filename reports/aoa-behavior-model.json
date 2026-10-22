@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "split": {
+    "train": "2018-2019",
+    "threshold_calibration": "2020",
+    "locked_test": "2021",
+    "features": [
+      "return_1h",
+      "return_4h",
+      "return_12h",
+      "return_24h",
+      "return_72h",
+      "return_168h",
+      "volatility_6h",
+      "volatility_24h",
+      "volatility_72h",
+      "distance_ema24",
+      "distance_ema72",
+      "distance_ema200",
+      "ema24_slope_24h",
+      "ema200_slope_24h",
+      "range_position_24h",
+      "range_width_24h",
+      "volume_ratio_24h",
+      "candle_body",
+      "candle_range",
+      "hour_sin",
+      "hour_cos"
+    ]
+  },
+  "sample_counts": {
+    "candidate_train": 3335,
+    "candidate_calibration": 395,
+    "candidate_test": 323,
+    "episode_train": 2174,
+    "episode_calibration": 277,
+    "episode_test": 124
+  },
+  "action_timing": {
+    "test_base_rate": 0.3622291021671827,
+    "calibrated_threshold": 0.4661256316791842,
+    "test_average_precision": 0.7996828967299843,
+    "test_roc_auc": 0.8963986391170858,
+    "test_precision": 0.6309523809523809,
+    "test_recall": 0.905982905982906,
+    "precision_lift_over_base": 1.7418599918599917,
+    "top_coefficients": [
+      {
+        "feature": "distance_ema24",
+        "coefficient": 1.08337402015887
+      },
+      {
+        "feature": "distance_ema72",
+        "coefficient": -1.0410597766945486
+      },
+      {
+        "feature": "ema200_slope_24h",
+        "coefficient": 0.9433154762389162
+      },
+      {
+        "feature": "distance_ema200",
+        "coefficient": -0.7498633578429534
+      },
+      {
+        "feature": "range_width_24h",
+        "coefficient": 0.7295834476741139
+      },
+      {
+        "feature": "return_72h",
+        "coefficient": 0.3067956110340989
+      },
+      {
+        "feature": "candle_range",
+        "coefficient": 0.25790691215018496
+      },
+      {
+        "feature": "volatility_72h",
+        "coefficient": 0.25341771808103275
+      }
+    ]
+  },
+  "direction": {
+    "test_accuracy": 0.5725806451612904,
+    "test_balanced_accuracy": 0.5725806451612903,
+    "test_roc_auc": 0.6234391259105099,
+    "24h_momentum_baseline_accuracy": 0.46774193548387094,
+    "confidence_rule": "top 30% absolute probability distance from 0.5, threshold fixed on 2020",
+    "confidence_threshold": 0.07240353623722819,
+    "confident_test_episodes": 36,
+    "confident_test_selection_rate": 0.2903225806451613,
+    "confident_test_accuracy": 0.6388888888888888,
+    "top_coefficients": [
+      {
+        "feature": "distance_ema24",
+        "coefficient": 0.4983583515770657
+      },
+      {
+        "feature": "range_position_24h",
+        "coefficient": -0.2523659068905565
+      },
+      {
+        "feature": "distance_ema72",
+        "coefficient": -0.24803472182906214
+      },
+      {
+        "feature": "ema200_slope_24h",
+        "coefficient": 0.2063266549871614
+      },
+      {
+        "feature": "ema24_slope_24h",
+        "coefficient": 0.19310107266575985
+      },
+      {
+        "feature": "distance_ema200",
+        "coefficient": -0.12480413967553403
+      },
+      {
+        "feature": "return_24h",
+        "coefficient": -0.11628363723220121
+      },
+      {
+        "feature": "volatility_72h",
+        "coefficient": -0.1069318483649389
+      }
+    ]
+  },
+  "quality_filter": {
+    "fixed_selection_rule": "top 30% predicted return proxy by 2020 calibration threshold",
+    "calibrated_threshold": 0.0038871430902391634,
+    "test_all": {
+      "episodes": 124,
+      "win_rate": 0.717741935483871,
+      "mean_return_proxy": 0.011912678471649733,
+      "net_pnl_xbt": 739.4581519028568,
+      "profit_factor": 1.4753176121769096
+    },
+    "test_selected": {
+      "episodes": 55,
+      "selection_rate": 0.4435483870967742,
+      "win_rate": 0.7272727272727273,
+      "mean_return_proxy": 0.014768981829656592,
+      "net_pnl_xbt": 167.96211394306596,
+      "profit_factor": 1.4121022177041123
+    },
+    "top_coefficients": [
+      {
+        "feature": "ema200_slope_24h",
+        "coefficient": 0.0010540842840608732
+      },
+      {
+        "feature": "return_12h",
+        "coefficient": 0.0009513056010663272
+      },
+      {
+        "feature": "distance_ema72",
+        "coefficient": -0.0009430743247776776
+      },
+      {
+        "feature": "return_72h",
+        "coefficient": -0.000888634544311705
+      },
+      {
+        "feature": "range_width_24h",
+        "coefficient": 0.0007666892576227177
+      },
+      {
+        "feature": "return_24h",
+        "coefficient": 0.0006965763255180774
+      },
+      {
+        "feature": "return_168h",
+        "coefficient": 0.0006801097444001176
+      },
+      {
+        "feature": "return_4h",
+        "coefficient": -0.0006025311559623704
+      }
+    ]
+  },
+  "deployable_model_spec": {
+    "basis": "entry timing and direction only; quality filter excluded because locked-test PF deteriorated",
+    "action": {
+      "features": [
+        "return_1h",
+        "return_4h",
+        "return_12h",
+        "return_24h",
+        "return_72h",
+        "return_168h",
+        "volatility_6h",
+        "volatility_24h",
+        "volatility_72h",
+        "distance_ema24",
+        "distance_ema72",
+        "distance_ema200",
+        "ema24_slope_24h",
+        "ema200_slope_24h",
+        "range_position_24h",
+        "range_width_24h",
+        "volume_ratio_24h",
+        "candle_body",
+        "candle_range",
+        "hour_sin",
+        "hour_cos"
+      ],
+      "mean": [
+        -0.0003421763981005785,
+        -0.0011447236367614982,
+        -0.0014941130248122968,
+        -0.002843789121488614,
+        -0.005183937699833411,
+        -0.012282545757370636,
+        0.0065736133901614395,
+        0.007010772368079741,
+        0.007238835191252486,
+        -0.0018580869120325765,
+        -0.004123705524411208,
+        -0.010804587409297958,
+        -0.002278058969329168,
+        -0.0023446413484733094,
+        0.4986956288473583,
+        0.058958530176238276,
+        1.5044362013389274,
+        -0.0003421763981005787,
+        0.010816500541698498,
+        -0.012643266852032079,
+        0.004113730075414062
+      ],
+      "scale": [
+        0.009650000750141479,
+        0.018413661294143055,
+        0.030709805399331644,
+        0.0427286388317487,
+        0.06652380541416279,
+        0.10933981484509,
+        0.006117684849681145,
+        0.0048798813635680845,
+        0.004159527289154855,
+        0.021148239973106515,
+        0.0354547645774401,
+        0.0606618549344725,
+        0.030166742485104703,
+        0.013734917477321647,
+        0.2587038798512109,
+        0.04237360337905631,
+        1.8791309990065335,
+        0.009650000750141479,
+        0.012272507811335643,
+        0.7100053727295507,
+        0.7040707320456849
+      ],
+      "coefficient": [
+        -0.04687173153918328,
+        -0.12463552452627805,
+        -0.007506706355862351,
+        0.24739748152975644,
+        0.3067956110340989,
+        0.11502349593584736,
+        0.17343012529915794,
+        -0.19771543944924536,
+        0.25341771808103275,
+        1.08337402015887,
+        -1.0410597766945486,
+        -0.7498633578429534,
+        0.13770985122181673,
+        0.9433154762389162,
+        -0.21572916980410106,
+        0.7295834476741139,
+        0.03531404332299017,
+        -0.04687173153919294,
+        0.25790691215018496,
+        0.11967836875341709,
+        -0.017487925135460658
+      ],
+      "intercept": -0.04723531645849235,
+      "threshold": 0.4661256316791842
+    },
+    "direction": {
+      "features": [
+        "return_1h",
+        "return_4h",
+        "return_12h",
+        "return_24h",
+        "return_72h",
+        "return_168h",
+        "volatility_6h",
+        "volatility_24h",
+        "volatility_72h",
+        "distance_ema24",
+        "distance_ema72",
+        "distance_ema200",
+        "ema24_slope_24h",
+        "ema200_slope_24h",
+        "range_position_24h",
+        "range_width_24h",
+        "volume_ratio_24h",
+        "candle_body",
+        "candle_range",
+        "hour_sin",
+        "hour_cos"
+      ],
+      "mean": [
+        -0.0015467652506749,
+        -0.0030807066937042957,
+        -0.003004995044798992,
+        -0.005078306483899737,
+        -0.003749741241119549,
+        -0.023471422018464014,
+        0.009667725933548867,
+        0.00994482790283198,
+        0.009580316357141978,
+        -0.0038314267057089355,
+        -0.0061381280529171686,
+        -0.01670929796177264,
+        -0.0015465929415143299,
+        -0.003282814824827417,
+        0.47409248423939987,
+        0.0851454018877303,
+        1.7378671263391614,
+        -0.0015467652506749015,
+        0.01789794218186759,
+        0.006718039405980241,
+        0.05141254342237439
+      ],
+      "scale": [
+        0.014248484797896432,
+        0.026069073050886855,
+        0.04222867547846104,
+        0.05984563545058393,
+        0.09478304672764541,
+        0.14651680396939568,
+        0.0070535857588512624,
+        0.005396444060898061,
+        0.004220021100281536,
+        0.030010700144377154,
+        0.05151604845584356,
+        0.08498131297524453,
+        0.04247949566157658,
+        0.018583665060574486,
+        0.2848314072907194,
+        0.04820500997784353,
+        1.8839172886022286,
+        0.014248484797896432,
+        0.01738431620490206,
+        0.6962440114930288,
+        0.7159300907110118
+      ],
+      "coefficient": [
+        -0.01173670586418853,
+        -0.07520339108407435,
+        -0.06313003366101021,
+        -0.11628363723220121,
+        -0.04939124742270726,
+        -0.050473267240094676,
+        -0.0041543908293936865,
+        0.053208691627144804,
+        -0.1069318483649389,
+        0.4983583515770657,
+        -0.24803472182906214,
+        -0.12480413967553403,
+        0.19310107266575985,
+        0.2063266549871614,
+        -0.2523659068905565,
+        0.006148813428812102,
+        -0.02929827712098431,
+        -0.011736705864175972,
+        0.03337202700723519,
+        0.03153861710567494,
+        -0.011071590058852757
+      ],
+      "intercept": -0.00038649002667634166,
+      "threshold": 0.5,
+      "minimum_confidence": 0.07240353623722819
+    }
+  },
+  "limitations": [
+    "The model observes public fills, not cancelled orders or private intent.",
+    "Hourly labels cannot reconstruct sub-hour discretionary timing.",
+    "The return proxy is not account return because collateral and leverage are unknown.",
+    "The 2021 split is held out only within the source archive and is not evidence for Binance futures."
+  ],
+  "generated_at": "2026-10-06T03:07:12.651897+00:00",
+  "source": "user-supplied AOA executions + BitMEX public XBTUSD 1h bars",
+  "episodes_reconstructed": 2655,
+  "hourly_bars": 33673
+}

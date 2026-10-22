@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-12T00:00:00Z",
+  "purpose": "Use the historical-data policy to screen additional independent hypotheses without downloading, calculating, or inspecting any candidate return series.",
+  "historical_evidence_policy": "research/historical-research-policy.json",
+  "project_return_data_inspected_during_screening": false,
+  "candidates": [
+    {
+      "name": "CROSS_SECTIONAL_MOMENTUM_STATIC_SURVIVOR_UNIVERSE",
+      "decision": "REJECT_AS_IMMEDIATE_HISTORICAL_ALPHA",
+      "reason": "A recent Binance-perpetual replication reports that the allowed cross-sectional momentum specifications are not distinguishable from zero after realistic costs. More importantly, a current surviving-symbol universe would only qualify as a diagnostic under the project policy and cannot promote to live evidence. This overlaps the failed Alpha 006/008 momentum family.",
+      "source": "https://papers.ssrn.com/sol3/Delivery.cfm/7404139.pdf?abstractid=7404139&mirid=1",
+      "retain": "Do not create an additional parameterized momentum trial. Reconsider only with a contemporaneously timestamped historical membership source and an independently preregistered forward protocol."
+    },
+    {
+      "name": "FUNDING_RATE_ARBITRAGE",
+      "decision": "REJECT_FOR_USDTM_ONLY_SCOPE",
+      "reason": "The documented strategy requires a spot or cross-venue hedge to neutralize the perpetual price exposure. It is therefore a different capital, custody, borrowing, and liquidation system from the requested Binance USDT-M-futures-only portfolio, and overlaps failed funding/carry family trials.",
+      "source": "https://doi.org/10.1016/j.bcra.2025.100354",
+      "retain": "Keep as a risk and funding-accounting reference, not as an alpha candidate."
+    },
+    {
+      "name": "PRICE_VOLUME_PERPETUAL_FACTOR_SORTS",
+      "decision": "DEFER_PENDING_REPRODUCIBLE_METHOD_AND_HISTORICAL_MEMBERSHIP",
+      "reason": "The cited working paper reports statistically significant perpetual-return predictors, but the accessible record does not provide enough executable signal, universe, turnover, or cost detail to preregister one unambiguously. A static current-symbol reconstruction would violate the historical-evidence policy for any promotion claim.",
+      "source": "https://doi.org/10.2139/ssrn.6795783",
+      "retain": "Require complete reproducible methods, publisher-bound source fields, an independent cost model, and a point-in-time membership source before opening a trial."
+    },
+    {
+      "name": "CROSS_VENUE_WORLD_ORDER_FLOW",
+      "decision": "REJECT_FOR_SINGLE_VENUE_SCOPE",
+      "reason": "The reported predictor uses international multi-currency order flow. Binance-only public USD-M data cannot reproduce that information set, so replacing it with Binance local flow would be a different, unvalidated hypothesis and overlaps Alpha 011/013 order-flow research.",
+      "source": "https://doi.org/10.1016/j.finmar.2026.101047",
+      "retain": "Continue the already preregistered Binance-specific forward order-flow tests rather than create a post-hoc substitute."
+    }
+  ],
+  "selected_next_step": "NO_NEW_EXPERIMENT; run archival diagnostics only under the historical evidence policy while Alpha 011, Alpha 013, and the point-in-time universe accumulate forward observations.",
+  "live_order_authorization": "CLOSED"
+}

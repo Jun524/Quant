@@ -1,0 +1,621 @@
+{
+  "candidate": "ALPHA_012_SPOT_PERP_CASH_AND_CARRY",
+  "status": "FAIL_DEVELOPMENT",
+  "validation_opened": false,
+  "development": {
+    "base": {
+      "timerange": "2022-01-01T00:00:00+00:00--2024-01-01T00:00:00+00:00",
+      "configuration": {
+        "lookback_days": 7,
+        "minimum_funding_score": 0.004,
+        "spot_capital_fraction": 0.45,
+        "maximum_holding_days": 7,
+        "minimum_holding_hours": 24,
+        "short_stop_fraction": 0.2,
+        "modeled_liquidation_rise": 0.8,
+        "spot_fee_per_fill": 0.001,
+        "futures_fee_per_fill": 0.0005,
+        "slippage_per_leg_per_fill": 0.0002,
+        "starting_equity": 1000.0
+      },
+      "closed_spreads": 2,
+      "liquidations": 0,
+      "ending_equity": 1000.8363938107075,
+      "net_return": 0.0008363938107074365,
+      "profit_factor": 2.577335231901535,
+      "maximum_mark_to_market_drawdown": 0.0022768169258490234,
+      "largest_winner_profit_concentration": 1.0,
+      "thirty_day_block_bootstrap_probability_of_loss": 0.843,
+      "pnl_components": {
+        "raw_basis_price_pnl": 0.13690190786808598,
+        "modeled_slippage": -0.7185239414487133,
+        "spot_fees": -1.795683542014988,
+        "futures_fees": -0.8984680689243569,
+        "funding_pnl": 4.112167455227404,
+        "net_pnl": 0.836393810707432
+      },
+      "monthly": {
+        "complete_months": 24,
+        "geometric_monthly_return": 3.4835782931619264e-05,
+        "median_monthly_return": 0.0,
+        "positive_month_ratio": 0.041666666666666664,
+        "best_month": 0.0013673763557551233,
+        "worst_month": -0.0005302574835022167,
+        "series": [
+          {
+            "month": "2022-01",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-02",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-03",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-04",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-05",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-06",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-07",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-08",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-09",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-10",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-11",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-12",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-01",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-02",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-03",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-04",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-05",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-06",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-07",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-08",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-09",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-10",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-11",
+            "return": -0.0005302574835022167,
+            "ending_equity": 999.4697425164978
+          },
+          {
+            "month": "2023-12",
+            "return": 0.0013673763557551233,
+            "ending_equity": 1000.8363938107075
+          }
+        ]
+      },
+      "by_symbol": {
+        "BTC": {
+          "spreads": 0,
+          "net_pnl": 0,
+          "funding_pnl": 0,
+          "raw_basis_price_pnl": 0
+        },
+        "ETH": {
+          "spreads": 2,
+          "net_pnl": 0.836393810707432,
+          "funding_pnl": 4.112167455227404,
+          "raw_basis_price_pnl": 0.13690190786808598
+        }
+      },
+      "exit_reason_distribution": {
+        "maximum_holding_time": 2
+      },
+      "trades": [
+        {
+          "symbol": "ETH",
+          "decision_at": "2023-11-14T00:00:00+00:00",
+          "entry_at": "2023-11-14T01:00:00+00:00",
+          "exit_at": "2023-11-21T01:00:00+00:00",
+          "exit_reason": "maximum_holding_time",
+          "liquidated": false,
+          "funding_score": 0.0042523,
+          "entry_basis_fraction": 0.0008704932303167379,
+          "quantity": 0.22126758469918842,
+          "spot_capital": 450.0,
+          "futures_initial_margin": 450.2116012889941,
+          "required_capital": 900.8867070896385,
+          "raw_spot_entry": 2033.33,
+          "raw_spot_exit": 2023.64,
+          "raw_perpetual_entry": 2035.1,
+          "raw_perpetual_exit": 2024.36,
+          "raw_basis_price_pnl": 0.2323309639341881,
+          "modeled_slippage": -0.3591805724959581,
+          "spot_fees": -0.8976763819136456,
+          "futures_fees": -0.44911321705009777,
+          "funding_pnl": 0.9433817240233355,
+          "funding_events": 21,
+          "net_pnl": -0.5302574835021778,
+          "return_on_starting_equity": -0.0005302574835021779,
+          "starting_equity": 1000.0,
+          "ending_equity": 999.4697425164978
+        },
+        {
+          "symbol": "ETH",
+          "decision_at": "2023-12-23T00:00:00+00:00",
+          "entry_at": "2023-12-23T01:00:00+00:00",
+          "exit_at": "2023-12-30T01:00:00+00:00",
+          "exit_reason": "maximum_holding_time",
+          "liquidated": false,
+          "funding_score": 0.004116,
+          "entry_basis_fraction": 0.0006756376330161462,
+          "quantity": 0.19475317564519307,
+          "spot_capital": 449.76138413242404,
+          "futures_initial_margin": 449.8852697435028,
+          "required_capital": 900.321357894931,
+          "raw_spot_entry": 2308.93,
+          "raw_spot_exit": 2302.07,
+          "raw_perpetual_entry": 2310.49,
+          "raw_perpetual_exit": 2304.12,
+          "raw_basis_price_pnl": -0.0954290560661021,
+          "modeled_slippage": -0.35934336895275526,
+          "spot_fees": -0.8980071601013422,
+          "futures_fees": -0.4493548518742592,
+          "funding_pnl": 3.1687857312040686,
+          "funding_events": 21,
+          "net_pnl": 1.3666512942096098,
+          "return_on_starting_equity": 0.001367376355755013,
+          "starting_equity": 999.4697425164978,
+          "ending_equity": 1000.8363938107075
+        }
+      ]
+    },
+    "double_fee": {
+      "timerange": "2022-01-01T00:00:00+00:00--2024-01-01T00:00:00+00:00",
+      "configuration": {
+        "lookback_days": 7,
+        "minimum_funding_score": 0.004,
+        "spot_capital_fraction": 0.45,
+        "maximum_holding_days": 7,
+        "minimum_holding_hours": 24,
+        "short_stop_fraction": 0.2,
+        "modeled_liquidation_rise": 0.8,
+        "spot_fee_per_fill": 0.002,
+        "futures_fee_per_fill": 0.001,
+        "slippage_per_leg_per_fill": 0.0002,
+        "starting_equity": 1000.0
+      },
+      "closed_spreads": 2,
+      "liquidations": 0,
+      "ending_equity": 998.1422162073808,
+      "net_return": -0.0018577837926192498,
+      "profit_factor": 0.010262550165422626,
+      "maximum_mark_to_market_drawdown": 0.004961372555969179,
+      "largest_winner_profit_concentration": 1.0,
+      "thirty_day_block_bootstrap_probability_of_loss": 0.9165,
+      "pnl_components": {
+        "raw_basis_price_pnl": 0.13703049891459945,
+        "modeled_slippage": -0.7180397247774376,
+        "spot_fees": -3.5889469473283397,
+        "futures_fees": -1.795725122817435,
+        "funding_pnl": 4.107897503389358,
+        "net_pnl": -1.8577837926192546
+      },
+      "monthly": {
+        "complete_months": 24,
+        "geometric_monthly_return": -7.747664907964413e-05,
+        "median_monthly_return": 0.0,
+        "positive_month_ratio": 0.041666666666666664,
+        "best_month": 1.9299515946702428e-05,
+        "worst_month": -0.0018770470824658325,
+        "series": [
+          {
+            "month": "2022-01",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-02",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-03",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-04",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-05",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-06",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-07",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-08",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-09",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-10",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-11",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-12",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-01",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-02",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-03",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-04",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-05",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-06",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-07",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-08",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-09",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-10",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-11",
+            "return": -0.0018770470824658325,
+            "ending_equity": 998.1229529175341
+          },
+          {
+            "month": "2023-12",
+            "return": 1.9299515946702428e-05,
+            "ending_equity": 998.1422162073808
+          }
+        ]
+      },
+      "by_symbol": {
+        "BTC": {
+          "spreads": 0,
+          "net_pnl": 0,
+          "funding_pnl": 0,
+          "raw_basis_price_pnl": 0
+        },
+        "ETH": {
+          "spreads": 2,
+          "net_pnl": -1.8577837926192546,
+          "funding_pnl": 4.107897503389358,
+          "raw_basis_price_pnl": 0.13703049891459945
+        }
+      },
+      "exit_reason_distribution": {
+        "maximum_holding_time": 2
+      }
+    },
+    "five_bps_slippage": {
+      "timerange": "2022-01-01T00:00:00+00:00--2024-01-01T00:00:00+00:00",
+      "configuration": {
+        "lookback_days": 7,
+        "minimum_funding_score": 0.004,
+        "spot_capital_fraction": 0.45,
+        "maximum_holding_days": 7,
+        "minimum_holding_hours": 24,
+        "short_stop_fraction": 0.2,
+        "modeled_liquidation_rise": 0.8,
+        "spot_fee_per_fill": 0.001,
+        "futures_fee_per_fill": 0.0005,
+        "slippage_per_leg_per_fill": 0.0005,
+        "starting_equity": 1000.0
+      },
+      "closed_spreads": 2,
+      "liquidations": 0,
+      "ending_equity": 999.7582340348002,
+      "net_return": -0.00024176596519975835,
+      "profit_factor": 0.7737773583196585,
+      "maximum_mark_to_market_drawdown": 0.0033501901648410604,
+      "largest_winner_profit_concentration": 1.0,
+      "thirty_day_block_bootstrap_probability_of_loss": 0.8985,
+      "pnl_components": {
+        "raw_basis_price_pnl": 0.1369122534984743,
+        "modeled_slippage": -1.795287396836431,
+        "spot_fees": -1.7946625057080814,
+        "futures_fees": -0.8979561097544715,
+        "funding_pnl": 4.109227793600698,
+        "net_pnl": -0.2417659651998112
+      },
+      "monthly": {
+        "complete_months": 24,
+        "geometric_monthly_return": -1.0074749053679e-05,
+        "median_monthly_return": 0.0,
+        "positive_month_ratio": 0.041666666666666664,
+        "best_month": 0.0008278268207073669,
+        "worst_month": -0.0010687080806943694,
+        "series": [
+          {
+            "month": "2022-01",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-02",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-03",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-04",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-05",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-06",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-07",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-08",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-09",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-10",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-11",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2022-12",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-01",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-02",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-03",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-04",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-05",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-06",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-07",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-08",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-09",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-10",
+            "return": 0.0,
+            "ending_equity": 1000.0
+          },
+          {
+            "month": "2023-11",
+            "return": -0.0010687080806943694,
+            "ending_equity": 998.9312919193056
+          },
+          {
+            "month": "2023-12",
+            "return": 0.0008278268207073669,
+            "ending_equity": 999.7582340348002
+          }
+        ]
+      },
+      "by_symbol": {
+        "BTC": {
+          "spreads": 0,
+          "net_pnl": 0,
+          "funding_pnl": 0,
+          "raw_basis_price_pnl": 0
+        },
+        "ETH": {
+          "spreads": 2,
+          "net_pnl": -0.2417659651998112,
+          "funding_pnl": 4.109227793600698,
+          "raw_basis_price_pnl": 0.1369122534984743
+        }
+      },
+      "exit_reason_distribution": {
+        "maximum_holding_time": 2
+      }
+    }
+  },
+  "gate": {
+    "natural_closed_spreads_minimum_20": false,
+    "net_return_positive": true,
+    "profit_factor_minimum_1_20": true,
+    "geometric_monthly_return_minimum_0_0025": false,
+    "actual_funding_pnl_positive": true,
+    "basis_plus_funding_exceeds_base_friction": true,
+    "double_fee_net_positive": false,
+    "five_bps_slippage_net_positive": false,
+    "maximum_drawdown_at_most_0_10": true,
+    "zero_liquidations": true,
+    "largest_winner_concentration_at_most_0_35": false,
+    "bootstrap_probability_of_loss_at_most_0_10": false
+  },
+  "warning": "Development uses previously seen local files and can reject only. Locked validation was not loaded or summarized.",
+  "preregistration_path": "research/alpha012-preregistration.json",
+  "preregistration_sha256": "a0b0d1ffd709795aa6f37b2502d0fa83d3d3c07d988b6364420d21d47ade1d59",
+  "locked_validation_timerange": "2024-01-01--2026-09-01",
+  "locked_validation_opened": false
+}

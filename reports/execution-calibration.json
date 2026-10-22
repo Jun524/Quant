@@ -1,0 +1,497 @@
+{
+  "schema_version": 1,
+  "policy": "periodic-public-l2-entry-calibration-v1",
+  "generated_at_utc": "2026-10-13T06:44:30.247914+00:00",
+  "status": "CALIBRATION_PASS",
+  "promotion_eligible": false,
+  "promotion_exclusion_reason": "periodic probes are not causally triggered by strategy order attempts",
+  "scope": "long entry at public best bid; no real order submitted",
+  "unmeasured_scopes": [
+    "long exit",
+    "short entry",
+    "short exit",
+    "protective stop"
+  ],
+  "source": {
+    "manifest_path": "research/execution/raw/alpha001-entry-20261013T044659Z.manifest.json",
+    "manifest_sha256": "f9b85a2fd08c8ce49c0e0dc4c0b20a3fa82f21b2627275de5900295af2c3ff47",
+    "raw_path": "research/execution/raw/alpha001-entry-20261013T044659Z.jsonl",
+    "raw_sha256": "60bb3891be4714302d3dfc07c0828d532d57d440dbd7682c7158d4ec494bf6c8"
+  },
+  "protocol_sha256": {
+    "scripts/manage_alpha001_forward_dryrun.py": "bd9cd4f19f5c0609eff1c65789e706aa3da7d9f86ff593d53c70f47d51195ba0",
+    "user_data/config.futures.json": "210be736076b40bb3fb39fba60384774f06f18f5423fc3fb3e4fa3b4130059cc",
+    "user_data/config.futures.forward-dryrun.json": "7946ee08e9c7df467906f28e0ab01e6ee77387b08abda0188fcd0213ed77db84",
+    "user_data/config.futures.bias-audit.json": "59a6b83526dbf42621de0654965219f7bae8c42b852eb1f81455494bfd2ade7e",
+    "user_data/strategies/FuturesBtcRegimeStrategy.py": "74eed4fea7dd5a78097c07521b154993c875e6cf1b3187ffd9123a746ccea70b",
+    "user_data/strategies/FuturesSlowTrendStrategy.py": "59d4140b729cf0d9a0a695dccbb24472b59480f00ebc39f21df7c479e7271416",
+    "quant/regime/classifier.py": "8334c31e14f677cba89392c5cc745380e16201627c65813f26930d1678b00f18",
+    "scripts/record_mtm_equity.py": "e141f1de9ae7a7b040ae96a9c06a8f80fbb3171f12f4e8f21cdc30104ce11ba9",
+    "scripts/alpha001_forward_report.py": "bbbe3049f4c82f32ae10fa55049102b92d9467032630dd10608b893e34d32d4b",
+    "quant/monitoring/equity.py": "8c260fe70f727e1c92ec346f18a5485f39f59d0487b3c623f2198b506174001a",
+    "quant/monitoring/sleep_guard.py": "91951ed531e6fb3768620ecccfebd0cb609cdc43142075b12d38fa3f45590cb5",
+    "quant/research/forward_dryrun.py": "a13b5569bf9c86bd5280fc2161fece79f6f0ec36c801717d7ae81a8005c8183f",
+    "quant/research/monthly_target.py": "b2480ab712b08c8ea5ce975e983c77f7e0cf9f6ed58d4a7501ee0c6582c20618",
+    "quant/research/risk.py": "cba75ebb83291cf43178cd3c1b73fb7d6ba5a062205af1a9ffdfa2417834ca13",
+    "research/promotion-policy.json": "ad4c0196bc9ce93a88cde7a201db55b80c9b91a2dd45b47acedac18a0e1eec4d",
+    "quant/execution/maker_quality.py": "b1d133131c168f83ea7c70e4369c7d9149c5ca2bf011d3807973b1226055ed95",
+    "scripts/maker_execution_report.py": "feea85ec1134fa91f5975ef855f8e59bc49144b2535b203568dbc8a14645fd17",
+    "scripts/live_preflight.py": "e8027b791c8280617a96a4818c15989707364eaf3175d623f79d4d4f16521805",
+    "scripts/audit_binance_api_permissions.py": "db428720af0aa802351f48e200cc7ea3d84792252343b2ffa2fe860fcf81fc95",
+    "scripts/audit_binance_futures_account.py": "79f5c65268134c759ed6987845fe2fafffe371d74c56f50f59b7eb9192a432a2",
+    "quant/execution/shadow_maker.py": "3a443c0d042ee823bfb5f316aa01f93a384fda59e2bd9153ad0d65b76d0c79e7",
+    "scripts/shadow_maker_probe.py": "a49b8cebd8fd7f2f0739193b782ef918751f8a1213ba47e5cb90ca620c29819f",
+    "scripts/manage_shadow_entry_campaign.py": "0119b5300c6b3d0b5e3cd78dca7fbf2701e62d10c59eb408d62cbfc1bcbe0efc",
+    "scripts/record_alpha001_entry_execution.py": "da5f4a66ecd2d07d38ea90227cd2f791fa3d636f68c56e242b5b8a2d13492595",
+    "scripts/run_alpha001_bias_audit.py": "e9c5cd6a1ee624c65038419a04db54ba863d22546a185ab2e97ab7cb0cb639b7",
+    "research/alpha001-forward-cohort.json": "0d3e3d0b7bf39d5e2e8141d28639bd757d4043d16b93ac5d1cfc2eb4f43a1835"
+  },
+  "timing": {
+    "first_submitted_at": "2026-10-13T04:46:59.222494+00:00",
+    "last_observed_at": "2026-10-13T06:44:07.639139+00:00",
+    "temporal_span_hours": 1.9523379569444446,
+    "distinct_utc_days": 1
+  },
+  "temporal_generalization": "INSUFFICIENT_SINGLE_WINDOW",
+  "cost_reference": {
+    "includes_fee": true,
+    "aggregate_observed_all_in_drag_bps": 2.7280252173061026,
+    "worst_symbol_observed_all_in_drag_bps": 4.789645234711852,
+    "descriptive_research_stress_floor_bps": 5.0,
+    "do_not_add_trading_fee_twice": true,
+    "automatic_cost_model_mutation": false
+  },
+  "per_symbol": {
+    "BNBUSDT": {
+      "basis": "one final row per submitted order; quantity-weighted fill and liquidity metrics",
+      "orders": 20,
+      "fully_filled_orders": 16,
+      "partially_filled_orders": 0,
+      "unfilled_orders": 4,
+      "submitted_qty": 1.340911291280146,
+      "filled_qty": 1.0726762067131559,
+      "fill_rate_by_qty": 0.7999606041717268,
+      "maker_share_by_filled_qty": 1.0,
+      "taker_share_by_filled_qty": 0.0,
+      "filled_notional": 800.0,
+      "orders_with_fills": 16,
+      "filled_markout_observations": 16,
+      "filled_markout_coverage_ratio": 1.0,
+      "orders_with_unfilled_qty": 4,
+      "unfilled_opportunity_observations": 4,
+      "unfilled_opportunity_coverage_ratio": 1.0,
+      "fees": 0.16,
+      "effective_fee_bps": 2.0,
+      "signed_slippage_bps": -0.06704181345579557,
+      "fee_plus_signed_slippage_bps": 1.9329581865442045,
+      "unfilled_opportunity_cost_bps": 6.942138554702586,
+      "post_fill_adverse_markout_5m_bps": 1.4212767644865574,
+      "conservative_all_in_execution_drag_bps": 4.071957020199358,
+      "checks": [
+        {
+          "name": "minimum_order_sample",
+          "passed": true,
+          "actual": 20,
+          "required": 20
+        },
+        {
+          "name": "minimum_filled_order_sample",
+          "passed": true,
+          "actual": 16,
+          "required": 6
+        },
+        {
+          "name": "maker_share",
+          "passed": true,
+          "actual": 1.0,
+          "required": 0.7
+        },
+        {
+          "name": "effective_fee_bps",
+          "passed": true,
+          "actual": 2.0,
+          "required_max": 2.8
+        },
+        {
+          "name": "filled_markout_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "unfilled_opportunity_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "all_in_execution_drag_within_gross_edge",
+          "passed": true,
+          "actual": 4.071957020199358,
+          "required_max_exclusive": 10.0
+        }
+      ],
+      "status": "PASS"
+    },
+    "BTCUSDT": {
+      "basis": "one final row per submitted order; quantity-weighted fill and liquidity metrics",
+      "orders": 20,
+      "fully_filled_orders": 15,
+      "partially_filled_orders": 0,
+      "unfilled_orders": 5,
+      "submitted_qty": 0.011964274680013317,
+      "filled_qty": 0.008971234888750783,
+      "fill_rate_by_qty": 0.7498352494144507,
+      "maker_share_by_filled_qty": 1.0,
+      "taker_share_by_filled_qty": 0.0,
+      "filled_notional": 750.0,
+      "orders_with_fills": 15,
+      "filled_markout_observations": 15,
+      "filled_markout_coverage_ratio": 1.0,
+      "orders_with_unfilled_qty": 5,
+      "unfilled_opportunity_observations": 5,
+      "unfilled_opportunity_coverage_ratio": 1.0,
+      "fees": 0.15,
+      "effective_fee_bps": 1.9999999999999998,
+      "signed_slippage_bps": -0.005980819682255384,
+      "fee_plus_signed_slippage_bps": 1.9940191803177445,
+      "unfilled_opportunity_cost_bps": 9.234211252358037,
+      "post_fill_adverse_markout_5m_bps": 1.3128019938638336,
+      "conservative_all_in_execution_drag_bps": 4.789645234711852,
+      "checks": [
+        {
+          "name": "minimum_order_sample",
+          "passed": true,
+          "actual": 20,
+          "required": 20
+        },
+        {
+          "name": "minimum_filled_order_sample",
+          "passed": true,
+          "actual": 15,
+          "required": 6
+        },
+        {
+          "name": "maker_share",
+          "passed": true,
+          "actual": 1.0,
+          "required": 0.7
+        },
+        {
+          "name": "effective_fee_bps",
+          "passed": true,
+          "actual": 1.9999999999999998,
+          "required_max": 2.8
+        },
+        {
+          "name": "filled_markout_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "unfilled_opportunity_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "all_in_execution_drag_within_gross_edge",
+          "passed": true,
+          "actual": 4.789645234711852,
+          "required_max_exclusive": 10.0
+        }
+      ],
+      "status": "PASS"
+    },
+    "ETHUSDT": {
+      "basis": "one final row per submitted order; quantity-weighted fill and liquidity metrics",
+      "orders": 20,
+      "fully_filled_orders": 17,
+      "partially_filled_orders": 0,
+      "unfilled_orders": 3,
+      "submitted_qty": 0.39603751742476523,
+      "filled_qty": 0.3365022858710375,
+      "fill_rate_by_qty": 0.849672748327341,
+      "maker_share_by_filled_qty": 1.0,
+      "taker_share_by_filled_qty": 0.0,
+      "filled_notional": 850.0,
+      "orders_with_fills": 17,
+      "filled_markout_observations": 17,
+      "filled_markout_coverage_ratio": 1.0,
+      "orders_with_unfilled_qty": 3,
+      "unfilled_opportunity_observations": 3,
+      "unfilled_opportunity_coverage_ratio": 1.0,
+      "fees": 0.17,
+      "effective_fee_bps": 2.0,
+      "signed_slippage_bps": -0.019794212928923884,
+      "fee_plus_signed_slippage_bps": 1.980205787071076,
+      "unfilled_opportunity_cost_bps": 12.420536377515658,
+      "post_fill_adverse_markout_5m_bps": -1.6984456994137407,
+      "conservative_all_in_execution_drag_bps": 3.5496719912865995,
+      "checks": [
+        {
+          "name": "minimum_order_sample",
+          "passed": true,
+          "actual": 20,
+          "required": 20
+        },
+        {
+          "name": "minimum_filled_order_sample",
+          "passed": true,
+          "actual": 17,
+          "required": 6
+        },
+        {
+          "name": "maker_share",
+          "passed": true,
+          "actual": 1.0,
+          "required": 0.7
+        },
+        {
+          "name": "effective_fee_bps",
+          "passed": true,
+          "actual": 2.0,
+          "required_max": 2.8
+        },
+        {
+          "name": "filled_markout_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "unfilled_opportunity_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "all_in_execution_drag_within_gross_edge",
+          "passed": true,
+          "actual": 3.5496719912865995,
+          "required_max_exclusive": 10.0
+        }
+      ],
+      "status": "PASS"
+    },
+    "SOLUSDT": {
+      "basis": "one final row per submitted order; quantity-weighted fill and liquidity metrics",
+      "orders": 20,
+      "fully_filled_orders": 18,
+      "partially_filled_orders": 0,
+      "unfilled_orders": 2,
+      "submitted_qty": 9.237565362107654,
+      "filled_qty": 8.312495910657324,
+      "fill_rate_by_qty": 0.8998578721569916,
+      "maker_share_by_filled_qty": 1.0,
+      "taker_share_by_filled_qty": 0.0,
+      "filled_notional": 900.0,
+      "orders_with_fills": 18,
+      "filled_markout_observations": 18,
+      "filled_markout_coverage_ratio": 1.0,
+      "orders_with_unfilled_qty": 2,
+      "unfilled_opportunity_observations": 2,
+      "unfilled_opportunity_coverage_ratio": 1.0,
+      "fees": 0.18000000000000002,
+      "effective_fee_bps": 2.0000000000000004,
+      "signed_slippage_bps": -0.46178400286324683,
+      "fee_plus_signed_slippage_bps": 1.5382159971367537,
+      "unfilled_opportunity_cost_bps": 19.888971813265485,
+      "post_fill_adverse_markout_5m_bps": -1.2378024076026601,
+      "conservative_all_in_execution_drag_bps": 3.375899732091346,
+      "checks": [
+        {
+          "name": "minimum_order_sample",
+          "passed": true,
+          "actual": 20,
+          "required": 20
+        },
+        {
+          "name": "minimum_filled_order_sample",
+          "passed": true,
+          "actual": 18,
+          "required": 6
+        },
+        {
+          "name": "maker_share",
+          "passed": true,
+          "actual": 1.0,
+          "required": 0.7
+        },
+        {
+          "name": "effective_fee_bps",
+          "passed": true,
+          "actual": 2.0000000000000004,
+          "required_max": 2.8
+        },
+        {
+          "name": "filled_markout_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "unfilled_opportunity_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "all_in_execution_drag_within_gross_edge",
+          "passed": true,
+          "actual": 3.375899732091346,
+          "required_max_exclusive": 10.0
+        }
+      ],
+      "status": "PASS"
+    },
+    "XRPUSDT": {
+      "basis": "one final row per submitted order; quantity-weighted fill and liquidity metrics",
+      "orders": 20,
+      "fully_filled_orders": 18,
+      "partially_filled_orders": 0,
+      "unfilled_orders": 2,
+      "submitted_qty": 728.8531340116276,
+      "filled_qty": 655.7643277679696,
+      "fill_rate_by_qty": 0.8997208040509131,
+      "maker_share_by_filled_qty": 1.0,
+      "taker_share_by_filled_qty": 0.0,
+      "filled_notional": 900.0,
+      "orders_with_fills": 18,
+      "filled_markout_observations": 18,
+      "filled_markout_coverage_ratio": 1.0,
+      "orders_with_unfilled_qty": 2,
+      "unfilled_opportunity_observations": 2,
+      "unfilled_opportunity_coverage_ratio": 1.0,
+      "fees": 0.18000000000000002,
+      "effective_fee_bps": 2.0000000000000004,
+      "signed_slippage_bps": -0.3643002434212051,
+      "fee_plus_signed_slippage_bps": 1.6356997565787954,
+      "unfilled_opportunity_cost_bps": 12.423895162068282,
+      "post_fill_adverse_markout_5m_bps": -1.5845066590893344,
+      "conservative_all_in_execution_drag_bps": 2.717531317582914,
+      "checks": [
+        {
+          "name": "minimum_order_sample",
+          "passed": true,
+          "actual": 20,
+          "required": 20
+        },
+        {
+          "name": "minimum_filled_order_sample",
+          "passed": true,
+          "actual": 18,
+          "required": 6
+        },
+        {
+          "name": "maker_share",
+          "passed": true,
+          "actual": 1.0,
+          "required": 0.7
+        },
+        {
+          "name": "effective_fee_bps",
+          "passed": true,
+          "actual": 2.0000000000000004,
+          "required_max": 2.8
+        },
+        {
+          "name": "filled_markout_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "unfilled_opportunity_coverage",
+          "passed": true,
+          "actual": 1.0,
+          "required": 1.0
+        },
+        {
+          "name": "all_in_execution_drag_within_gross_edge",
+          "passed": true,
+          "actual": 2.717531317582914,
+          "required_max_exclusive": 10.0
+        }
+      ],
+      "status": "PASS"
+    }
+  },
+  "summary": {
+    "basis": "one final row per submitted order; quantity-weighted fill and liquidity metrics",
+    "orders": 100,
+    "fully_filled_orders": 84,
+    "partially_filled_orders": 0,
+    "unfilled_orders": 16,
+    "submitted_qty": 739.83961245712,
+    "filled_qty": 665.4949734060997,
+    "fill_rate_by_qty": 0.8995124918979258,
+    "maker_share_by_filled_qty": 1.0,
+    "taker_share_by_filled_qty": 0.0,
+    "filled_notional": 4200.0,
+    "orders_with_fills": 84,
+    "filled_markout_observations": 84,
+    "filled_markout_coverage_ratio": 1.0,
+    "orders_with_unfilled_qty": 16,
+    "unfilled_opportunity_observations": 16,
+    "unfilled_opportunity_coverage_ratio": 1.0,
+    "fees": 0.8400000000000005,
+    "effective_fee_bps": 2.0000000000000013,
+    "signed_slippage_bps": -0.1948618971837905,
+    "fee_plus_signed_slippage_bps": 1.8051381028162108,
+    "unfilled_opportunity_cost_bps": 10.989236026236028,
+    "post_fill_adverse_markout_5m_bps": -0.4433652613184175,
+    "conservative_all_in_execution_drag_bps": 2.7280252173061026,
+    "checks": [
+      {
+        "name": "minimum_order_sample",
+        "passed": true,
+        "actual": 100,
+        "required": 100
+      },
+      {
+        "name": "minimum_filled_order_sample",
+        "passed": true,
+        "actual": 84,
+        "required": 30
+      },
+      {
+        "name": "maker_share",
+        "passed": true,
+        "actual": 1.0,
+        "required": 0.7
+      },
+      {
+        "name": "effective_fee_bps",
+        "passed": true,
+        "actual": 2.0000000000000013,
+        "required_max": 2.8
+      },
+      {
+        "name": "filled_markout_coverage",
+        "passed": true,
+        "actual": 1.0,
+        "required": 1.0
+      },
+      {
+        "name": "unfilled_opportunity_coverage",
+        "passed": true,
+        "actual": 1.0,
+        "required": 1.0
+      },
+      {
+        "name": "all_in_execution_drag_within_gross_edge",
+        "passed": true,
+        "actual": 2.7280252173061026,
+        "required_max_exclusive": 10.0
+      }
+    ],
+    "status": "PASS"
+  },
+  "limitations": [
+    "one short collection window cannot represent other volatility or liquidity regimes",
+    "public aggregate trades estimate queue fills but are not exchange acknowledgements",
+    "the result cannot validate alpha profitability or any unmeasured order path"
+  ]
+}

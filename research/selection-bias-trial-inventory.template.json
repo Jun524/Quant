@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "template_only_not_evidence": true,
+  "inventory_id": "REPLACE_WITH_IMMUTABLE_INVENTORY_ID",
+  "family_id": "REPLACE_WITH_STRATEGY_OR_PORTFOLIO_FAMILY",
+  "sample_role": "locked_forward",
+  "return_periodicity": "daily",
+  "return_definition": "net_of_fees_slippage_funding",
+  "complete_attempted_trial_inventory": false,
+  "selection_rule_preregistered": false,
+  "selection_rule_sha256": "REPLACE_WITH_64_HEX_CHARACTERS",
+  "inventory_closed_at_utc": "REPLACE_BEFORE_LOCKED_SAMPLE",
+  "selected_at_utc": "REPLACE_BEFORE_LOCKED_SAMPLE",
+  "sample_started_at_utc": "MUST_EQUAL_FIRST_CSV_TIMESTAMP",
+  "selected_trial_id": "REPLACE_WITH_EXACT_CSV_COLUMN",
+  "trials": [
+    {
+      "attempt_number": 1,
+      "trial_id": "REPLACE_WITH_EXACT_CSV_COLUMN",
+      "configuration_sha256": "REPLACE_WITH_64_HEX_CHARACTERS",
+      "registered_at_utc": "REPLACE_NO_LATER_THAN_INVENTORY_CLOSE"
+    }
+  ],
+  "warning": "Copy this template before the locked sample. A file retaining template placeholders or false completeness fields cannot pass. Every attempted configuration, including failed variants, must appear in trials and as a CSV column in the same order."
+}

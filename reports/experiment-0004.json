@@ -1,0 +1,703 @@
+{
+  "created_at": "2026-09-18T09:29:31.754312+00:00",
+  "experiment_id": 4,
+  "hypothesis": "After a 20th-percentile ATR/range compression relative to the prior 120 hours, a first 24-hour Donchian break with 1.5x prior-24h volume continues sufficiently to overcome fees, funding, and five-basis-point-per-fill modeled slippage in either direction; PANIC entries are prohibited.",
+  "parent_experiment": 3,
+  "reason": "Pre-registered independent volatility-compression-to-expansion Alpha after Experiment 0003 was closed FAIL. 5m detail data contains 47 unchanged exchange-wide zero-volume maintenance timestamps across all five pairs; they remain non-tradable volume=0 candles and are not imputed.",
+  "reason_for_change": "Roadmap progression to an independent Alpha family; ATR, range, volume, stop, and holding-time values were selected once before evaluation. Startup warmup was raised from 500 to 1500 solely to stabilize the existing shared BTC daily EMA200 classifier in recursive analysis.",
+  "result": {
+    "cost_stress": {
+      "breakout_metrics": {
+        "basis": "breakout success is a net-profitable natural trade; false breakout is an explicit return-to-range exit",
+        "breakout_success_rate": 0.2903225806451613,
+        "detail_timing": {
+          "basis": "5m OHLC replay between exported open/close timestamps; same-candle high/low ordering remains unknowable",
+          "coverage_ratio": 1.0,
+          "covered_trades": 310,
+          "median_time_to_mae_minutes": 25.0,
+          "median_time_to_mfe_minutes": 25.0,
+          "requested_trades": 310
+        },
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 310
+        },
+        "expectancy": -0.0686391534516129,
+        "false_breakout_rate": 1.0,
+        "largest_winner_profit_concentration": 0.07682331520611371,
+        "long_expectancy": -0.06239345704663213,
+        "mae_mean": 0.00457183819218313,
+        "median_holding_minutes": 60.0,
+        "mfe_mae_ratio": 1.5445647967371021,
+        "mfe_mean": 0.007061500328024256,
+        "pnl_by_regime": {
+          "BEAR": {
+            "expectancy": -0.06712196250000001,
+            "losses": 112,
+            "net_profit": -9.93405045,
+            "net_return": -9.93405045,
+            "profit_factor": 0.6881743708988177,
+            "trades": 148,
+            "wins": 36
+          },
+          "BULL": {
+            "expectancy": -0.11111063198412699,
+            "losses": 89,
+            "net_profit": -13.99993963,
+            "net_return": -13.99993963,
+            "profit_factor": 0.5850946261933154,
+            "trades": 126,
+            "wins": 37
+          },
+          "RANGE": {
+            "expectancy": 0.22169125,
+            "losses": 0,
+            "net_profit": 0.4433825,
+            "net_return": 0.4433825,
+            "profit_factor": null,
+            "trades": 2,
+            "wins": 2
+          },
+          "TRANSITION": {
+            "expectancy": 0.06507264735294117,
+            "losses": 19,
+            "net_profit": 2.21247001,
+            "net_return": 2.21247001,
+            "profit_factor": 1.436215303011313,
+            "trades": 34,
+            "wins": 15
+          },
+          "UNSPECIFIED": {
+            "expectancy": null,
+            "net_profit": 0.0,
+            "profit_factor": null,
+            "trades": 0
+          }
+        },
+        "short_expectancy": -0.07894188341880341,
+        "trades": 310
+      },
+      "calmar": -2.660142533903242,
+      "cost_drag": {
+        "basis": "fractions of starting balance; positive funding_drag means funding reduced PnL",
+        "fee_drag_pct": 0.040522646224059995,
+        "funding_drag_pct": 0.00022183351949901873,
+        "slippage_drag_pct": 0.0
+      },
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.005815238221714635,
+        "days": 605,
+        "geometric_daily_return": -3.554941862582428e-05,
+        "historical_var_95": 0.0007832532570964375,
+        "historical_var_99": 0.0013798660497161355,
+        "max_consecutive_losing_days": 3,
+        "mean_daily_return": -3.5425731581003677e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.171900826446281,
+        "positive_day_ratio": 0.09256198347107437,
+        "worst_daily_return": -0.0021017951723425426
+      },
+      "daily_geometric_return": -3.554941862582428e-05,
+      "estimated_fee_cost": 40.52264622406,
+      "expectancy": -0.0686391534516129,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -0.22183351949901872,
+      "funding_paid": 0.2844860476641935,
+      "funding_received": 0.06265252816517479,
+      "max_drawdown": 0.025134575688914185,
+      "organic": {
+        "expectancy": -0.0686391534516129,
+        "losses": 220,
+        "net_profit": -21.27813757,
+        "net_return": -0.021278137569999998,
+        "profit_factor": 0.6989177098226229,
+        "trades": 310,
+        "wins": 90
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL - modeled slippage = net PnL (rounding may differ)",
+        "funding_pnl": -0.22183351949901872,
+        "modeled_slippage": -0.0,
+        "net_pnl": -21.27813757,
+        "price_pnl_estimate": 19.466342173559017,
+        "trading_fees": -40.52264622406
+      },
+      "positive_day_ratio": 0.09256198347107437,
+      "sharpe": -1.1151012074411855,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 117
+        },
+        "expectancy": -0.07894188341880341,
+        "funding_pnl": -0.06644794783531419,
+        "largest_single_loss": -1.60757961,
+        "largest_winner_profit_concentration": 0.18727945256183756,
+        "mae_max": 0.024458067370283665,
+        "mae_mean": 0.004773708570667578,
+        "median_holding_minutes": 60.0,
+        "mfe_max": 0.06559877955758964,
+        "mfe_mean": 0.007216242150462581,
+        "trades": 117,
+        "worst_rebound_from_entry": 0.024458067370283665
+      },
+      "sortino": -2.472984480875568,
+      "source": "research/results/alpha004/cost-stress/backtest-result-2026-09-18_09-28-24.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_004_VOL_BREAKOUT",
+      "timerange": "20250101-20260901",
+      "turnover": 40.52264622406
+    },
+    "development": {
+      "breakout_metrics": {
+        "basis": "breakout success is a net-profitable natural trade; false breakout is an explicit return-to-range exit",
+        "breakout_success_rate": 0.30514705882352944,
+        "detail_timing": {
+          "basis": "5m OHLC replay between exported open/close timestamps; same-candle high/low ordering remains unknowable",
+          "coverage_ratio": 1.0,
+          "covered_trades": 544,
+          "median_time_to_mae_minutes": 30.0,
+          "median_time_to_mfe_minutes": 12.5,
+          "requested_trades": 544
+        },
+        "exit_reason_distribution": {
+          "stop_loss": 1,
+          "volbo_return_to_range": 543
+        },
+        "expectancy": -0.07451908852941176,
+        "false_breakout_rate": 0.9981617647058824,
+        "largest_winner_profit_concentration": 0.06364744926635518,
+        "long_expectancy": -0.11075647648484849,
+        "mae_mean": 0.005022280286508635,
+        "median_holding_minutes": 60.0,
+        "mfe_mae_ratio": 1.3882735104195367,
+        "mfe_mean": 0.006972298683662179,
+        "pnl_by_regime": {
+          "BEAR": {
+            "expectancy": -0.09900819977941178,
+            "losses": 92,
+            "net_profit": -13.46511517,
+            "net_return": -13.46511517,
+            "profit_factor": 0.6254933955066645,
+            "trades": 136,
+            "wins": 44
+          },
+          "BULL": {
+            "expectancy": -0.07698408176291793,
+            "losses": 231,
+            "net_profit": -25.3277629,
+            "net_return": -25.3277629,
+            "profit_factor": 0.588125480552687,
+            "trades": 329,
+            "wins": 98
+          },
+          "RANGE": {
+            "expectancy": -0.02598309,
+            "losses": 14,
+            "net_profit": -0.59761107,
+            "net_return": -0.59761107,
+            "profit_factor": 0.8010106189102421,
+            "trades": 23,
+            "wins": 9
+          },
+          "TRANSITION": {
+            "expectancy": -0.020498125357142852,
+            "losses": 41,
+            "net_profit": -1.1478950199999998,
+            "net_return": -1.1478950199999998,
+            "profit_factor": 0.8735878884624066,
+            "trades": 56,
+            "wins": 15
+          },
+          "UNSPECIFIED": {
+            "expectancy": null,
+            "net_profit": 0.0,
+            "profit_factor": null,
+            "trades": 0
+          }
+        },
+        "short_expectancy": -0.018639004299065422,
+        "trades": 544
+      },
+      "calmar": -1.872573871361028,
+      "cost_drag": {
+        "basis": "fractions of starting balance; positive funding_drag means funding reduced PnL",
+        "fee_drag_pct": 0.0345062673063975,
+        "funding_drag_pct": 0.0011947113179007702,
+        "slippage_drag_pct": 0.0
+      },
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.004248058553641257,
+        "days": 939,
+        "geometric_daily_return": -4.40703480112381e-05,
+        "historical_var_95": 0.0006728032051396584,
+        "historical_var_99": 0.0014141268138481134,
+        "max_consecutive_losing_days": 4,
+        "mean_daily_return": -4.397045068605523e-05,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.2066027689030884,
+        "positive_day_ratio": 0.0926517571884984,
+        "worst_daily_return": -0.0027628056400668976
+      },
+      "daily_geometric_return": -4.40703480112381e-05,
+      "estimated_fee_cost": 34.5062673063975,
+      "expectancy": -0.07451908852941178,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -1.1947113179007702,
+      "funding_paid": 1.5300924045486808,
+      "funding_received": 0.33538108664791055,
+      "max_drawdown": 0.04376652830579801,
+      "organic": {
+        "expectancy": -0.07451908852941176,
+        "losses": 378,
+        "net_profit": -40.53838416,
+        "net_return": -0.04053838416,
+        "profit_factor": 0.6298945030760664,
+        "trades": 544,
+        "wins": 166
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL - modeled slippage = net PnL (rounding may differ)",
+        "funding_pnl": -1.1947113179007702,
+        "modeled_slippage": -0.0,
+        "net_pnl": -40.53838416,
+        "price_pnl_estimate": -4.837405535701732,
+        "trading_fees": -34.5062673063975
+      },
+      "positive_day_ratio": 0.0926517571884984,
+      "sharpe": -1.5318767788223706,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 214
+        },
+        "expectancy": -0.018639004299065422,
+        "funding_pnl": -0.6098285269835295,
+        "largest_single_loss": -1.48399163,
+        "largest_winner_profit_concentration": 0.1438213998021051,
+        "mae_max": 0.03248408846248285,
+        "mae_mean": 0.004187242381042323,
+        "median_holding_minutes": 60.0,
+        "mfe_max": 0.08926529445397369,
+        "mfe_mean": 0.007587836786810272,
+        "trades": 214,
+        "worst_rebound_from_entry": 0.03248408846248285
+      },
+      "sortino": -2.8253109997794765,
+      "source": "research/results/alpha004/development/backtest-result-2026-09-18_09-28-26.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_004_VOL_BREAKOUT",
+      "timerange": "20220601-20250101",
+      "turnover": 69.01253461279501
+    },
+    "evaluated_at": "2026-09-18T09:29:31.753009+00:00",
+    "gate": {
+      "checks": [
+        {
+          "actual": -0.04053838416,
+          "name": "development_net_positive",
+          "passed": false,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": -0.001179766240000001,
+          "name": "oos_net_positive",
+          "passed": false,
+          "required": "> 0.0",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.9795283788495402,
+          "name": "oos_profit_factor",
+          "passed": false,
+          "required": ">= 1.2",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.015517936360040207,
+          "name": "oos_max_drawdown",
+          "passed": true,
+          "required": "<= 0.15",
+          "severity": "fail"
+        },
+        {
+          "actual": -0.021278137569999998,
+          "name": "cost_stress_net_positive",
+          "passed": false,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": -0.0219283168557625,
+          "name": "slippage_stress_net_positive",
+          "passed": false,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "lookahead",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "recursive",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": 315,
+          "name": "oos_sample_size",
+          "passed": true,
+          "required": ">= 30",
+          "severity": "review"
+        },
+        {
+          "actual": -0.0037452896507936544,
+          "name": "breakout_expectancy_positive",
+          "passed": false,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.06920968700440779,
+          "name": "single_trade_profit_concentration",
+          "passed": true,
+          "required": "<= 0.5",
+          "severity": "fail"
+        }
+      ],
+      "policy": {
+        "max_drawdown": 0.15,
+        "max_short_single_trade_profit_concentration": 0.5,
+        "min_oos_net_return": 0.0,
+        "min_oos_trades": 30,
+        "min_profit_factor": 1.2
+      },
+      "role": "breakout",
+      "status": "FAIL"
+    },
+    "slippage_stress": {
+      "breakout_metrics": {
+        "basis": "breakout success is a net-profitable natural trade; false breakout is an explicit return-to-range exit",
+        "breakout_success_rate": 0.35555555555555557,
+        "detail_timing": {
+          "basis": "5m OHLC replay between exported open/close timestamps; same-candle high/low ordering remains unknowable",
+          "coverage_ratio": 1.0,
+          "covered_trades": 315,
+          "median_time_to_mae_minutes": 25.0,
+          "median_time_to_mfe_minutes": 20.0,
+          "requested_trades": 315
+        },
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 315
+        },
+        "expectancy": -0.0037452896507936544,
+        "false_breakout_rate": 1.0,
+        "largest_winner_profit_concentration": 0.06920968700440779,
+        "long_expectancy": 0.002965640761421315,
+        "mae_mean": 0.0045142836672839295,
+        "median_holding_minutes": 60.0,
+        "mfe_mae_ratio": 1.5420694491165785,
+        "mfe_mean": 0.006961338927964497,
+        "pnl_by_regime": {
+          "BEAR": {
+            "expectancy": -0.003916374117647061,
+            "losses": 107,
+            "net_profit": -0.5992052400000003,
+            "net_return": -0.5992052400000003,
+            "profit_factor": 0.9765198486199602,
+            "trades": 153,
+            "wins": 46
+          },
+          "BULL": {
+            "expectancy": -0.04457924563492064,
+            "losses": 82,
+            "net_profit": -5.616984950000001,
+            "net_return": -5.616984950000001,
+            "profit_factor": 0.8005633422158595,
+            "trades": 126,
+            "wins": 44
+          },
+          "RANGE": {
+            "expectancy": 0.287470625,
+            "losses": 0,
+            "net_profit": 0.57494125,
+            "net_return": 0.57494125,
+            "profit_factor": null,
+            "trades": 2,
+            "wins": 2
+          },
+          "TRANSITION": {
+            "expectancy": 0.13122007941176472,
+            "losses": 14,
+            "net_profit": 4.4614827,
+            "net_return": 4.4614827,
+            "profit_factor": 2.1307930353909357,
+            "trades": 34,
+            "wins": 20
+          },
+          "UNSPECIFIED": {
+            "expectancy": null,
+            "net_profit": 0.0,
+            "profit_factor": null,
+            "trades": 0
+          }
+        },
+        "short_expectancy": -0.014949131101694916,
+        "trades": 315
+      },
+      "calmar": -0.23889378466720768,
+      "cost_drag": {
+        "basis": "fractions of starting balance; positive funding_drag means funding reduced PnL",
+        "fee_drag_pct": 0.0207485506157625,
+        "funding_drag_pct": 0.0002294547903460995,
+        "slippage_drag_pct": 0.0207485506157625
+      },
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.00595250212475399,
+        "days": 605,
+        "geometric_daily_return": -1.95117613288609e-06,
+        "historical_var_95": 0.0006534653557430783,
+        "historical_var_99": 0.0011300874643896096,
+        "max_consecutive_losing_days": 3,
+        "mean_daily_return": -1.8306773120911759e-06,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.15702479338842976,
+        "positive_day_ratio": 0.10743801652892562,
+        "worst_daily_return": -0.0017050833098747945
+      },
+      "daily_geometric_return": -1.95117613288609e-06,
+      "estimated_fee_cost": 20.7485506157625,
+      "expectancy": -0.003745289650793626,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -0.2294547903460995,
+      "funding_paid": 0.29078994862374496,
+      "funding_received": 0.06133515827764547,
+      "max_drawdown": 0.015517936360040207,
+      "organic": {
+        "expectancy": -0.06961370430400794,
+        "losses": 224,
+        "net_profit": -21.9283168557625,
+        "net_return": -0.0219283168557625,
+        "profit_factor": 0.6948442529713688,
+        "trades": 315,
+        "wins": 91
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL - modeled slippage = net PnL (rounding may differ)",
+        "funding_pnl": -0.2294547903460995,
+        "modeled_slippage": -20.7485506157625,
+        "net_pnl": -21.9283168557625,
+        "price_pnl_estimate": 19.7982391661086,
+        "trading_fees": -20.7485506157625
+      },
+      "positive_day_ratio": 0.10743801652892562,
+      "sharpe": -0.06177516986767662,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 118
+        },
+        "expectancy": -0.014949131101694916,
+        "funding_pnl": -0.06757143302694701,
+        "largest_single_loss": -1.55913326,
+        "largest_winner_profit_concentration": 0.1727154591869003,
+        "mae_max": 0.024458067370283665,
+        "mae_mean": 0.004745318864811757,
+        "median_holding_minutes": 60.0,
+        "mfe_max": 0.06559877955758964,
+        "mfe_mean": 0.007162443889695981,
+        "trades": 118,
+        "worst_rebound_from_entry": 0.024458067370283665
+      },
+      "sortino": -0.13914219832034228,
+      "source": "research/results/alpha004/validation/backtest-result-2026-09-18_09-28-24.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_004_VOL_BREAKOUT",
+      "timerange": "20250101-20260901",
+      "turnover": 41.497101231525
+    },
+    "validation": {
+      "breakout_metrics": {
+        "basis": "breakout success is a net-profitable natural trade; false breakout is an explicit return-to-range exit",
+        "breakout_success_rate": 0.35555555555555557,
+        "detail_timing": {
+          "basis": "5m OHLC replay between exported open/close timestamps; same-candle high/low ordering remains unknowable",
+          "coverage_ratio": 1.0,
+          "covered_trades": 315,
+          "median_time_to_mae_minutes": 25.0,
+          "median_time_to_mfe_minutes": 20.0,
+          "requested_trades": 315
+        },
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 315
+        },
+        "expectancy": -0.0037452896507936544,
+        "false_breakout_rate": 1.0,
+        "largest_winner_profit_concentration": 0.06920968700440779,
+        "long_expectancy": 0.002965640761421315,
+        "mae_mean": 0.0045142836672839295,
+        "median_holding_minutes": 60.0,
+        "mfe_mae_ratio": 1.5420694491165785,
+        "mfe_mean": 0.006961338927964497,
+        "pnl_by_regime": {
+          "BEAR": {
+            "expectancy": -0.003916374117647061,
+            "losses": 107,
+            "net_profit": -0.5992052400000003,
+            "net_return": -0.5992052400000003,
+            "profit_factor": 0.9765198486199602,
+            "trades": 153,
+            "wins": 46
+          },
+          "BULL": {
+            "expectancy": -0.04457924563492064,
+            "losses": 82,
+            "net_profit": -5.616984950000001,
+            "net_return": -5.616984950000001,
+            "profit_factor": 0.8005633422158595,
+            "trades": 126,
+            "wins": 44
+          },
+          "RANGE": {
+            "expectancy": 0.287470625,
+            "losses": 0,
+            "net_profit": 0.57494125,
+            "net_return": 0.57494125,
+            "profit_factor": null,
+            "trades": 2,
+            "wins": 2
+          },
+          "TRANSITION": {
+            "expectancy": 0.13122007941176472,
+            "losses": 14,
+            "net_profit": 4.4614827,
+            "net_return": 4.4614827,
+            "profit_factor": 2.1307930353909357,
+            "trades": 34,
+            "wins": 20
+          },
+          "UNSPECIFIED": {
+            "expectancy": null,
+            "net_profit": 0.0,
+            "profit_factor": null,
+            "trades": 0
+          }
+        },
+        "short_expectancy": -0.014949131101694916,
+        "trades": 315
+      },
+      "calmar": -0.23889378466720768,
+      "cost_drag": {
+        "basis": "fractions of starting balance; positive funding_drag means funding reduced PnL",
+        "fee_drag_pct": 0.0207485506157625,
+        "funding_drag_pct": 0.0002294547903460995,
+        "slippage_drag_pct": 0.0
+      },
+      "daily": {
+        "basis": "Freqtrade backtest daily_profit; not live mark-to-market equity",
+        "best_daily_return": 0.00595250212475399,
+        "days": 605,
+        "geometric_daily_return": -1.95117613288609e-06,
+        "historical_var_95": 0.0006534653557430783,
+        "historical_var_99": 0.0011300874643896096,
+        "max_consecutive_losing_days": 3,
+        "mean_daily_return": -1.8306773120911759e-06,
+        "median_daily_return": 0.0,
+        "negative_day_ratio": 0.15702479338842976,
+        "positive_day_ratio": 0.10743801652892562,
+        "worst_daily_return": -0.0017050833098747945
+      },
+      "daily_geometric_return": -1.95117613288609e-06,
+      "estimated_fee_cost": 20.7485506157625,
+      "expectancy": -0.003745289650793626,
+      "forced_exit": {
+        "expectancy": null,
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -0.2294547903460995,
+      "funding_paid": 0.29078994862374496,
+      "funding_received": 0.06133515827764547,
+      "max_drawdown": 0.015517936360040207,
+      "organic": {
+        "expectancy": -0.0037452896507936544,
+        "losses": 203,
+        "net_profit": -1.179766240000001,
+        "net_return": -0.001179766240000001,
+        "profit_factor": 0.9795283788495402,
+        "trades": 315,
+        "wins": 112
+      },
+      "pnl_components": {
+        "basis": "estimated price PnL + trading fees + funding PnL - modeled slippage = net PnL (rounding may differ)",
+        "funding_pnl": -0.2294547903460995,
+        "modeled_slippage": -0.0,
+        "net_pnl": -1.179766240000001,
+        "price_pnl_estimate": 19.798239166108598,
+        "trading_fees": -20.7485506157625
+      },
+      "positive_day_ratio": 0.10743801652892562,
+      "sharpe": -0.06177516986767662,
+      "short_metrics": {
+        "basis": "organic short trades; excursions use Freqtrade min_rate/max_rate and stated leverage",
+        "exit_reason_distribution": {
+          "volbo_return_to_range": 118
+        },
+        "expectancy": -0.014949131101694916,
+        "funding_pnl": -0.06757143302694701,
+        "largest_single_loss": -1.55913326,
+        "largest_winner_profit_concentration": 0.1727154591869003,
+        "mae_max": 0.024458067370283665,
+        "mae_mean": 0.004745318864811757,
+        "median_holding_minutes": 60.0,
+        "mfe_max": 0.06559877955758964,
+        "mfe_mean": 0.007162443889695981,
+        "trades": 118,
+        "worst_rebound_from_entry": 0.024458067370283665
+      },
+      "sortino": -0.13914219832034228,
+      "source": "research/results/alpha004/validation/backtest-result-2026-09-18_09-28-24.zip",
+      "starting_balance": 1000.0,
+      "strategy": "ALPHA_004_VOL_BREAKOUT",
+      "timerange": "20250101-20260901",
+      "turnover": 41.497101231525
+    }
+  },
+  "strategy": "ALPHA_004_VOL_BREAKOUT"
+}

@@ -1,0 +1,27 @@
+# Usage (only after futures-live-preflight succeeds):
+# docker compose --env-file .env.live -f docker-compose.yml -f docker-compose.live.yml \
+#   --profile futures up -d freqtrade-futures
+#
+# Copy this file to docker-compose.live.yml. It is intentionally not the
+# default compose file, and the bot still starts in STOPPED state.
+services:
+  freqtrade-futures:
+    environment:
+      FREQTRADE__EXCHANGE__API_KEY: "${BINANCE_FUTURES_API_KEY:?required}"
+      FREQTRADE__EXCHANGE__SECRET: "${BINANCE_FUTURES_API_SECRET:?required}"
+      FREQTRADE__API_SERVER__USERNAME: "${FREQTRADE_API_USERNAME:?required}"
+      FREQTRADE__API_SERVER__PASSWORD: "${FREQTRADE_API_PASSWORD:?required}"
+      FREQTRADE__API_SERVER__JWT_SECRET_KEY: "${FREQTRADE_JWT_SECRET:?required}"
+      FREQTRADE__API_SERVER__WS_TOKEN: "${FREQTRADE_WS_TOKEN:?required}"
+    command:
+      - trade
+      - --logfile
+      - /freqtrade/user_data/logs/freqtrade-futures-live.log
+      - --db-url
+      - sqlite:////freqtrade/user_data/tradesv3.futures-live.sqlite
+      - --config
+      - /freqtrade/user_data/config.futures.json
+      - --config
+      - /freqtrade/user_data/config.futures.live.json
+      - --strategy
+      - FuturesBtcRegimeRiskBudgetLong

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Maker execution final order record",
+  "type": "object",
+  "required": [
+    "signal_id",
+    "side",
+    "submitted_qty",
+    "reference_mid",
+    "filled_qty",
+    "average_fill_price",
+    "maker_filled_qty",
+    "taker_filled_qty",
+    "fee"
+  ],
+  "properties": {
+    "signal_id": {"type": "string", "minLength": 1},
+    "submitted_at": {"type": "string", "format": "date-time"},
+    "side": {"enum": ["buy", "sell"]},
+    "submitted_qty": {"type": "number", "exclusiveMinimum": 0},
+    "reference_mid": {"type": "number", "exclusiveMinimum": 0},
+    "filled_qty": {"type": "number", "minimum": 0},
+    "average_fill_price": {"type": "number", "minimum": 0},
+    "maker_filled_qty": {"type": "number", "minimum": 0},
+    "taker_filled_qty": {"type": "number", "minimum": 0},
+    "fee": {"type": "number", "minimum": 0},
+    "mid_after_timeout": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "mid_after_5m": {"type": ["number", "null"], "exclusiveMinimum": 0}
+  },
+  "additionalProperties": true
+}

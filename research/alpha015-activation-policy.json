@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-10T07:52:00Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "DEFERRED_NOT_AN_EXPERIMENT",
+  "purpose": "Prevent premature testing of a high-turnover cross-sectional predictor on today's surviving assets.",
+  "primary_source": {
+    "citation": "Guo, Sang, Tu and Wang (2021), Cross-cryptocurrency Return Predictability",
+    "url": "https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=7900&context=lkcsb_research",
+    "reported_result": "Adaptive-LASSO long-short portfolios on Binance futures were reported profitable out of sample after stated transaction costs at slower intraday rebalance intervals.",
+    "transfer_risks": [
+      "the futures test is based on a short 2021 sample",
+      "the reported top-30 universe is not reconstructed point in time in the current project",
+      "market structure and Binance fee/execution conditions have changed",
+      "the model has high turnover and is especially sensitive to latency, spread, slippage, and feature timestamping"
+    ]
+  },
+  "activation_requirements": {
+    "point_in_time_universe_consecutive_days": 180,
+    "universe_protocol_status": "READY",
+    "minimum_cross_section_size_each_decision": 30,
+    "membership_lag": "use only the prior sealed daily universe snapshot",
+    "return_data_before_activation": "must not be downloaded, analyzed, or summarized for strategy performance",
+    "publisher_bound_inputs": [
+      "Binance USD-M 1m futures klines",
+      "Binance USD-M aggTrades needed for execution replay",
+      "publisher CHECKSUM for every archive",
+      "all instruments selected by historical snapshots, including later-delisted contracts"
+    ],
+    "execution_policy": "Base cost is 5 basis points all-in per unit of realized turnover per fill, including trading fee; do not add the fee twice. A flat entry plus flat exit therefore costs at least 10 basis points. Stress cost is 10 basis points per fill, or 20 basis points for a flat round trip. No VIP discount or maker fill credit is allowed without matching forward execution evidence.",
+    "execution_cost_floor": {
+      "basis": "reports/execution-calibration.json cost_reference",
+      "source_sha256": "da2404f428c62b35b7fab4e799f5019a173650522fc25e8d034fc014be42b6cf",
+      "base_all_in_basis_points_per_fill": 5.0,
+      "base_flat_round_trip_basis_points": 10.0,
+      "stress_all_in_basis_points_per_fill": 10.0,
+      "stress_flat_round_trip_basis_points": 20.0,
+      "includes_trading_fee": true,
+      "fee_must_not_be_added_again": true,
+      "limitations": [
+        "the calibration covers public-L2 long-entry observations from one temporal window",
+        "long exit, short entry, short exit, protective stops, strategy-trigger latency, and market impact remain unmeasured",
+        "the stress floor is not permission to trade live"
+      ]
+    },
+    "holding_and_rebalance_policy": {
+      "grid": "non-overlapping 13-minute UTC epoch grid",
+      "decision_information": "only returns from fully closed one-minute bars through decision minute t",
+      "entry": "first executable price at or after the t+1 minute boundary; the mandatory one-minute latency buffer forbids a fill inside decision minute t",
+      "exit": "close the whole cross-sectional portfolio 13 minutes after entry before forming the next portfolio",
+      "overlap": false,
+      "diagnostics": "record 1-minute, 5-minute, and 13-minute markouts, but only the preregistered non-overlapping 13-minute portfolio may determine the gate",
+      "rationale": "the one-minute forecast is ranked cross-sectionally and held for the paper-motivated 13-minute interval solely as a fixed cost-amortization transfer assumption"
+    },
+    "model_policy": "The exact predictor, training window, regularization selection, rebalance interval, latency buffer, portfolio weights, and costs must be preregistered before return archives are acquired.",
+    "sample_policy": "The first 120 consecutive universe days are development and the final 60 are locked validation; validation returns remain unread unless all development gates pass.",
+    "live_policy": "Even a locked-validation pass is only a sleeve candidate and must still pass portfolio monthly-return, MTM drawdown, ruin, bias, execution, and concentration gates."
+  },
+  "prohibited": [
+    "registering Experiment 0015 before every activation requirement passes",
+    "testing the paper's model on only BTC, ETH, BNB, SOL, and XRP",
+    "constructing past membership from today's listed symbols",
+    "choosing a rebalance interval after observing net returns",
+    "using the paper's historical transaction-cost assumption instead of current measured costs",
+    "using leverage to target 10% monthly returns"
+  ]
+}

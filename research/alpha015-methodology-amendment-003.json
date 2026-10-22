@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_METHOD_003_UTC_PHASE_BOUNDARY",
+  "registered_at_utc": "2026-10-11T06:20:00Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_BOUNDARY_AMENDMENT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "rule": {
+    "decision_grid": "10-minute UTC epoch grid",
+    "first_daily_decision": "00:00 UTC",
+    "last_daily_decision": "23:40 UTC",
+    "expected_decisions_per_complete_utc_day": 143,
+    "entry_latency_minutes": 1,
+    "holding_minutes": 10,
+    "phase_boundary": "entry and exit must have the same UTC date as the decision",
+    "reason": "A 23:50 decision would exit at 00:01 on the next UTC day and could read the first locked-validation return from the final development trade."
+  },
+  "unchanged": [
+    "720-minute causal training window may use earlier authorized historical rows",
+    "top-minus-bottom quintile construction",
+    "base and stress cost floors",
+    "120 development and 60 locked-validation evaluation days",
+    "no return acquisition or live trading is authorized"
+  ]
+}

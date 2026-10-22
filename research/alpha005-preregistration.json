@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-06T10:05:00Z",
+  "candidate": "ALPHA_005_FUNDING_EXTREME_REVERSAL",
+  "hypothesis_family": "funding_crowding_reversal",
+  "status": "PREREGISTERED_DIAGNOSTIC",
+  "hypothesis": "An extreme signed perpetual funding event, relative only to the preceding 90 funding events for that instrument, identifies crowded positioning that partially reverses over the next eight hours.",
+  "data_status": "All available Binance history is already project-seen; no interval may be called final unseen OOS.",
+  "universe": [
+    "BTC/USDT:USDT",
+    "ETH/USDT:USDT",
+    "BNB/USDT:USDT",
+    "SOL/USDT:USDT",
+    "XRP/USDT:USDT"
+  ],
+  "timeframe": "1h",
+  "development_timerange": "20210101-20240101",
+  "diagnostic_validation_timerange": "20240101-20260901",
+  "rules": {
+    "history_window_funding_events": 90,
+    "minimum_history_events": 60,
+    "upper_quantile": 0.95,
+    "lower_quantile": 0.05,
+    "positive_upper_extreme_action": "short",
+    "negative_lower_extreme_action": "long",
+    "maximum_holding_hours": 8,
+    "hard_stop": -0.02,
+    "leverage": 1.0,
+    "account_risk_fraction": 0.0025,
+    "position_adjustment": false,
+    "maximum_open_trades": 2
+  },
+  "costs": {
+    "base_fee_per_fill": 0.0005,
+    "double_fee_per_fill": 0.001,
+    "historic_funding_required": true
+  },
+  "development_gate": {
+    "organic_trades_minimum": 100,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.1,
+    "price_pnl_positive": true
+  },
+  "monthly_objective_is_promotion_gate": true,
+  "prohibited": [
+    "searching quantiles, holding hours, or stop distance after seeing results",
+    "dropping a losing asset or direction after seeing results",
+    "claiming final OOS from project-seen Binance history",
+    "increasing leverage to manufacture the 10 percent monthly target"
+  ]
+}

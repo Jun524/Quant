@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "WAITING_POINT_IN_TIME_UNIVERSE",
+  "experiment_registered": false,
+  "preregistration_authorized": false,
+  "return_data_authorized": false,
+  "current_consecutive_universe_days": 10,
+  "required_consecutive_universe_days": 180,
+  "days_remaining": 170,
+  "unresolved_methodology": [],
+  "checks": {
+    "candidate_identity_present": true,
+    "policy_is_deferred_not_experiment": true,
+    "candidate_screened_defer_high_priority": true,
+    "alpha015_registration_valid_or_absent": true,
+    "universe_data_integrity": true,
+    "universe_requirement_matches_policy": true,
+    "universe_protocol_ready": false,
+    "point_in_time_days_minimum": false,
+    "prior_day_activation_lock_verified": false,
+    "methodology_audit_current": true,
+    "methodology_artifact_integrity": true,
+    "methodology_contract_consistency": true,
+    "methodology_resolved_before_preregistration": true,
+    "screening_did_not_select_candidate_for_immediate_test": true
+  },
+  "next_action": "Continue sealed daily universe collection; do not open Experiment 0015.",
+  "warning": "Only a verified preregistration may authorize source-bound development data acquisition; locked validation and live trading remain closed."
+}

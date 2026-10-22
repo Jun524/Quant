@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "kind": "HISTORICAL_EVIDENCE_GOVERNANCE_ONLY",
+  "checks": [
+    {
+      "name": "schema_version",
+      "passed": true,
+      "required": 1,
+      "actual": 1
+    },
+    {
+      "name": "policy_active",
+      "passed": true,
+      "required": "ACTIVE",
+      "actual": "ACTIVE"
+    },
+    {
+      "name": "live_order_authorization_closed",
+      "passed": true,
+      "required": "CLOSED",
+      "actual": "CLOSED"
+    },
+    {
+      "name": "archival_is_non_promotional",
+      "passed": true,
+      "required": "DIAGNOSTIC_ONLY",
+      "actual": "DIAGNOSTIC_ONLY"
+    },
+    {
+      "name": "archival_requires_publisher_checksums",
+      "passed": true,
+      "required": true,
+      "actual": true
+    },
+    {
+      "name": "archival_requires_preregistered_costs",
+      "passed": true,
+      "required": true,
+      "actual": true
+    },
+    {
+      "name": "historical_pit_requires_membership_source",
+      "passed": true,
+      "required": true,
+      "actual": true
+    },
+    {
+      "name": "historical_pit_cannot_fallback_to_current_symbols",
+      "passed": true,
+      "required": "FORBIDDEN",
+      "actual": "FORBIDDEN"
+    },
+    {
+      "name": "historical_decision_feature_availability_rule",
+      "passed": true,
+      "required": "event timestamp plus no-later-than-decision availability evidence",
+      "actual": "A historical decision feature requires both an event timestamp and evidence that it was available no later than the decision timestamp."
+    },
+    {
+      "name": "historical_open_interest_blocked_without_publication_time",
+      "passed": true,
+      "required": "UNVERIFIED_PUBLICATION_TIME and not eligible as a historical decision feature",
+      "actual": {
+        "availability_status": "UNVERIFIED_PUBLICATION_TIME",
+        "allowed_as_historical_decision_feature": false,
+        "allowed_uses": [
+          "descriptive archive quality checks",
+          "postmortem explanation for already sealed failed trials"
+        ],
+        "unblock_requirements": [
+          "source-specific publication or receive timestamp",
+          "timestamp-to-decision availability rule",
+          "gap and revision audit",
+          "preregistered execution delay"
+        ]
+      }
+    },
+    {
+      "name": "forward_open_interest_requires_observed_provenance",
+      "passed": true,
+      "required": "observed endpoint, receive time, append-only capture, and decision delay",
+      "actual": {
+        "allowed_as_forward_decision_feature": true,
+        "required_evidence": [
+          "source endpoint",
+          "local UTC receive timestamp",
+          "append-only raw capture",
+          "preregistered decision delay"
+        ]
+      }
+    },
+    {
+      "name": "forward_confirmation_retained",
+      "passed": true,
+      "required": 180,
+      "actual": 180
+    },
+    {
+      "name": "forward_is_non_live",
+      "passed": true,
+      "required": "REVIEW_ONLY",
+      "actual": "REVIEW_ONLY"
+    }
+  ],
+  "historical_point_in_time_available_now": false,
+  "live_order_authorization": "CLOSED",
+  "warning": "A PASS validates evidence boundaries only. It does not validate a strategy, return, or live-trading eligibility.",
+  "policy_path": "research/historical-research-policy.json",
+  "archival_diagnostic_readiness": {
+    "status": "READY_DIAGNOSTIC_ONLY",
+    "universe_audit": "PASS",
+    "universe_audit_universe_bound": true,
+    "next_open_execution_coverage": "PASS",
+    "next_open_execution_coverage_universe_bound": true,
+    "one_day_funding_coverage": "PASS",
+    "one_day_funding_coverage_universe_bound": true,
+    "funding_ledger_replay": "PASS",
+    "funding_ledger_replay_universe_bound": true,
+    "cost_policy": "PASS",
+    "release_train": "PASS",
+    "promotion_capability": "DIAGNOSTIC_ONLY"
+  },
+  "historical_release_train": {
+    "status": "PASS",
+    "next_withheld_partition": "ARCHIVAL_2024H2_WITHHELD",
+    "warning": "A withheld partition may be accessed only after an independently preregistered candidate and a sealed prior-partition verdict."
+  },
+  "historical_point_in_time_replication": {
+    "status": "NOT_READY",
+    "missing": [
+      "contemporaneous historical contract-status source",
+      "historical bid-ask spread source",
+      "historical orderbook-depth source"
+    ],
+    "warning": "The reconstructed daily archive universe is suitable for archival diagnostics, not point-in-time promotion evidence."
+  }
+}

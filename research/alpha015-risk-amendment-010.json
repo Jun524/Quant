@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_RISK_010_MINUTE_MARK_TO_MARKET",
+  "registered_at_utc": "2026-10-11T11:42:00Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_RISK_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "rules": {
+    "mark_frequency": "For every complete UTC evaluation day, replay the account-equity path at all nine closed one-minute boundaries strictly inside each of the 143 ten-minute holding windows, plus every execution boundary and the final liquidation. The expected interior-mark count is exactly 1287.",
+    "boundary_prices": "Entry, exit, and shared rebalance boundary marks use the same first verified aggregate-trade price used for execution. A one-minute kline may never replace a boundary execution reference.",
+    "interior_prices": "Interior marks use only the matching fully closed one-minute price. Missing, duplicate, extra, non-finite, or wrong-symbol marks reject the complete day.",
+    "equity_path": "At a shared boundary record pre-rebalance equity, then record post-rebalance equity after direct net-turnover cost at the same timestamp. Include funding only after its event time and apply final liquidation cost after the last pre-exit mark.",
+    "risk_gate": "Both the 5-bp base and 10-bp stress paths must independently have maximum minute mark-to-market drawdown at or below 15 percent during development and locked validation.",
+    "conservatism": "This is a one-minute mark-to-market drawdown measure, not a claim to have observed every sub-minute worst tick. Any later portfolio promotion still requires its separate daily MTM, leverage-adjusted MAE, ruin, and deterministic-stress gates."
+  },
+  "unchanged": [
+    "all model, universe, timing, cost, funding, and direct-rebalance rules",
+    "the 120/60 development and locked-validation split",
+    "no return acquisition before verified preregistration",
+    "live order authorization remains CLOSED"
+  ]
+}

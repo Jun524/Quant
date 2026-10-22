@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "HISTORICAL_ARCHIVAL_COST_ACCOUNTING_V1",
+  "status": "PREREGISTERED",
+  "scope": "Any future diagnostic-only strategy evaluation using HISTORICAL_UNIVERSE_RECONSTRUCTION_2024H1.",
+  "execution": {
+    "signal_observation": "A daily signal may use only candles closed at the decision-day UTC close.",
+    "entry_price": "next available UTC daily open",
+    "exit_price": "next available UTC daily open",
+    "fills_per_round_trip": 2,
+    "base_fee_per_fill": 0.0005,
+    "stress_fee_per_fill": 0.001,
+    "base_slippage_per_fill": 0.0005,
+    "stress_slippage_per_fill": 0.001,
+    "cost_application": "Deduct fee and adverse slippage on every entry, rebalance, and exit fill; no netting across symbols unless the execution model proves it."
+  },
+  "funding": {
+    "source": "Binance data.binance.vision USD-M monthly fundingRate archive with publisher CHECKSUM",
+    "accounting": "At every funding event within [entry, exit), subtract signed position weight times funding rate; positive rates are paid by longs and received by shorts.",
+    "missing_data": "REJECT_EVALUATION_DAY",
+    "zero_funding_assumption": "FORBIDDEN"
+  },
+  "risk": {
+    "maximum_gross_leverage": 1.0,
+    "liquidation_claim": "FORBIDDEN_FROM_DAILY_OHLC_ONLY",
+    "promotion_capability": "DIAGNOSTIC_ONLY"
+  },
+  "prohibited": [
+    "same-close execution after observing that close",
+    "zero funding fallback",
+    "fee-only result labelled as net return",
+    "live promotion"
+  ],
+  "live_order_authorization": "CLOSED"
+}

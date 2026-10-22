@@ -1,0 +1,179 @@
+{
+  "created_at": "2026-09-18T05:45:27.679830+00:00",
+  "experiment_id": 1,
+  "hypothesis": "BTC daily 50/200 regime-gated 4h long breakout has positive net edge after conservative costs.",
+  "reason": "Baseline Alpha #1 formal registration; no parameter selection performed.",
+  "result": {
+    "cost_stress": {
+      "calmar": 9.382578237071554,
+      "daily_geometric_return": 3.5821314646078406e-05,
+      "estimated_fee_cost": 0.6343551214,
+      "expectancy": 3.145408872857142,
+      "forced_exit": {
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -1.682376486576403,
+      "funding_paid": 1.682376486576403,
+      "funding_received": 0.0,
+      "max_drawdown": 0.007373875590000012,
+      "organic": {
+        "losses": 3,
+        "net_profit": 22.01786211,
+        "net_return": 0.022017862109999998,
+        "profit_factor": 2.996871497304773,
+        "trades": 7,
+        "wins": 4
+      },
+      "positive_day_ratio": 0.006578947368421052,
+      "sharpe": 0.08647418839119997,
+      "sortino": 5.201074241466561,
+      "source": "/tmp/research-alpha1.B5FBot/stress/backtest-result-2026-09-18_05-44-52.zip",
+      "starting_balance": 1000.0,
+      "strategy": "FuturesBtcRegimeRiskBudgetLong",
+      "timerange": "20250101-20260901",
+      "turnover": 0.6343551213999999
+    },
+    "development": {
+      "calmar": 9.851421575001911,
+      "daily_geometric_return": 9.021434976519416e-05,
+      "estimated_fee_cost": 0.9728944691324998,
+      "expectancy": 4.449394046,
+      "forced_exit": {
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -13.723300787915893,
+      "funding_paid": 15.667686825926957,
+      "funding_received": 1.944386038011063,
+      "max_drawdown": 0.018261926240072182,
+      "organic": {
+        "losses": 15,
+        "net_profit": 88.98788092,
+        "net_return": 0.08898788092,
+        "profit_factor": 2.725991245437089,
+        "trades": 20,
+        "wins": 5
+      },
+      "positive_day_ratio": 0.004232804232804233,
+      "sharpe": 0.08609688713725772,
+      "sortino": 1.667812943586218,
+      "source": "/tmp/research-alpha1.B5FBot/development/backtest-result-2026-09-18_05-44-44.zip",
+      "starting_balance": 1000.0,
+      "strategy": "FuturesBtcRegimeRiskBudgetLong",
+      "timerange": "20220601-20250101",
+      "turnover": 1.9457889382649998
+    },
+    "evaluated_at": "2026-09-18T05:45:27.679562+00:00",
+    "gate": {
+      "checks": [
+        {
+          "actual": 0.08898788092,
+          "name": "development_net_positive",
+          "passed": true,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.02233472281,
+          "name": "oos_net_positive",
+          "passed": true,
+          "required": "> 0.0",
+          "severity": "fail"
+        },
+        {
+          "actual": 3.0490797554848976,
+          "name": "oos_profit_factor",
+          "passed": true,
+          "required": ">= 1.2",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.0072896635099999685,
+          "name": "oos_max_drawdown",
+          "passed": true,
+          "required": "<= 0.15",
+          "severity": "fail"
+        },
+        {
+          "actual": 0.022017862109999998,
+          "name": "cost_stress_net_positive",
+          "passed": true,
+          "required": "> 0",
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "lookahead",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": true,
+          "name": "recursive",
+          "passed": true,
+          "required": true,
+          "severity": "fail"
+        },
+        {
+          "actual": 7,
+          "name": "oos_sample_size",
+          "passed": false,
+          "required": ">= 20",
+          "severity": "review"
+        }
+      ],
+      "policy": {
+        "max_drawdown": 0.15,
+        "min_oos_net_return": 0.0,
+        "min_oos_trades": 20,
+        "min_profit_factor": 1.2
+      },
+      "status": "REVIEW"
+    },
+    "validation": {
+      "calmar": 9.627553442997929,
+      "daily_geometric_return": 3.633117901724603e-05,
+      "estimated_fee_cost": 0.31701913035,
+      "expectancy": 3.1906746871428573,
+      "forced_exit": {
+        "losses": 0,
+        "net_profit": 0,
+        "net_return": 0.0,
+        "profit_factor": null,
+        "trades": 0,
+        "wins": 0
+      },
+      "funding_net": -1.682376486576403,
+      "funding_paid": 1.682376486576403,
+      "funding_received": 0.0,
+      "max_drawdown": 0.0072896635099999685,
+      "organic": {
+        "losses": 3,
+        "net_profit": 22.33472281,
+        "net_return": 0.02233472281,
+        "profit_factor": 3.0490797554848976,
+        "trades": 7,
+        "wins": 4
+      },
+      "positive_day_ratio": 0.006578947368421052,
+      "sharpe": 0.0876851191919583,
+      "sortino": 5.3028437129357044,
+      "source": "/tmp/research-alpha1.B5FBot/validation/backtest-result-2026-09-18_05-44-48.zip",
+      "starting_balance": 1000.0,
+      "strategy": "FuturesBtcRegimeRiskBudgetLong",
+      "timerange": "20250101-20260901",
+      "turnover": 0.6340382606999999
+    }
+  },
+  "strategy": "FuturesBtcRegimeRiskBudgetLong"
+}

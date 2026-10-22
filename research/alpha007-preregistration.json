@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-06T10:25:00Z",
+  "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+  "status": "PREREGISTERED_DATA_ACCUMULATION",
+  "hypothesis_family": "limit_order_book_microstructure",
+  "hypothesis": "Persistent same-direction top-five depth imbalance and aggressive trade-flow imbalance predict the 60-second BTCUSDT perpetual mid-price sufficiently to improve passive quote selection after realistic queue nonfills and adverse selection.",
+  "instrument": "BTCUSDT USD-M perpetual",
+  "data": {
+    "source": "Binance public depth@100ms, aggTrade, and REST depth snapshots",
+    "api_key": false,
+    "orders_submitted": false,
+    "local_book_rule": "official U/u/pu sequence synchronization with resnapshot on every gap",
+    "development": "first 7 complete UTC collection days",
+    "calibration": "next 3 complete UTC collection days; operational validation only",
+    "locked_oos": "next 7 complete UTC collection days",
+    "minimum_coverage_per_day": 0.95
+  },
+  "fixed_signal": {
+    "decision_interval_seconds": 1,
+    "top_book_levels": 5,
+    "depth_imbalance_absolute_minimum": 0.60,
+    "aggressive_flow_window_seconds": 5,
+    "aggressive_flow_imbalance_absolute_minimum": 0.50,
+    "depth_and_flow_sign_must_match": true,
+    "minimum_signal_spacing_seconds": 60,
+    "shadow_notional_usdt": 50,
+    "quote": "post-only at same-direction best bid or best ask",
+    "queue_timeout_seconds": 3,
+    "markout_horizons_seconds": [5, 30, 60, 300],
+    "entry_fee": 0.0002,
+    "conservative_exit_fee": 0.0005
+  },
+  "locked_gate": {
+    "eligible_shadow_orders_minimum": 1000,
+    "queue_estimated_fills_minimum": 200,
+    "net_60s_markout_after_entry_and_exit_fees_positive": true,
+    "bootstrap_95pct_lower_bound_positive": true,
+    "plus_100ms_latency_stress_positive": true,
+    "single_hour_profit_concentration_maximum": 0.20,
+    "sequence_gap_or_missing_coverage_is_fail_closed": true,
+    "insufficient_locked_signals_after_17_complete_days_is_fail": true
+  },
+  "pre_sample_amendments": [
+    {
+      "registered_at_utc": "2026-10-06T11:20:00Z",
+      "sample_state": "0 complete days; the sole incomplete-day signal remains excluded",
+      "reason": "remove two optimistic execution assumptions before any development sample exists",
+      "changes": [
+        "all decisions and flow windows use local received_at availability rather than exchange event time",
+        "taker exit markout uses executable best bid for a long and best ask for a short instead of mid-price",
+        "signal spacing and flow state continue across hourly collector chunk boundaries",
+        "+100ms latency order time is the first locally available book update after the latency boundary",
+        "the evaluator streams previous/current/next chunks so five-minute horizons are preserved without loading the full campaign into RAM"
+      ],
+      "threshold_changes": false
+    },
+    {
+      "registered_at_utc": "2026-10-06T16:56:09Z",
+      "sample_state": "0 complete days; all seven incomplete-day signals remain excluded",
+      "reason": "remove a mixed-clock missing-data check before any development sample exists",
+      "changes": [
+        "future markout gap validation uses local received_at availability, matching the decision and fill clock",
+        "each future run records collector, order-book, evaluator, fill-model, and preregistration SHA-256 fingerprints; mixed protocol versions inside evaluated complete days fail closed",
+        "each future run compares UTC active duration with monotonic active duration and fails the chunk when clock drift or sleep exceeds the fixed five-percent-or-five-second tolerance",
+        "campaign preflight requires a healthy five-minute canary whose complete protocol fingerprint matches the current collector and evaluator"
+      ],
+      "threshold_changes": false
+    }
+  ],
+  "prohibited": [
+    "using candle touches as maker fills",
+    "crediting queue cancellations as fills",
+    "changing thresholds after development results",
+    "opening the locked period before development and calibration are sealed",
+    "claiming the hypothesis is profitable before the locked gate has enough fills",
+    "submitting live orders during this study"
+  ],
+  "research_basis": [
+    "Cartea, Donnelly, and Jaimungal: order-book imbalance can improve quote placement by reducing adverse selection",
+    "Stoikov: microprice adjusts mid-price using touch imbalance",
+    "Binance USD-M official local-order-book synchronization rules"
+  ]
+}

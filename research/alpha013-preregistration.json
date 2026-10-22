@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-09T16:39:50Z",
+  "amended_before_first_sample_at_utc": "2026-10-11T05:02:43Z",
+  "candidate": "ALPHA_013_FUNDING_DISPERSION_REVERSAL",
+  "status": "PREREGISTERED_FORWARD_ONLY",
+  "hypothesis_family": "cross_sectional_funding_dispersion_price_reversal",
+  "hypothesis": "When the trailing seven-day funding differential among five major Binance USD-M perpetuals is at least 25 basis points, the lowest-funding contract outperforms the highest-funding contract over the following seven days strongly enough for an equal-notional long-low/short-high spread to retain positive price expectancy after actual funding, taker fees, and modeled slippage.",
+  "provenance": {
+    "parent_experiment": 9,
+    "post_hoc_hypothesis": true,
+    "reason": "Alpha #9 failed its preregistered carry mechanism because funding did not exceed fees and slippage, but its already-observed development result contained positive residual price PnL. Alpha #13 tests that price-reversal interpretation only on observations not available when this file was registered.",
+    "historical_alpha009_price_pnl_is_discovery_only": true,
+    "historical_or_locked_data_may_authorize_promotion": false,
+    "family_trial": 2
+  },
+  "research_basis": [
+    {
+      "source": "Chi, Hao, Hu and Ran (2023), An empirical investigation on risk factors in cryptocurrency futures",
+      "url": "https://api.repository.cam.ac.uk/server/api/core/bitstreams/50f9c065-2731-4ab3-bba9-3ec4dcfc7ef7/content",
+      "sha256": "fb2c7e479f97ea8c6e74e0cf89578be3f82fe256a61d18f886bb0a1fc7b0ca7b",
+      "relevance": "Cross-sectional futures basis is reported as a stronger short-horizon predictor than momentum, but the paper uses dated OKEx quarterly futures and a wider universe; it motivates testing, not assuming transfer to Binance perpetuals."
+    },
+    {
+      "source": "Cao, Luo, Cheng and Dong (2026), Anatomy of Cryptocurrency Perpetual Futures Returns",
+      "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6365329",
+      "relevance": "A recent perpetual-futures study reports that log basis and a price-volume factor explain many candidate predictors; this makes basis/crowding attribution and strict fresh-data validation necessary."
+    },
+    {
+      "source": "Binance public data repository",
+      "url": "https://github.com/binance/binance-public-data/",
+      "relevance": "Publisher-checksummed USD-M 1h trade-price and mark-price archives are the required forward price source; monthly funding archives reconcile provisional REST funding rows."
+    }
+  ],
+  "fresh_sample": {
+    "rule": "No observation with a timestamp at or before registered_at_utc can contribute PnL or count toward a gate.",
+    "first_eligible_decision": "2026-10-19T04:00:00Z",
+    "first_eligible_decision_reason": "The first Monday decision for which the complete seven-day signal lookback is later than preregistration.",
+    "development_weeks": 30,
+    "locked_validation_weeks": 26,
+    "validation_opens_only_after_all_development_gates_pass": true,
+    "overlap_between_development_and_validation": false
+  },
+  "fixed_signal_and_execution": {
+    "universe": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "BNBUSDT",
+      "SOLUSDT",
+      "XRPUSDT"
+    ],
+    "decision_time": "Monday 04:00 UTC",
+    "funding_lookback_days": 7,
+    "score": "sum of actual funding events with timestamp in (decision - 7 days, decision]",
+    "minimum_funding_events_per_symbol": 21,
+    "long": "lowest score, alphabetical symbol as exact-tie breaker",
+    "short": "highest score, alphabetical symbol as exact-tie breaker",
+    "minimum_score_spread": 0.0025,
+    "entry": "next 1h candle open at Monday 05:00 UTC",
+    "holding_days": 7,
+    "exit": "Monday 05:00 UTC after seven days, unless an individual 10% adverse stop is reached first",
+    "hard_stop_per_leg": 0.10,
+    "modeled_liquidation_adverse_move": 0.80,
+    "leg_notional_fraction_of_current_equity": 0.20,
+    "gross_notional_fraction": 0.40,
+    "leverage": 1.0,
+    "maximum_concurrent_spreads": 1,
+    "position_adjustment": false,
+    "panic_override": "No discretionary override; the fixed 10% per-leg stop and portfolio gates are the preregistered protection."
+  },
+  "cost_and_accounting": {
+    "base_fee_per_fill": 0.0005,
+    "base_slippage_per_fill": 0.0002,
+    "double_fee_stress_per_fill": 0.001,
+    "slippage_stress_per_fill": 0.0005,
+    "funding": "actual event rate times contemporaneous mark-price notional; long pays positive funding and short receives it",
+    "primary_edge_component": "raw relative price PnL",
+    "funding_may_rescue_negative_price_pnl": false,
+    "mark_to_market_required": true,
+    "mark_to_market_frequency": "each completed 1h candle using adverse exit slippage and exit fee",
+    "profit_factor_unit": "closed weekly two-leg spread",
+    "liquidation_or_nonpositive_equity": "hard failure"
+  },
+  "development_gate": {
+    "eligible_weeks_minimum": 30,
+    "closed_legs_minimum": 60,
+    "net_return_positive": true,
+    "raw_relative_price_pnl_positive": true,
+    "price_pnl_after_base_fees_and_slippage_positive": true,
+    "profit_factor_minimum": 1.20,
+    "double_fee_net_positive": true,
+    "five_bps_slippage_net_positive": true,
+    "first_half_net_positive": true,
+    "second_half_net_positive": true,
+    "maximum_mark_to_market_drawdown_maximum": 0.15,
+    "largest_winning_week_concentration_maximum": 0.25,
+    "zero_liquidations": true,
+    "all_funding_rows_reconciled_to_publisher_monthly_archives": true,
+    "monthly_target_interpretation": "This may qualify only as a portfolio sleeve. Live promotion still requires the combined locked-forward portfolio to meet the platform's 10% geometric monthly target and all risk gates."
+  },
+  "locked_validation_gate": {
+    "eligible_weeks_minimum": 26,
+    "closed_legs_minimum": 52,
+    "net_return_positive": true,
+    "raw_relative_price_pnl_positive": true,
+    "price_pnl_after_base_fees_and_slippage_positive": true,
+    "profit_factor_minimum": 1.25,
+    "double_fee_net_positive": true,
+    "five_bps_slippage_net_positive": true,
+    "maximum_mark_to_market_drawdown_maximum": 0.12,
+    "largest_winning_week_concentration_maximum": 0.20,
+    "zero_liquidations": true
+  },
+  "data_integrity": {
+    "trade_price": "Binance USD-M daily 1h kline archives plus publisher CHECKSUM",
+    "mark_price": "Binance USD-M daily 1h markPriceKlines archives plus publisher CHECKSUM",
+    "funding_provisional": "Binance public /fapi/v1/fundingRate response sealed after each complete UTC day",
+    "funding_final": "Binance USD-M monthly fundingRate archive plus publisher CHECKSUM",
+    "forward_report_source_binding": "Every evaluated UTC day is bound by its day-manifest SHA-256; the ordered day/manifest inventory and current protocol digest are recomputed from sealed sources whenever report currency is assessed.",
+    "missing_or_changed_archive": "fail closed; never interpolate",
+    "funding_reconciliation_mismatch": "fail closed",
+    "future_information": "Signals use funding timestamps at or before 04:00 UTC; execution and PnL begin at the following 05:00 UTC open."
+  },
+  "prohibited": [
+    "using Alpha #9's already-seen development or locked interval as Alpha #13 confirmation",
+    "moving the 25bp threshold, seven-day lookback, Monday decision, one-hour execution delay, holding period, stop, costs, sizing, or universe after forward collection begins",
+    "dropping a losing symbol or leg after observing it",
+    "calling equal notional exactly beta neutral",
+    "crediting favorable funding when raw relative price PnL is non-positive",
+    "opening locked validation before every development gate passes",
+    "raising leverage or notional to manufacture the monthly return target",
+    "placing real orders before the platform-wide live preflight passes"
+  ]
+}

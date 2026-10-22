@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_DATA_005_FUNDING_ACCOUNTING",
+  "registered_at_utc": "2026-10-11T10:22:41Z",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "status": "PRE_DATA_FAIL_CLOSED_FUNDING_CONTRACT",
+  "evidence_state": {
+    "experiment_0015_open": false,
+    "real_return_archives_downloaded": false,
+    "performance_results_observed": false
+  },
+  "official_sources": {
+    "funding_history_api": "https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-History",
+    "publisher_archive_root": "https://data.binance.vision/data/futures/um/monthly/fundingRate/",
+    "public_data_repository": "https://github.com/binance/binance-public-data"
+  },
+  "rules": {
+    "development_source": "Fetch the public funding-history API separately for each authorized symbol and UTC evaluation day, validate and seal canonical bytes, and never request a locked-validation day during development.",
+    "required_fields": [
+      "symbol",
+      "fundingTime",
+      "fundingRate",
+      "markPrice"
+    ],
+    "event_validation": "Require a non-empty, unique, chronological, same-symbol, same-UTC-day response with finite funding rates and positive mark prices.",
+    "accounting": "For each event in [entry, exit), funding portfolio PnL is the negative sum of position weight multiplied by funding rate; positive rates are paid by longs and received by shorts.",
+    "final_reconciliation": "After locked validation is legitimately opened, reconcile the complete 180-day daily API set to Binance monthly fundingRate ZIP files and publisher CHECKSUMs before any final verdict.",
+    "unreconciled_result": "Development may be evaluated provisionally, but no locked-validation PASS or promotion review may use unreconciled funding."
+  },
+  "supersedes": [
+    "any interpretation that funding may be assumed to be zero",
+    "the data amendment 004 inventory insofar as it omitted evaluation-day funding files"
+  ],
+  "unchanged": [
+    "base and stress trading-cost floors",
+    "120 development and 60 locked-validation evaluation days",
+    "no return acquisition before a verified preregistration",
+    "no live trading"
+  ]
+}

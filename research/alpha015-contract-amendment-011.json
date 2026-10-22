@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_CONTRACT_AMENDMENT_011",
+  "recorded_at_utc": "2026-10-19T06:25:00Z",
+  "status": "PRE_RETURN_CONTRACT_REPAIR",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "authorization_boundary": "No Alpha 015 return archive, strategy PnL, development result, or locked-validation result has been acquired or inspected. This amendment is permitted only before Experiment 0015 preregistration.",
+  "problem": [
+    "The immutable base activation policy predates methodology amendment 002 and still describes the superseded 13-minute grid and holding convention.",
+    "The methodology audit bound its execution-cost reference to a mutable generic report path. Re-running an unrelated calibration could therefore invalidate or silently alter the pre-registration contract.",
+    "Three immutable public-L2 long-entry calibration receipts report descriptive cost floors of 5, 9, and 6 basis points; retaining 5 basis points as the base floor would be less conservative than the worst observed receipt."
+  ],
+  "authoritative_contract": {
+    "cadence": {
+      "decision_grid_minutes": 10,
+      "entry_latency_minutes": 1,
+      "holding_minutes": 10,
+      "description": "Use the already-approved amendment-002 convention: a non-overlapping 10-minute UTC epoch decision grid, a one-minute latency buffer, and a 10-minute holding interval. The superseded 13-minute text remains historical context only."
+    },
+    "execution_calibration": {
+      "path": "reports/execution-calibration-alpha001-entry-20261013T065131Z.json",
+      "sha256": "ba4f36d60d6a9c193fa6a3e60ba51c02b533c02b520e0f9324ee7e9f0f46d014",
+      "source_scope": "diagnostic-only public-L2 long-entry calibration; it is not live-promotion evidence",
+      "observed_descriptive_floor_basis_points": 9.0,
+      "measured_scopes": [
+        "long_entry"
+      ],
+      "required_unmeasured_scopes": [
+        "long_exit",
+        "short_entry",
+        "short_exit",
+        "protective_stop"
+      ],
+      "promotion_eligible": false
+    },
+    "costs": {
+      "base_all_in_basis_points_per_unit_realized_turnover": 10.0,
+      "stress_all_in_basis_points_per_unit_realized_turnover": 20.0,
+      "includes_trading_fee": true,
+      "fee_must_not_be_added_again": true,
+      "rationale": "The base rounds the worst observed 9bp long-entry receipt up to the next conservative 10bp band. The stress cost doubles that conservative base. Neither value grants maker credit or an execution-path pass."
+    }
+  },
+  "nonchanges": [
+    "The candidate remains deferred and Experiment 0015 remains unregistered.",
+    "The 180 consecutive prior-day point-in-time universe requirement, 120/60 development-validation split, source-bound archive rules, model family, lambda grid, quintile construction, funding accounting, and all gates are unchanged.",
+    "No result is selected, discarded, or interpreted by this amendment."
+  ],
+  "prohibited": [
+    "acquiring or inspecting returns before activation and preregistration",
+    "reducing these costs after observing strategy returns",
+    "treating the calibration receipt as complete order-path or live-trading evidence"
+  ]
+}

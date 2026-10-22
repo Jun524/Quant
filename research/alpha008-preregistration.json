@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-06T11:30:00Z",
+  "candidate": "ALPHA_008_TIME_SERIES_MOMENTUM",
+  "status": "FAIL_DEVELOPMENT",
+  "hypothesis_family": "monthly_time_series_momentum_with_volatility_scaling",
+  "hypothesis": "A low-turnover, per-asset 180-day trend sign held for 28 days across five major USD-M perpetuals retains positive net expectancy after fees and funding when position weights are set from ex-ante 60-day volatility.",
+  "independence_from_alpha006": "Alpha 006 ranked assets against each other every week. Alpha 008 makes an absolute sign decision independently for every asset once per month and sizes by prior volatility; no cross-sectional rank is used.",
+  "research_basis": [
+    {
+      "title": "Time series momentum",
+      "authors": "Moskowitz, Ooi, and Pedersen",
+      "publication": "Journal of Financial Economics 104(2), 2012",
+      "url": "https://doi.org/10.1016/j.jfineco.2011.11.003",
+      "adaptation_note": "The paper studies diversified futures rather than crypto; transfer to five crypto perpetuals is an unproven hypothesis, not borrowed evidence."
+    }
+  ],
+  "data_status": "Static five-asset Binance history is project-seen and survivor-biased; development can reject the candidate but cannot produce final OOS approval.",
+  "universe": ["BTC", "ETH", "BNB", "SOL", "XRP"],
+  "rules": {
+    "decision_time": "first 4h candle at 00:00 UTC on calendar day 1",
+    "signal": "long when completed daily close / close 180 days ago - 1 > 0; short when < 0",
+    "realized_volatility": "60 completed daily log returns annualized by sqrt(365)",
+    "portfolio_volatility_target": 0.20,
+    "per_asset_volatility_budget": "0.20 / sqrt(5)",
+    "maximum_equity_weight_per_asset": 0.25,
+    "maximum_holding_days": 28,
+    "hard_stop": -0.15,
+    "leverage": 1.0,
+    "position_adjustment": false,
+    "maximum_open_trades": 5
+  },
+  "development_timerange": "20220101-20250101",
+  "locked_timerange": "20250101-20260901",
+  "development_gate": {
+    "organic_trades_minimum": 100,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.10,
+    "price_pnl_positive": true,
+    "maximum_drawdown": 0.20
+  },
+  "costs": {
+    "base_fee_per_fill": 0.0005,
+    "double_fee_per_fill_if_development_passes": 0.001,
+    "funding": "Freqtrade historical funding included and reported separately"
+  },
+  "observed_result": {
+    "result_file": "user_data/backtest_results/backtest-result-2026-10-06_11-15-06.zip",
+    "organic_trades": 110,
+    "net_return": -0.06548757874,
+    "profit_factor": 0.9350425601,
+    "maximum_drawdown": 0.2797100713,
+    "price_pnl_estimate": -18.6767471154,
+    "trading_fees": -13.5125337504,
+    "funding_pnl": -33.2982978741,
+    "net_pnl": -65.48757874,
+    "long_net_pnl": 90.80871391,
+    "short_net_pnl": -156.29629265,
+    "stop_loss_exits": 46,
+    "failed_gates": ["net return > 0", "profit factor >= 1.10", "maximum drawdown <= 0.20", "price PnL > 0"],
+    "locked_timerange_opened": false,
+    "post_result_rule_changes": false
+  },
+  "prohibited": [
+    "opening the locked timerange before the development gate passes",
+    "changing 180-day signal, 60-day volatility, 28-day hold, stop, cap, rebalance date, or asset list after seeing development",
+    "dropping the losing direction or assets after seeing results",
+    "using leverage to force the monthly target",
+    "claiming final OOS from this survivor-biased universe"
+  ]
+}

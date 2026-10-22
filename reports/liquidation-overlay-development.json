@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "candidate": "RISK_OVERLAY_001_OBSERVED_LIQUIDATION_SHOCK",
+  "generated_at_utc": "2026-10-22T04:43:23.798244+00:00",
+  "protocol_sha256": {
+    "research/liquidation-telemetry-policy.json": "fef4e8df5ff5888224af645168037a1f6b515136639818988b36f54777bf1ba4",
+    "quant/research/liquidation_telemetry.py": "5819144e62cf4ca77d6f572050aaf9ecf17aa1d7b4b3076c520168b7777aa5ac",
+    "scripts/collect_liquidation_telemetry.py": "3ceb7a40f7868ac17209b58e1b3bf4f3c3d09d5672a8d02f76118ce454d82abc",
+    "quant/research/liquidation_overlay.py": "c62a6171ee0c510ef34e30bbfbeb80fcfca1ff734942c6a721da27cf8b86fac4",
+    "scripts/analyze_liquidation_overlay.py": "5d625998cb8d038b0798de9d2365471f8256fe068d5b0078805d4cafd449fc45",
+    "scripts/open_liquidation_overlay_validation.py": "dc2492ea533fcda815b9b628a18b872bd8e859c5a946348ede8a9e5356a117aa",
+    "scripts/analyze_liquidation_overlay_validation.py": "6b623085e753865e202d6b52b0ee4843d6e01dd8aa0b30939ab6e2b38da4021b"
+  },
+  "complete_utc_days": 11,
+  "required_complete_utc_days": 60,
+  "locked_validation_opened": false,
+  "status": "ACCUMULATING",
+  "performance_calculated": false
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "kind": "ALPHA013_SOURCE_BOUND_SIGNAL_PANEL",
+  "status": "ACCUMULATING",
+  "promotion_eligible": false,
+  "live_order_authorization": "CLOSED",
+  "generated_at_utc": "2026-10-19T05:45:17.700655+00:00",
+  "panel": {
+    "path": "research/alpha013/signal-panel.csv",
+    "sha256": "b3e4102b156ea1301a3167e2a9fb90e051b54baac45b19ba7cf4d22a1d75fde0",
+    "header": [
+      "decision_at",
+      "forward_start_at",
+      "forward_end_at",
+      "symbol",
+      "signal",
+      "forward_return"
+    ]
+  },
+  "coverage": {
+    "completed_decisions": 0,
+    "threshold_eligible_decisions": 0,
+    "incomplete_funding_decisions": 0,
+    "rows": 0,
+    "first_completed_decision_at": null,
+    "last_completed_decision_at": null
+  },
+  "source_integrity": {
+    "sealed_days": 8,
+    "first_day": "2026-10-10",
+    "last_day": "2026-10-17",
+    "day_manifests": [
+      {
+        "day": "2026-10-10",
+        "manifest_sha256": "183a9c106e359a3f902c1cd9c8a9926cecd4c75317e788b2b85a3aa2de764d42"
+      },
+      {
+        "day": "2026-10-11",
+        "manifest_sha256": "579cd253601f023ebcd4724c31aa63c634cf999ca3ed3f3b2b293663b7c398a3"
+      },
+      {
+        "day": "2026-10-12",
+        "manifest_sha256": "67de8ee3d23c732677f4e220f71351d8e0ce8dad2c2e7085465fbe3ad15bcc74"
+      },
+      {
+        "day": "2026-10-13",
+        "manifest_sha256": "38d7dbd7bcc255ff192a83ff5b844fc980d466cfba46dc13d140e2f8263f1bff"
+      },
+      {
+        "day": "2026-10-14",
+        "manifest_sha256": "a26c3cdd0271c842589837c743469b414b332108ba3e2f24284bac98323ebe35"
+      },
+      {
+        "day": "2026-10-15",
+        "manifest_sha256": "989676570ddf00cf430fd571be30bbdad1b5f85d2873bd6ea703a973dc16bb41"
+      },
+      {
+        "day": "2026-10-16",
+        "manifest_sha256": "22a4bdb5290951350724924935cc728f633934e4cf71e8dda40a15a67811d97e"
+      },
+      {
+        "day": "2026-10-17",
+        "manifest_sha256": "f1855643d860d6a2760cbe3ce543e7e7212753e177cb4af81f61e649f738c34d"
+      }
+    ],
+    "source_inventory_sha256": "47bfacbad41c60c7b124f17a7cd283401ac1335ff64f2455bd46852f1443781f",
+    "protocol_sha256": {
+      "research/alpha013-preregistration.json": "278589e5166379c37b27c7207c15b59192b0adbe68620a7d99d5c7124f7e29ba",
+      "scripts/download_alpha013_day.py": "57597bb4725b9b2450cb8d786d8417a1fd8dec4c8b0d1b11f6217c5827e94b33",
+      "quant/research/funding_dispersion_reversal.py": "b86bc71b71f8dbb7adf0f044928eef7d6cd54c3d734568e10ec8419af3273342",
+      "scripts/analyze_alpha013_forward.py": "f53beafe2fabc1a39d881acc4a7b9831ae2a292504b1f3e1bce2c0461fbbbb0d",
+      "scripts/reconcile_alpha013_funding.py": "f8fbd92ea1356b288349696be45ce2997bea36edce16b84469c11e7abf58226e"
+    },
+    "funding_reconciled": false
+  },
+  "protocol_sha256": {
+    "research/alpha013-preregistration.json": "278589e5166379c37b27c7207c15b59192b0adbe68620a7d99d5c7124f7e29ba",
+    "quant/research/funding_dispersion_reversal.py": "b86bc71b71f8dbb7adf0f044928eef7d6cd54c3d734568e10ec8419af3273342",
+    "quant/research/funding_dispersion_signal_panel.py": "ff2eb403f01f2f4e2132911a0e335e7d0501c28c9e8c7f8a563bff7e1337f049",
+    "scripts/build_alpha013_signal_panel.py": "98630bbec58e85b5ff7b17475a040469419c0b38c978549d188b3eb7a520de57"
+  },
+  "warning": "Gross unhedged labels are a source-bound predictive-signal diagnostic only. They exclude stop behavior, fees, slippage, funding, execution uncertainty, and strategy PnL."
+}

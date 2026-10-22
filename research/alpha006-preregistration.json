@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-06T10:08:00Z",
+  "candidate": "ALPHA_006_CROSS_SECTIONAL_SWING",
+  "hypothesis_family": "cross_sectional_momentum",
+  "status": "FAIL_DEVELOPMENT",
+  "hypothesis": "Once per week, the strongest positive 30-day asset above its own 100-day trend continues upward while the weakest negative asset below its trend continues downward over the next seven days.",
+  "data_status": "Static five-asset Binance history is project-seen and survivor-biased; results are development diagnostics only.",
+  "universe": ["BTC", "ETH", "BNB", "SOL", "XRP"],
+  "rules": {
+    "signal_time": "Monday 00:00 UTC on a completed 4h candle",
+    "relative_strength_lookback_days": 30,
+    "absolute_trend_sma_days": 100,
+    "long": "rank 5, positive 30-day return, close above SMA100",
+    "short": "rank 1, negative 30-day return, close below SMA100",
+    "maximum_holding_days": 7,
+    "hard_stop": -0.08,
+    "leverage": 1.0,
+    "account_risk_fraction": 0.004,
+    "position_adjustment": false,
+    "maximum_open_trades": 2
+  },
+  "development_timerange": "20210101-20240101",
+  "diagnostic_validation_timerange": "20240101-20260901",
+  "development_gate": {
+    "organic_trades_minimum": 60,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.1,
+    "price_pnl_positive": true
+  },
+  "costs": {"base_fee_per_fill": 0.0005, "double_fee_per_fill": 0.001},
+  "observed_result": {
+    "result_file": "user_data/backtest_results/backtest-result-2026-10-06_10-14-46.zip",
+    "development_trades": 96,
+    "development_net_return": 0.00996062008,
+    "development_profit_factor": 1.0485110573,
+    "development_price_pnl": 18.9577521744,
+    "development_max_drawdown": 0.0575233486,
+    "failed_gate": "profit_factor >= 1.10",
+    "diagnostic_validation_opened": false,
+    "post_result_rule_changes": false
+  },
+  "prohibited": [
+    "changing lookback, trend, rebalance day, stop, or holding period after seeing results",
+    "dropping losing assets or one direction after seeing results",
+    "claiming final OOS from the static project-seen universe",
+    "using leverage to force the monthly target"
+  ]
+}

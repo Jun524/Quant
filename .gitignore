@@ -1,0 +1,44 @@
+.env
+.env.live
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv-research/
+
+# Runtime state and credentials-adjacent artifacts
+user_data/data/
+user_data/logs/
+user_data/backtest_results/
+user_data/hyperopt_results/
+user_data/tradesv3*.sqlite*
+user_data/*.sqlite*
+user_data/config.futures.live.json
+research/microstructure/
+research/equity/
+
+# Downloaded market data, append-only runtime captures and derived backtest blobs.
+# Keep the code, preregistrations, policies and compact summary reports in Git.
+tmp/
+research/.registry.json.lock
+research/*/raw/
+research/historical_universe/
+research/historical_funding/
+research/liquidation_telemetry/
+research/liquidation_telemetry_diagnostics/
+research/universe_snapshots/
+research/universe_forward/
+research/results/
+research/evidence/
+research/execution/
+research/alpha001-forward-dryrun-state.json
+reports/bias-audit/
+
+# Large reference exports are retained locally; derived methodology is versioned.
+워뇨띠 매매/*.csv
+
+# Keep empty runtime directories in git
+!user_data/data/.gitkeep
+!user_data/logs/.gitkeep
+!user_data/backtest_results/.gitkeep

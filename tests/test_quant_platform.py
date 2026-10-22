@@ -301,6 +301,13 @@ from quant.research.spot_perp_flow_divergence import (
     reprice_trades as reprice_spot_perp_flow_trades,
     simulate_flow_divergence,
     summarize_trades as summarize_spot_perp_flow_trades,
+    validate_trade_stream_coverage,
+)
+from quant.research.spot_perp_flow_protocol import (
+    SpotPerpFlowProtocolError,
+    build_phase_plan as build_spot_perp_flow_phase_plan,
+    evaluate_phase_gate as evaluate_spot_perp_flow_gate,
+    phase_calendar as spot_perp_flow_phase_calendar,
 )
 from quant.research.campaign import microstructure_campaign_preflight, microstructure_run_audit
 from quant.research.protocol import protocol_digests
@@ -8935,7 +8942,12 @@ class ResearchTests(unittest.TestCase):
         )
         self.assertEqual(len(controls), 1)
         bootstrap = daily_block_bootstrap_excess_return(
-            trades, controls, block_days=1, paths=100
+            trades,
+            controls,
+            calendar_start_utc=date(1970, 1, 1),
+            calendar_end_exclusive_utc=date(1970, 1, 2),
+            block_days=1,
+            paths=100,
         )
         self.assertIsNotNone(bootstrap["ci95_lower"])
 
@@ -8950,6 +8962,109 @@ class ResearchTests(unittest.TestCase):
         ]
         with self.assertRaisesRegex(ValueError, "spot aggregate-trade IDs are not continuous"):
             simulate_flow_divergence(spot, perpetual, boundaries_ms=[four_hours])
+
+    def test_spot_perp_flow_divergence_rejects_delayed_reference_or_coverage_gap(self) -> None:
+        four_hours = 4 * 60 * 60 * 1000
+        spot = [
+            {"agg_trade_id": 1, "transact_time": four_hours - 600_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": True},
+            {"agg_trade_id": 2, "transact_time": four_hours - 1, "price": 100.0, "quantity": 1.0, "is_buyer_maker": True},
+            {"agg_trade_id": 3, "transact_time": four_hours + 180_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": False},
+        ]
+        perpetual = [
+            {"agg_trade_id": 1, "transact_time": four_hours - 600_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": False},
+            {"agg_trade_id": 2, "transact_time": four_hours - 1, "price": 100.0, "quantity": 1.0, "is_buyer_maker": False},
+        ]
+        with self.assertRaisesRegex(ValueError, "entry reference delay"):
+            simulate_flow_divergence(spot, perpetual, boundaries_ms=[four_hours])
+        with self.assertRaisesRegex(ValueError, "coverage gap"):
+            validate_trade_stream_coverage(
+                spot,
+                market="spot",
+                start_ms=four_hours,
+                end_ms=four_hours + 180_000,
+                maximum_intertrade_gap_ms=60_000,
+            )
+
+    def test_spot_perp_flow_bootstrap_preserves_zero_signal_calendar_days(self) -> None:
+        day_ms = 24 * 60 * 60 * 1000
+        signals = [
+            {"signal_at_ms": 0, "net_return": 0.01},
+            {"signal_at_ms": 4 * day_ms, "net_return": 0.01},
+            {"signal_at_ms": 11 * day_ms, "net_return": 0.01},
+        ]
+        controls = [
+            {"net_return": 0.0},
+            {"net_return": 0.0},
+            {"net_return": 0.0},
+        ]
+        result = daily_block_bootstrap_excess_return(
+            signals,
+            controls,
+            calendar_start_utc=date(1970, 1, 1),
+            calendar_end_exclusive_utc=date(1970, 1, 15),
+            block_days=7,
+            paths=100,
+        )
+        self.assertEqual(result["days"], 14)
+        self.assertEqual(result["signal_days"], 3)
+
+    def test_spot_perp_flow_protocol_hides_oos_until_all_development_checks_pass(self) -> None:
+        preregistration = {
+            "candidate": "ALPHA_016_SPOT_PERP_FLOW_DIVERGENCE",
+            "status": "PREREGISTERED_HISTORICAL_DEVELOPMENT_LOCKED",
+            "research_scope": {
+                "orders_submitted": False,
+                "real_or_test_positions": False,
+                "live_promotion_eligible": False,
+            },
+            "development_gate": {
+                "complete_utc_days_minimum": 90,
+                "natural_virtual_trades_minimum": 100,
+                "profit_factor_minimum": 1.15,
+            },
+            "locked_oos_gate": {
+                "complete_utc_days_minimum": 90,
+                "natural_virtual_trades_minimum": 100,
+                "profit_factor_minimum": 1.20,
+            },
+        }
+        development = spot_perp_flow_phase_calendar("development")
+        oos = spot_perp_flow_phase_calendar("locked_oos")
+        self.assertEqual(development["decision_count"], 539)
+        self.assertEqual(oos["decision_count"], 539)
+        with self.assertRaisesRegex(SpotPerpFlowProtocolError, "remains unopened"):
+            build_spot_perp_flow_phase_plan(preregistration, phase="locked_oos")
+        failed = evaluate_spot_perp_flow_gate(
+            preregistration,
+            phase="development",
+            evidence={},
+        )
+        self.assertEqual(failed["status"], "FAIL")
+        with self.assertRaisesRegex(SpotPerpFlowProtocolError, "did not pass"):
+            build_spot_perp_flow_phase_plan(
+                preregistration, phase="locked_oos", development_report=failed
+            )
+        passed = evaluate_spot_perp_flow_gate(
+            preregistration,
+            phase="development",
+            evidence={
+                "complete_utc_days": 90,
+                "natural_virtual_trades": 100,
+                "net_return": 0.01,
+                "profit_factor": 1.2,
+                "double_fee_net_return": 0.01,
+                "slippage_stress_net_return": 0.01,
+                "random_control_excess_return": 0.01,
+                "bootstrap_ci95_lower": 0.001,
+                "data_integrity_pass": True,
+                "lookahead_pass": True,
+            },
+        )
+        plan = build_spot_perp_flow_phase_plan(
+            preregistration, phase="locked_oos", development_report=passed
+        )
+        self.assertEqual(plan["status"], "AUTHORIZED_PLAN_NO_SOURCE_BYTES_ACQUIRED")
+        self.assertFalse(plan["orders_submitted"])
 
     def test_metrics_normalization_collapses_only_exact_duplicates(self) -> None:
         times = pd.date_range("2021-01-01", periods=288, freq="5min", tz="UTC")

@@ -111943,6 +111943,778 @@
         },
         "source_sha256": "04a3c45751636594d96aa872e3ff66959a42d66c6073856b0651e83efb035118"
       }
+    },
+    {
+      "created_at": "2026-10-22T09:47:58.343759+00:00",
+      "event_id": 179,
+      "event_type": "result_update",
+      "experiment_id": 7,
+      "payload": {
+        "result": {
+          "accumulation": {
+            "all_detected_signals": 15754,
+            "basis": "public market data only; decisions use local receive time, maker queue, and executable taker-exit quote; no API key or order",
+            "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+            "checks": [
+              {
+                "actual": 11,
+                "name": "complete_collection_days",
+                "passed": false,
+                "required": 17
+              },
+              {
+                "actual": 1217,
+                "name": "locked_eligible_orders",
+                "passed": true,
+                "required": 1000
+              },
+              {
+                "actual": 102,
+                "name": "locked_queue_fills",
+                "passed": false,
+                "required": 200
+              },
+              {
+                "actual": -0.0007780721744636218,
+                "name": "locked_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": -0.0008429179057585283,
+                "name": "hour_block_bootstrap_95pct_lower_bound",
+                "passed": false,
+                "required": "> 0"
+              },
+              {
+                "actual": -0.0008154595128511599,
+                "name": "plus_100ms_latency_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": 0.6259903971523736,
+                "name": "single_hour_profit_concentration",
+                "passed": false,
+                "required": "<= 0.20"
+              }
+            ],
+            "collection_totals": {
+              "all_verified_runs": {
+                "aggregate_trades": 14182551,
+                "compressed_bytes": 7330400363,
+                "depth_events": 11740172,
+                "feature_rows": 11724572
+              },
+              "timing_eligible_runs": {
+                "aggregate_trades": 12982889,
+                "compressed_bytes": 6801067257,
+                "depth_events": 10982942,
+                "feature_rows": 10967541
+              }
+            },
+            "complete_days": 11,
+            "configuration": {
+              "depth_imbalance_min": 0.6,
+              "entry_fee": 0.0002,
+              "exit_fee": 0.0005,
+              "flow_imbalance_min": 0.5,
+              "flow_window_ms": 5000,
+              "horizons_seconds": [
+                5,
+                30,
+                60,
+                300
+              ],
+              "queue_timeout_ms": 3000,
+              "shadow_notional_usdt": 50.0,
+              "signal_spacing_ms": 60000
+            },
+            "coverage": [
+              {
+                "complete": false,
+                "coverage_ratio": 0.007361111111111111,
+                "day": "2026-10-06",
+                "observed_seconds": 636
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.25002314814814813,
+                "day": "2026-10-07",
+                "observed_seconds": 21602
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.33327546296296295,
+                "day": "2026-10-08",
+                "observed_seconds": 28795
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.4547337962962963,
+                "day": "2026-10-09",
+                "observed_seconds": 39289
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9789236111111111,
+                "day": "2026-10-10",
+                "observed_seconds": 84579
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9760763888888889,
+                "day": "2026-10-11",
+                "observed_seconds": 84333
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.973738425925926,
+                "day": "2026-10-12",
+                "observed_seconds": 84131
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9704398148148148,
+                "day": "2026-10-13",
+                "observed_seconds": 83846
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9668634259259259,
+                "day": "2026-10-14",
+                "observed_seconds": 83537
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9625925925925926,
+                "day": "2026-10-15",
+                "observed_seconds": 83168
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9588888888888889,
+                "day": "2026-10-16",
+                "observed_seconds": 82848
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9589004629629629,
+                "day": "2026-10-17",
+                "observed_seconds": 82849
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9550462962962963,
+                "day": "2026-10-18",
+                "observed_seconds": 82516
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9543402777777777,
+                "day": "2026-10-19",
+                "observed_seconds": 82455
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9506828703703704,
+                "day": "2026-10-20",
+                "observed_seconds": 82139
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.9464467592592593,
+                "day": "2026-10-21",
+                "observed_seconds": 81773
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.38524305555555555,
+                "day": "2026-10-22",
+                "observed_seconds": 33285
+              }
+            ],
+            "data_integrity": {
+              "evaluated_protocol_variants": 1,
+              "fingerprinted_protocol_variants": 3,
+              "legacy_prefingerprint_runs": 3,
+              "status": "PASS_WITH_TIMING_EXCLUSIONS",
+              "verified_run_count": 3615
+            },
+            "eligible_timing_runs": 3589,
+            "excluded_timing_runs": 26,
+            "incomplete_day_signals_excluded": 2943,
+            "phases": {
+              "CALIBRATION": {
+                "eligible_shadow_orders": 3480,
+                "fill_rate": 0.05172413793103448,
+                "fully_filled_orders": 180,
+                "hour_block_bootstrap_95pct_lower_mean_60s": -0.0009055331002083458,
+                "latency_100ms_net_markout_60s": {
+                  "mean": -0.0008400922190461009,
+                  "observations": 213
+                },
+                "net_markout_300s": {
+                  "mean": -0.0007661156105760789,
+                  "median": -0.000718984016685597,
+                  "observations": 174,
+                  "positive_ratio": 0.23563218390804597
+                },
+                "net_markout_30s": {
+                  "mean": -0.0007913603078849587,
+                  "median": -0.0008249035398404041,
+                  "observations": 179,
+                  "positive_ratio": 0.01675977653631285
+                },
+                "net_markout_5s": {
+                  "mean": -0.000795041951939582,
+                  "median": -0.0007857472124387026,
+                  "observations": 178,
+                  "positive_ratio": 0.0
+                },
+                "net_markout_60s": {
+                  "mean": -0.0008275908268820755,
+                  "median": -0.0007644603832115065,
+                  "observations": 176,
+                  "positive_ratio": 0.045454545454545456
+                },
+                "single_hour_profit_concentration": 0.5952996173187762
+              },
+              "DEVELOPMENT": {
+                "eligible_shadow_orders": 8114,
+                "fill_rate": 0.09452797633719497,
+                "fully_filled_orders": 767,
+                "hour_block_bootstrap_95pct_lower_mean_60s": -0.0008245830801847252,
+                "latency_100ms_net_markout_60s": {
+                  "mean": -0.0007699421284314542,
+                  "observations": 868
+                },
+                "net_markout_300s": {
+                  "mean": -0.0007234844700471821,
+                  "median": -0.0007646810386338847,
+                  "observations": 751,
+                  "positive_ratio": 0.2636484687083888
+                },
+                "net_markout_30s": {
+                  "mean": -0.0007935132195517457,
+                  "median": -0.0007895446226611973,
+                  "observations": 759,
+                  "positive_ratio": 0.0461133069828722
+                },
+                "net_markout_5s": {
+                  "mean": -0.0008002697191218961,
+                  "median": -0.0007888990642460286,
+                  "observations": 759,
+                  "positive_ratio": 0.003952569169960474
+                },
+                "net_markout_60s": {
+                  "mean": -0.0007689406425024228,
+                  "median": -0.0007623186303805312,
+                  "observations": 758,
+                  "positive_ratio": 0.09894459102902374
+                },
+                "single_hour_profit_concentration": 0.2261551225552542
+              },
+              "LOCKED_OOS": {
+                "eligible_shadow_orders": 1217,
+                "fill_rate": 0.0838126540673788,
+                "fully_filled_orders": 102,
+                "hour_block_bootstrap_95pct_lower_mean_60s": -0.0008429179057585283,
+                "latency_100ms_net_markout_60s": {
+                  "mean": -0.0008154595128511599,
+                  "observations": 124
+                },
+                "net_markout_300s": {
+                  "mean": -0.0007020156558053152,
+                  "median": -0.0005948969162283484,
+                  "observations": 98,
+                  "positive_ratio": 0.3163265306122449
+                },
+                "net_markout_30s": {
+                  "mean": -0.0007857629892990952,
+                  "median": -0.0007188965067852154,
+                  "observations": 100,
+                  "positive_ratio": 0.03
+                },
+                "net_markout_5s": {
+                  "mean": -0.000784112027774913,
+                  "median": -0.0007720480450555616,
+                  "observations": 101,
+                  "positive_ratio": 0.009900990099009901
+                },
+                "net_markout_60s": {
+                  "mean": -0.0007780721744636218,
+                  "median": -0.0008322874459213086,
+                  "observations": 101,
+                  "positive_ratio": 0.0891089108910891
+                },
+                "single_hour_profit_concentration": 0.6259903971523736
+              }
+            },
+            "runs": 3615,
+            "status": "ACCUMULATING",
+            "warning": "A PASS is shadow evidence only and still requires a separate dry-run gate before promotion."
+          },
+          "development": {},
+          "evidence_archive": "research/evidence/alpha007/42b3cc6f0ca9aeb8b9b476d248c41d20290373543d09f505069bc06a56337d90.json.gz",
+          "evidence_encoding": "gzip",
+          "gate": {
+            "checks": [
+              {
+                "actual": 11,
+                "name": "complete_collection_days",
+                "passed": false,
+                "required": 17
+              },
+              {
+                "actual": 1217,
+                "name": "locked_eligible_orders",
+                "passed": true,
+                "required": 1000
+              },
+              {
+                "actual": 102,
+                "name": "locked_queue_fills",
+                "passed": false,
+                "required": 200
+              },
+              {
+                "actual": -0.0007780721744636218,
+                "name": "locked_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": -0.0008429179057585283,
+                "name": "hour_block_bootstrap_95pct_lower_bound",
+                "passed": false,
+                "required": "> 0"
+              },
+              {
+                "actual": -0.0008154595128511599,
+                "name": "plus_100ms_latency_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": 0.6259903971523736,
+                "name": "single_hour_profit_concentration",
+                "passed": false,
+                "required": "<= 0.20"
+              }
+            ],
+            "stage": "forward_collection",
+            "status": "ACCUMULATING"
+          },
+          "locked_validation_opened": false,
+          "promotion_eligible": false,
+          "shadow_status": "ACCUMULATING",
+          "source_report": "reports/alpha007-accumulation.json",
+          "source_sha256": "42b3cc6f0ca9aeb8b9b476d248c41d20290373543d09f505069bc06a56337d90",
+          "status": "ACCUMULATING",
+          "validation_opened": false,
+          "warning": "Alpha #7 has not produced live-promotion evidence."
+        },
+        "source_sha256": "42b3cc6f0ca9aeb8b9b476d248c41d20290373543d09f505069bc06a56337d90"
+      }
+    },
+    {
+      "created_at": "2026-10-22T11:54:47.817535+00:00",
+      "event_id": 180,
+      "event_type": "result_update",
+      "experiment_id": 7,
+      "payload": {
+        "result": {
+          "accumulation": {
+            "all_detected_signals": 15855,
+            "basis": "public market data only; decisions use local receive time, maker queue, and executable taker-exit quote; no API key or order",
+            "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+            "checks": [
+              {
+                "actual": 11,
+                "name": "complete_collection_days",
+                "passed": false,
+                "required": 17
+              },
+              {
+                "actual": 1217,
+                "name": "locked_eligible_orders",
+                "passed": true,
+                "required": 1000
+              },
+              {
+                "actual": 102,
+                "name": "locked_queue_fills",
+                "passed": false,
+                "required": 200
+              },
+              {
+                "actual": -0.0007780721744636218,
+                "name": "locked_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": -0.0008429179057585283,
+                "name": "hour_block_bootstrap_95pct_lower_bound",
+                "passed": false,
+                "required": "> 0"
+              },
+              {
+                "actual": -0.0008154595128511599,
+                "name": "plus_100ms_latency_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": 0.6259903971523736,
+                "name": "single_hour_profit_concentration",
+                "passed": false,
+                "required": "<= 0.20"
+              }
+            ],
+            "collection_totals": {
+              "all_verified_runs": {
+                "aggregate_trades": 14257834,
+                "compressed_bytes": 7370357374,
+                "depth_events": 11810673,
+                "feature_rows": 11794985
+              },
+              "timing_eligible_runs": {
+                "aggregate_trades": 13058172,
+                "compressed_bytes": 6841024268,
+                "depth_events": 11053443,
+                "feature_rows": 11037954
+              }
+            },
+            "complete_days": 11,
+            "configuration": {
+              "depth_imbalance_min": 0.6,
+              "entry_fee": 0.0002,
+              "exit_fee": 0.0005,
+              "flow_imbalance_min": 0.5,
+              "flow_window_ms": 5000,
+              "horizons_seconds": [
+                5,
+                30,
+                60,
+                300
+              ],
+              "queue_timeout_ms": 3000,
+              "shadow_notional_usdt": 50.0,
+              "signal_spacing_ms": 60000
+            },
+            "coverage": [
+              {
+                "complete": false,
+                "coverage_ratio": 0.007361111111111111,
+                "day": "2026-10-06",
+                "observed_seconds": 636
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.25002314814814813,
+                "day": "2026-10-07",
+                "observed_seconds": 21602
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.33327546296296295,
+                "day": "2026-10-08",
+                "observed_seconds": 28795
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.4547337962962963,
+                "day": "2026-10-09",
+                "observed_seconds": 39289
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9789236111111111,
+                "day": "2026-10-10",
+                "observed_seconds": 84579
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9760763888888889,
+                "day": "2026-10-11",
+                "observed_seconds": 84333
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.973738425925926,
+                "day": "2026-10-12",
+                "observed_seconds": 84131
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9704398148148148,
+                "day": "2026-10-13",
+                "observed_seconds": 83846
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9668634259259259,
+                "day": "2026-10-14",
+                "observed_seconds": 83537
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9625925925925926,
+                "day": "2026-10-15",
+                "observed_seconds": 83168
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9588888888888889,
+                "day": "2026-10-16",
+                "observed_seconds": 82848
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9589004629629629,
+                "day": "2026-10-17",
+                "observed_seconds": 82849
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9550462962962963,
+                "day": "2026-10-18",
+                "observed_seconds": 82516
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9543402777777777,
+                "day": "2026-10-19",
+                "observed_seconds": 82455
+              },
+              {
+                "complete": true,
+                "coverage_ratio": 0.9506828703703704,
+                "day": "2026-10-20",
+                "observed_seconds": 82139
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.9464467592592593,
+                "day": "2026-10-21",
+                "observed_seconds": 81773
+              },
+              {
+                "complete": false,
+                "coverage_ratio": 0.4686111111111111,
+                "day": "2026-10-22",
+                "observed_seconds": 40488
+              }
+            ],
+            "data_integrity": {
+              "evaluated_protocol_variants": 1,
+              "fingerprinted_protocol_variants": 3,
+              "legacy_prefingerprint_runs": 3,
+              "status": "PASS_WITH_TIMING_EXCLUSIONS",
+              "verified_run_count": 3639
+            },
+            "eligible_timing_runs": 3613,
+            "excluded_timing_runs": 26,
+            "incomplete_day_signals_excluded": 3044,
+            "phases": {
+              "CALIBRATION": {
+                "eligible_shadow_orders": 3480,
+                "fill_rate": 0.05172413793103448,
+                "fully_filled_orders": 180,
+                "hour_block_bootstrap_95pct_lower_mean_60s": -0.0009055331002083458,
+                "latency_100ms_net_markout_60s": {
+                  "mean": -0.0008400922190461009,
+                  "observations": 213
+                },
+                "net_markout_300s": {
+                  "mean": -0.0007661156105760789,
+                  "median": -0.000718984016685597,
+                  "observations": 174,
+                  "positive_ratio": 0.23563218390804597
+                },
+                "net_markout_30s": {
+                  "mean": -0.0007913603078849587,
+                  "median": -0.0008249035398404041,
+                  "observations": 179,
+                  "positive_ratio": 0.01675977653631285
+                },
+                "net_markout_5s": {
+                  "mean": -0.000795041951939582,
+                  "median": -0.0007857472124387026,
+                  "observations": 178,
+                  "positive_ratio": 0.0
+                },
+                "net_markout_60s": {
+                  "mean": -0.0008275908268820755,
+                  "median": -0.0007644603832115065,
+                  "observations": 176,
+                  "positive_ratio": 0.045454545454545456
+                },
+                "single_hour_profit_concentration": 0.5952996173187762
+              },
+              "DEVELOPMENT": {
+                "eligible_shadow_orders": 8114,
+                "fill_rate": 0.09452797633719497,
+                "fully_filled_orders": 767,
+                "hour_block_bootstrap_95pct_lower_mean_60s": -0.0008245830801847252,
+                "latency_100ms_net_markout_60s": {
+                  "mean": -0.0007699421284314542,
+                  "observations": 868
+                },
+                "net_markout_300s": {
+                  "mean": -0.0007234844700471821,
+                  "median": -0.0007646810386338847,
+                  "observations": 751,
+                  "positive_ratio": 0.2636484687083888
+                },
+                "net_markout_30s": {
+                  "mean": -0.0007935132195517457,
+                  "median": -0.0007895446226611973,
+                  "observations": 759,
+                  "positive_ratio": 0.0461133069828722
+                },
+                "net_markout_5s": {
+                  "mean": -0.0008002697191218961,
+                  "median": -0.0007888990642460286,
+                  "observations": 759,
+                  "positive_ratio": 0.003952569169960474
+                },
+                "net_markout_60s": {
+                  "mean": -0.0007689406425024228,
+                  "median": -0.0007623186303805312,
+                  "observations": 758,
+                  "positive_ratio": 0.09894459102902374
+                },
+                "single_hour_profit_concentration": 0.2261551225552542
+              },
+              "LOCKED_OOS": {
+                "eligible_shadow_orders": 1217,
+                "fill_rate": 0.0838126540673788,
+                "fully_filled_orders": 102,
+                "hour_block_bootstrap_95pct_lower_mean_60s": -0.0008429179057585283,
+                "latency_100ms_net_markout_60s": {
+                  "mean": -0.0008154595128511599,
+                  "observations": 124
+                },
+                "net_markout_300s": {
+                  "mean": -0.0007020156558053152,
+                  "median": -0.0005948969162283484,
+                  "observations": 98,
+                  "positive_ratio": 0.3163265306122449
+                },
+                "net_markout_30s": {
+                  "mean": -0.0007857629892990952,
+                  "median": -0.0007188965067852154,
+                  "observations": 100,
+                  "positive_ratio": 0.03
+                },
+                "net_markout_5s": {
+                  "mean": -0.000784112027774913,
+                  "median": -0.0007720480450555616,
+                  "observations": 101,
+                  "positive_ratio": 0.009900990099009901
+                },
+                "net_markout_60s": {
+                  "mean": -0.0007780721744636218,
+                  "median": -0.0008322874459213086,
+                  "observations": 101,
+                  "positive_ratio": 0.0891089108910891
+                },
+                "single_hour_profit_concentration": 0.6259903971523736
+              }
+            },
+            "runs": 3639,
+            "status": "ACCUMULATING",
+            "warning": "A PASS is shadow evidence only and still requires a separate dry-run gate before promotion."
+          },
+          "development": {},
+          "evidence_archive": "research/evidence/alpha007/6740d72a74e6815dd43916f65d7b80111071e23eab8755c5bec28098a06fd877.json.gz",
+          "evidence_encoding": "gzip",
+          "gate": {
+            "checks": [
+              {
+                "actual": 11,
+                "name": "complete_collection_days",
+                "passed": false,
+                "required": 17
+              },
+              {
+                "actual": 1217,
+                "name": "locked_eligible_orders",
+                "passed": true,
+                "required": 1000
+              },
+              {
+                "actual": 102,
+                "name": "locked_queue_fills",
+                "passed": false,
+                "required": 200
+              },
+              {
+                "actual": -0.0007780721744636218,
+                "name": "locked_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": -0.0008429179057585283,
+                "name": "hour_block_bootstrap_95pct_lower_bound",
+                "passed": false,
+                "required": "> 0"
+              },
+              {
+                "actual": -0.0008154595128511599,
+                "name": "plus_100ms_latency_net_60s_markout",
+                "passed": false,
+                "required": "> 0 after 7 bps fees"
+              },
+              {
+                "actual": 0.6259903971523736,
+                "name": "single_hour_profit_concentration",
+                "passed": false,
+                "required": "<= 0.20"
+              }
+            ],
+            "stage": "forward_collection",
+            "status": "ACCUMULATING"
+          },
+          "locked_validation_opened": false,
+          "promotion_eligible": false,
+          "shadow_status": "ACCUMULATING",
+          "source_report": "reports/alpha007-accumulation.json",
+          "source_sha256": "6740d72a74e6815dd43916f65d7b80111071e23eab8755c5bec28098a06fd877",
+          "status": "ACCUMULATING",
+          "validation_opened": false,
+          "warning": "Alpha #7 has not produced live-promotion evidence."
+        },
+        "source_sha256": "6740d72a74e6815dd43916f65d7b80111071e23eab8755c5bec28098a06fd877"
+      }
+    },
+    {
+      "created_at": "2026-10-22T12:10:45.341508+00:00",
+      "event_id": 181,
+      "event_type": "PRE_DATA_INTEGRITY_AMENDMENT",
+      "experiment_id": 15,
+      "payload": {
+        "changes": [
+          "maximum one-minute reference delay and aggregate-trade coverage gap",
+          "full UTC calendar with zero-return no-signal days for seven-day blocks",
+          "eight-hour development-to-OOS execution embargo"
+        ],
+        "data_state": "No source archive or trade row read; HTTP headers only for storage estimation.",
+        "source_preregistration": "research/alpha016-preregistration.json",
+        "unchanged": [
+          "signal thresholds",
+          "entry delay",
+          "holding period",
+          "cost model",
+          "random-control seed",
+          "bootstrap path count",
+          "live-order prohibition"
+        ]
+      }
     }
   ],
   "experiments": [

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from bisect import bisect_left
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 import random
 from typing import Any, Iterable
 
@@ -26,6 +26,8 @@ class SpotPerpFlowConfig:
     decision_interval_ms: int = 4 * HOUR_MS
     entry_delay_ms: int = MINUTE_MS
     holding_ms: int = 4 * HOUR_MS
+    maximum_reference_delay_ms: int = MINUTE_MS
+    maximum_intertrade_gap_ms: int = MINUTE_MS
     perp_imbalance_minimum: float = 0.25
     spot_imbalance_maximum: float = -0.10
     fee_per_side_bps: float = 10.0
@@ -102,6 +104,45 @@ def _first_at_or_after(
     return rows[index] if index < len(rows) else None
 
 
+def validate_trade_stream_coverage(
+    rows: Iterable[dict[str, Any]],
+    *,
+    market: str,
+    start_ms: int,
+    end_ms: int,
+    maximum_intertrade_gap_ms: int = MINUTE_MS,
+) -> dict[str, int | str]:
+    """Fail closed when a source stream cannot support every instant in a range.
+
+    Aggregate-trade ID continuity alone does not detect an archive truncated at
+    a time boundary.  BTC should not have a one-minute no-trade interval; such
+    an interval is therefore treated as missing coverage rather than a price
+    that can be carried forward to a virtual fill.
+    """
+    if start_ms < 0 or end_ms <= start_ms or maximum_intertrade_gap_ms <= 0:
+        raise ValueError("coverage interval or maximum gap is invalid")
+    normalized = _normalize_stream(rows, market=market)
+    if not normalized:
+        raise ValueError(f"{market} aggregate-trade stream is empty")
+    timestamps = [int(item["transact_time"]) for item in normalized]
+    previous = start_ms
+    start = bisect_left(timestamps, start_ms)
+    end = bisect_left(timestamps, end_ms)
+    for timestamp in timestamps[start:end]:
+        if timestamp - previous > maximum_intertrade_gap_ms:
+            raise ValueError(f"{market} aggregate-trade coverage gap exceeds maximum")
+        previous = timestamp
+    if end_ms - previous > maximum_intertrade_gap_ms:
+        raise ValueError(f"{market} aggregate-trade coverage gap exceeds maximum")
+    return {
+        "status": "PASS",
+        "market": market,
+        "start_ms": start_ms,
+        "end_ms": end_ms,
+        "maximum_intertrade_gap_ms": maximum_intertrade_gap_ms,
+    }
+
+
 def _reprice_one(item: dict[str, Any], *, fee_per_side_bps: float, slippage_per_side_bps: float) -> dict[str, Any]:
     if fee_per_side_bps < 0 or slippage_per_side_bps < 0:
         raise ValueError("fees and slippage must be non-negative")
@@ -153,6 +194,8 @@ def simulate_flow_divergence(
         raise ValueError("decision boundaries must be aligned to the fixed four-hour UTC grid")
     if config.observation_window_ms <= 0 or config.entry_delay_ms < 0 or config.holding_ms <= 0:
         raise ValueError("time parameters are invalid")
+    if config.maximum_reference_delay_ms <= 0 or config.maximum_intertrade_gap_ms <= 0:
+        raise ValueError("maximum data gaps must be positive")
 
     spot = _normalize_stream(spot_rows, market="spot")
     perpetual = _normalize_stream(perpetual_rows, market="perpetual")
@@ -180,14 +223,20 @@ def simulate_flow_divergence(
             and spot_imbalance <= config.spot_imbalance_maximum
         ):
             continue
-        entry = _first_at_or_after(spot, spot_times, boundary + config.entry_delay_ms)
+        expected_entry = boundary + config.entry_delay_ms
+        entry = _first_at_or_after(spot, spot_times, expected_entry)
         if entry is None:
-            break
+            raise ValueError("spot entry reference price is unavailable")
+        if int(entry["transact_time"]) - expected_entry > config.maximum_reference_delay_ms:
+            raise ValueError("spot entry reference delay exceeds maximum")
+        expected_exit = int(entry["transact_time"]) + config.holding_ms
         exit_row = _first_at_or_after(
-            spot, spot_times, int(entry["transact_time"]) + config.holding_ms
+            spot, spot_times, expected_exit
         )
         if exit_row is None:
-            break
+            raise ValueError("spot exit reference price is unavailable")
+        if int(exit_row["transact_time"]) - expected_exit > config.maximum_reference_delay_ms:
+            raise ValueError("spot exit reference delay exceeds maximum")
         raw = {
             "signal_at_ms": boundary,
             "observation_start_ms": window_start,
@@ -285,12 +334,18 @@ def matched_random_baseline(
     for boundary in sorted(boundaries_ms):
         if boundary in signal_boundaries:
             continue
-        entry = _first_at_or_after(spot, times, boundary + config.entry_delay_ms)
+        expected_entry = boundary + config.entry_delay_ms
+        entry = _first_at_or_after(spot, times, expected_entry)
         if entry is None:
-            continue
-        exit_row = _first_at_or_after(spot, times, int(entry["transact_time"]) + config.holding_ms)
+            raise ValueError("random-control entry reference price is unavailable")
+        if int(entry["transact_time"]) - expected_entry > config.maximum_reference_delay_ms:
+            raise ValueError("random-control entry reference delay exceeds maximum")
+        expected_exit = int(entry["transact_time"]) + config.holding_ms
+        exit_row = _first_at_or_after(spot, times, expected_exit)
         if exit_row is None:
-            continue
+            raise ValueError("random-control exit reference price is unavailable")
+        if int(exit_row["transact_time"]) - expected_exit > config.maximum_reference_delay_ms:
+            raise ValueError("random-control exit reference delay exceeds maximum")
         day = datetime.fromtimestamp(boundary / 1000, tz=timezone.utc).date().isoformat()
         by_day.setdefault(day, []).append(
             {
@@ -326,6 +381,8 @@ def daily_block_bootstrap_excess_return(
     signal_trades: list[dict[str, Any]],
     controls: list[dict[str, Any]],
     *,
+    calendar_start_utc: date,
+    calendar_end_exclusive_utc: date,
     block_days: int = 7,
     paths: int = 5_000,
     seed: int = 16,
@@ -335,13 +392,21 @@ def daily_block_bootstrap_excess_return(
         raise ValueError("signal and control samples must be non-empty and paired")
     if block_days <= 0 or paths <= 0:
         raise ValueError("bootstrap parameters must be positive")
-    grouped: dict[str, float] = {}
+    if calendar_end_exclusive_utc <= calendar_start_utc:
+        raise ValueError("calendar bounds are invalid")
+    grouped: dict[date, float] = {}
     for signal, control in zip(signal_trades, controls):
-        day = datetime.fromtimestamp(int(signal["signal_at_ms"]) / 1000, tz=timezone.utc).date().isoformat()
+        day = datetime.fromtimestamp(int(signal["signal_at_ms"]) / 1000, tz=timezone.utc).date()
+        if not calendar_start_utc <= day < calendar_end_exclusive_utc:
+            raise ValueError("signal observation falls outside the locked calendar")
         grouped[day] = grouped.get(day, 0.0) + float(signal["net_return"]) - float(control["net_return"])
-    daily = [grouped[key] for key in sorted(grouped)]
+    days = (calendar_end_exclusive_utc - calendar_start_utc).days
+    daily = [
+        grouped.get(calendar_start_utc + timedelta(days=offset), 0.0)
+        for offset in range(days)
+    ]
     if len(daily) < block_days:
-        return {"days": len(daily), "block_days": block_days, "ci95_lower": None, "ci95_upper": None}
+        return {"days": len(daily), "signal_days": len(grouped), "block_days": block_days, "ci95_lower": None, "ci95_upper": None}
     blocks = [daily[index : index + block_days] for index in range(len(daily) - block_days + 1)]
     generator = random.Random(seed)
     samples: list[float] = []
@@ -352,6 +417,7 @@ def daily_block_bootstrap_excess_return(
         samples.append(sum(sample[: len(daily)]))
     return {
         "days": len(daily),
+        "signal_days": len(grouped),
         "block_days": block_days,
         "observed_excess_return": sum(daily),
         "ci95_lower": float(np.percentile(samples, 2.5)),

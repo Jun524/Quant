@@ -114324,6 +114324,51 @@
           13
         ]
       }
+    },
+    {
+      "created_at": "2026-10-22T08:48:54.546863+00:00",
+      "experiment_id": 15,
+      "hypothesis": "When BTCUSDT USD-M perpetual aggressive buy imbalance over the last completed ten minutes is at least +0.25 while BTCUSDT spot aggressive buy imbalance is at most -0.10, a delayed spot-only four-hour long hold has positive incremental net expectancy after fixed spot fees and slippage.",
+      "parent_experiment": null,
+      "reason": "First fixed test of delayed BTC spot performance following a completed spot/perpetual aggressive-flow disagreement; simulation only.",
+      "reason_for_change": null,
+      "result": {
+        "development": {},
+        "development_data_acquired": false,
+        "gate": {
+          "checks": [
+            {
+              "name": "spot_and_perpetual_data_admitted",
+              "passed": false
+            },
+            {
+              "name": "development_evaluated",
+              "passed": false
+            },
+            {
+              "name": "locked_oos_unopened",
+              "passed": true
+            },
+            {
+              "name": "simulation_only",
+              "passed": true
+            }
+          ],
+          "stage": "preregistered_historical_development_acquisition",
+          "status": "ACCUMULATING"
+        },
+        "live_promotion_eligible": false,
+        "source_preregistration": "research/alpha016-preregistration.json",
+        "validation_opened": false
+      },
+      "strategy": "ALPHA_016_SPOT_PERP_FLOW_DIVERGENCE",
+      "trial_accounting": {
+        "alpha_number": 16,
+        "family": "spot_perpetual_flow_divergence",
+        "family_trial": 1,
+        "independence_status": "UNMEASURED_SHARED_ORDER_FLOW_DATA",
+        "independent_alpha": false
+      }
     }
   ],
   "schema_version": 1

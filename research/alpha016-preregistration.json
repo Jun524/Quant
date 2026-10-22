@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "registered_at_utc": "2026-10-22T08:47:30Z",
+  "candidate": "ALPHA_016_SPOT_PERP_FLOW_DIVERGENCE",
+  "status": "PREREGISTERED_HISTORICAL_DEVELOPMENT_LOCKED",
+  "pre_data_amendments": [
+    {
+      "recorded_at_utc": "2026-10-22T08:47:30Z",
+      "data_state": "Only HTTP headers for one official spot archive and one official perpetual archive were read to estimate storage. No archive payload, checksum payload, aggregate-trade row, feature, signal, virtual trade or performance result was read.",
+      "change": "Clarified the matched control from 'no-signal' to 'another eligible grid point on the same UTC day'.",
+      "reason": "The stated purpose is an unconditional same-time random-hold baseline. Calling it a no-signal control would make a stronger and unsupported conditioning claim.",
+      "unchanged": "All dates, signal thresholds, entry delay, hold, costs, bootstrap seed, gates, OOS lock and simulation-only restriction remain unchanged."
+    }
+  ],
+  "hypothesis_family": "spot_perpetual_flow_divergence",
+  "hypothesis": "When BTCUSDT USD-M perpetual aggressive buy imbalance over the last completed ten minutes is at least +0.25 while BTCUSDT spot aggressive buy imbalance is at most -0.10, a delayed spot-only four-hour long hold has positive incremental net expectancy after fixed spot fees and slippage.",
+  "independence": {
+    "from_alpha011": "Both candidates use order-flow data, but Alpha 011 uses one perpetual market at fixed quarter-hour openings and a twelve-hour futures position. Alpha 016 tests a cross-market disagreement, uses a completed ten-minute window, and evaluates a spot-only virtual long. PnL correlation and shared-data dependence remain unmeasured; it is not eligible as an independent portfolio sleeve.",
+    "from_alpha012": "Alpha 012 is a delta-neutral spot/perpetual carry hypothesis with funding. Alpha 016 has intentional outright spot direction and never credits funding."
+  },
+  "research_scope": {
+    "orders_submitted": false,
+    "api_key": false,
+    "real_or_test_positions": false,
+    "funding_included": false,
+    "live_promotion_eligible": false,
+    "purpose": "historical simulation may reject the hypothesis only; a pass would require a separately preregistered forward study before any promotion discussion."
+  },
+  "data": {
+    "symbol": "BTCUSDT",
+    "spot_source": "Binance official public-data daily spot aggTrades archives and publisher SHA-256 checksum files",
+    "perpetual_source": "Binance official public-data daily USD-M futures aggTrades archives and publisher SHA-256 checksum files",
+    "development_timerange": "2025-01-01T00:00:00Z inclusive to 2025-04-01T00:00:00Z exclusive",
+    "locked_oos_timerange": "2025-04-01T00:00:00Z inclusive to 2025-06-30T00:00:00Z exclusive",
+    "data_admission": [
+      "Verify archive checksum, filename, CSV schema, symbol, UTC-day containment and non-empty rows before use.",
+      "Require unique, monotonically increasing and consecutive aggregate-trade IDs within and across every consumed UTC day for each market independently.",
+      "Reject a decision if either market lacks the complete [decision minus ten minutes, decision) observation interval, the spot entry after availability delay, or the spot exit after the fixed hold.",
+      "Do not open any locked OOS archive before every development gate is recorded as PASS."
+    ]
+  },
+  "fixed_signal": {
+    "decision_schedule": "UTC 00:00, 04:00, 08:00, 12:00, 16:00 and 20:00",
+    "observation_window": "[decision minus 10 minutes, decision), using exchange timestamps only",
+    "aggressive_flow_imbalance": "sum(quantity * direction) / sum(quantity), where direction is +1 when isBuyerMaker is false and -1 when true",
+    "perpetual_imbalance_minimum": 0.25,
+    "spot_imbalance_maximum": -0.1,
+    "entry": "first BTCUSDT spot aggregate trade at or after decision plus one minute",
+    "direction": "simulated spot long only",
+    "holding_period": "four hours from actual entry timestamp",
+    "exit": "first BTCUSDT spot aggregate trade at or after actual entry plus four hours",
+    "maximum_concurrent_virtual_positions": 1,
+    "parameter_search": false
+  },
+  "cost_model": {
+    "base": {
+      "spot_taker_fee_per_side_bps": 10.0,
+      "spot_slippage_per_side_bps": 3.0,
+      "round_trip_cost_interpretation": "fee is charged on executed entry and exit notional; directional adverse slippage is applied to both fills."
+    },
+    "double_fee_stress": {
+      "spot_taker_fee_per_side_bps": 20.0,
+      "spot_slippage_per_side_bps": 3.0
+    },
+    "slippage_stress": {
+      "spot_taker_fee_per_side_bps": 10.0,
+      "spot_slippage_per_side_bps": 5.0
+    },
+    "funding": "zero by construction: no perpetual position is modeled",
+    "borrow_or_cash_yield": "zero; neither is credited"
+  },
+  "control_and_statistics": {
+    "control": "For every signal, draw one distinct four-hour BTC spot hold from another eligible four-hour UTC grid point on the same UTC day, without replacement, using deterministic seed 16. The control is descriptive and is not a tradable portfolio; it is a random-hold baseline, not a no-signal strategy.",
+    "bootstrap": "paired daily signal-minus-control net returns; seven-day moving-block bootstrap, 5,000 paths, deterministic seed 16; the 95% confidence interval lower bound must exceed zero.",
+    "lookahead_test": "Change every row strictly after each decision boundary and require the feature, signal decision and entry selection to remain unchanged.",
+    "cost_repricing": "Stress results may change only fixed execution costs; observations, signal timestamps, entries and exits remain sealed."
+  },
+  "development_gate": {
+    "complete_utc_days_minimum": 90,
+    "natural_virtual_trades_minimum": 100,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.15,
+    "double_fee_net_positive": true,
+    "slippage_stress_net_positive": true,
+    "random_control_excess_return_positive": true,
+    "daily_block_bootstrap_ci95_lower_positive": true,
+    "data_integrity_pass": true,
+    "lookahead_pass": true
+  },
+  "locked_oos_gate": {
+    "complete_utc_days_minimum": 90,
+    "natural_virtual_trades_minimum": 100,
+    "net_return_positive": true,
+    "profit_factor_minimum": 1.2,
+    "double_fee_net_positive": true,
+    "slippage_stress_net_positive": true,
+    "random_control_excess_return_positive": true,
+    "daily_block_bootstrap_ci95_lower_positive": true,
+    "data_integrity_pass": true,
+    "lookahead_pass": true
+  },
+  "prohibited": [
+    "changing any threshold, observation window, decision time, entry delay, holding period, direction, cost, random-control seed, bootstrap policy or gate after development data are read",
+    "opening the locked OOS archives if any development gate fails",
+    "treating a historical OOS pass as live-trading authorization",
+    "crediting perpetual funding, leverage, maker rebates, borrowing yield or unmodeled execution improvements",
+    "placing real or test orders"
+  ]
+}

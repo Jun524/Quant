@@ -294,6 +294,14 @@ from quant.research.quarter_hour_flow import (
     summarize_trades as summarize_quarter_hour_trades,
     reprice_trades as reprice_quarter_hour_trades,
 )
+from quant.research.spot_perp_flow_divergence import (
+    SpotPerpFlowConfig,
+    daily_block_bootstrap_excess_return,
+    matched_random_baseline,
+    reprice_trades as reprice_spot_perp_flow_trades,
+    simulate_flow_divergence,
+    summarize_trades as summarize_spot_perp_flow_trades,
+)
 from quant.research.campaign import microstructure_campaign_preflight, microstructure_run_audit
 from quant.research.protocol import protocol_digests
 from quant.research.forward_dryrun import audit_mtm_segments, build_forward_report, load_forward_trades, summarize_mtm
@@ -8887,6 +8895,62 @@ class ResearchTests(unittest.TestCase):
         second = quarter_hour_bootstrap_loss_probability(trades, paths=100)
         self.assertEqual(first, second)
 
+    def test_spot_perp_flow_divergence_uses_only_completed_opposing_flow(self) -> None:
+        four_hours = 4 * 60 * 60 * 1000
+        spot = [
+            {"agg_trade_id": 1, "transact_time": four_hours - 600_000, "price": 99.0, "quantity": 2.0, "is_buyer_maker": True},
+            {"agg_trade_id": 2, "transact_time": four_hours - 1, "price": 99.0, "quantity": 1.0, "is_buyer_maker": True},
+            {"agg_trade_id": 3, "transact_time": four_hours + 60_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": False},
+            {"agg_trade_id": 4, "transact_time": four_hours + 60_000 + four_hours, "price": 110.0, "quantity": 1.0, "is_buyer_maker": False},
+            {"agg_trade_id": 5, "transact_time": 2 * four_hours + 60_000 + four_hours, "price": 111.0, "quantity": 1.0, "is_buyer_maker": False},
+        ]
+        perpetual = [
+            {"agg_trade_id": 101, "transact_time": four_hours - 600_000, "price": 99.0, "quantity": 2.0, "is_buyer_maker": False},
+            {"agg_trade_id": 102, "transact_time": four_hours - 1, "price": 99.0, "quantity": 1.0, "is_buyer_maker": False},
+        ]
+        config = SpotPerpFlowConfig()
+        trades = simulate_flow_divergence(
+            spot, perpetual, boundaries_ms=[four_hours, 2 * four_hours], config=config
+        )
+        self.assertEqual(len(trades), 1)
+        self.assertEqual(trades[0]["direction"], "simulated_spot_long")
+        self.assertAlmostEqual(trades[0]["perp_imbalance"], 1.0)
+        self.assertAlmostEqual(trades[0]["spot_imbalance"], -1.0)
+        self.assertEqual(trades[0]["entry_time_ms"], four_hours + 60_000)
+        self.assertEqual(trades[0]["exit_time_ms"], four_hours + 60_000 + four_hours)
+        self.assertEqual(trades[0]["funding_return"], 0.0)
+        self.assertLess(trades[0]["net_return"], trades[0]["raw_price_return"])
+        stressed = reprice_spot_perp_flow_trades(
+            trades, fee_per_side_bps=20.0, slippage_per_side_bps=5.0
+        )
+        self.assertLess(stressed[0]["net_return"], trades[0]["net_return"])
+        summary = summarize_spot_perp_flow_trades(trades)
+        self.assertEqual(summary["trades"], 1)
+        self.assertEqual(summary["funding_return"], 0.0)
+        controls = matched_random_baseline(
+            spot,
+            boundaries_ms=[four_hours, 2 * four_hours],
+            signal_trades=trades,
+            config=config,
+        )
+        self.assertEqual(len(controls), 1)
+        bootstrap = daily_block_bootstrap_excess_return(
+            trades, controls, block_days=1, paths=100
+        )
+        self.assertIsNotNone(bootstrap["ci95_lower"])
+
+    def test_spot_perp_flow_divergence_rejects_a_trade_id_gap(self) -> None:
+        four_hours = 4 * 60 * 60 * 1000
+        spot = [
+            {"agg_trade_id": 1, "transact_time": four_hours - 600_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": True},
+            {"agg_trade_id": 3, "transact_time": four_hours + 60_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": False},
+        ]
+        perpetual = [
+            {"agg_trade_id": 1, "transact_time": four_hours - 600_000, "price": 100.0, "quantity": 1.0, "is_buyer_maker": False},
+        ]
+        with self.assertRaisesRegex(ValueError, "spot aggregate-trade IDs are not continuous"):
+            simulate_flow_divergence(spot, perpetual, boundaries_ms=[four_hours])
+
     def test_metrics_normalization_collapses_only_exact_duplicates(self) -> None:
         times = pd.date_range("2021-01-01", periods=288, freq="5min", tz="UTC")
         frame = pd.DataFrame(
@@ -11018,6 +11082,45 @@ class ResearchTests(unittest.TestCase):
             self.assertAlmostEqual(result["short_metrics"]["mae_max"], 0.1)
             self.assertAlmostEqual(result["pnl_components"]["net_pnl"], 10)
             self.assertIn("breakout_success_rate", result["breakout_metrics"])
+
+    def test_result_loader_reconciles_daily_profit_to_organic_cost_adjusted_pnl(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            result_path = Path(directory) / "result.zip"
+            payload = {
+                "strategy": {
+                    "Demo": {
+                        "starting_balance": 1000,
+                        "backtest_days": 31,
+                        "backtest_start": "2025-01-01 00:00:00+00:00",
+                        "backtest_end": "2025-02-01 00:00:00+00:00",
+                        "daily_profit": [["2025-01-02", 60.0]],
+                        "trades": [
+                            {
+                                "profit_abs": 10.0,
+                                "close_date": "2025-01-02 12:00:00+00:00",
+                                "exit_reason": "signal",
+                                "orders": [
+                                    {"cost": 100.0, "ft_is_entry": True},
+                                    {"cost": 110.0, "ft_is_entry": False},
+                                ],
+                            },
+                            {
+                                "profit_abs": 50.0,
+                                "close_date": "2025-01-02 12:01:00+00:00",
+                                "exit_reason": "force_exit",
+                                "orders": [],
+                            },
+                        ],
+                    }
+                }
+            }
+            with ZipFile(result_path, "w") as archive:
+                archive.writestr("result.json", json.dumps(payload))
+            result = load_freqtrade_result(result_path, "Demo", modeled_slippage_bps=10.0)
+            self.assertEqual(result["daily_accounting"]["status"], "RECONCILED")
+            self.assertAlmostEqual(result["organic"]["net_profit"], 9.79)
+            self.assertAlmostEqual(result["daily"]["series"][0]["profit"], 9.79)
+            self.assertAlmostEqual(result["monthly"]["series"][0]["return"], 0.00979)
 
     def test_historical_report_requires_exact_sealed_universe_binding(self) -> None:
         expected = "a" * 64

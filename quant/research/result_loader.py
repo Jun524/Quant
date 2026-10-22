@@ -186,6 +186,11 @@ def _breakout_metrics(trades: list[dict], detail_data_dir: Path | None) -> dict:
     gross_profit = sum(winners)
     long_values = [float(trade.get("profit_abs") or 0.0) for trade in trades if not trade.get("is_short")]
     short_values = [float(trade.get("profit_abs") or 0.0) for trade in trades if trade.get("is_short")]
+    holding_minutes = [
+        float(trade["trade_duration"])
+        for trade in trades
+        if trade.get("trade_duration") is not None
+    ]
     by_regime: dict[str, dict] = {}
     for regime in ("BULL", "BEAR", "RANGE", "TRANSITION", "UNSPECIFIED"):
         values = [float(trade.get("profit_abs") or 0.0) for trade in trades if _entry_regime(trade) == regime]
@@ -199,7 +204,7 @@ def _breakout_metrics(trades: list[dict], detail_data_dir: Path | None) -> dict:
         "mfe_mean": sum(mfe) / len(mfe) if mfe else None,
         "mae_mean": sum(mae) / len(mae) if mae else None,
         "mfe_mae_ratio": (sum(mfe) / len(mfe)) / (sum(mae) / len(mae)) if mfe and mae and sum(mae) else None,
-        "median_holding_minutes": median([float(trade["trade_duration"]) for trade in trades if trade.get("trade_duration") is not None]) if trades else None,
+        "median_holding_minutes": median(holding_minutes) if holding_minutes else None,
         "long_expectancy": sum(long_values) / len(long_values) if long_values else None,
         "short_expectancy": sum(short_values) / len(short_values) if short_values else None,
         "expectancy": sum(profits) / len(profits) if profits else None,
@@ -218,6 +223,33 @@ def _modeled_slippage_cost(trades: list[dict], slippage_bps: float) -> float:
         sum(float(order.get("cost") or 0.0) for order in trade.get("orders", [])) * slippage_bps / 10_000
         for trade in trades
     )
+
+
+def _organic_daily_profit(
+    trades: list[dict], *, modeled_slippage_bps: float
+) -> list[list[str | float]] | None:
+    """Return cost-adjusted realized PnL grouped by organic trade close day.
+
+    Freqtrade's top-level ``daily_profit`` may include a terminal ``force_exit``
+    while the research gates intentionally exclude it.  It also cannot include
+    a slippage stress added only by this loader.  Rebuild the series from the
+    same organic trade PnL used by ``organic`` whenever each close timestamp is
+    available; otherwise callers must retain the source series and disclose
+    that the two accounting bases cannot be reconciled.
+    """
+    grouped: dict[date, float] = {}
+    for trade in trades:
+        closed = trade.get("close_date")
+        if not closed:
+            return None
+        try:
+            closed_day = date.fromisoformat(str(closed)[:10])
+        except ValueError:
+            return None
+        profit = float(trade.get("profit_abs") or 0.0)
+        profit -= _modeled_slippage_cost([trade], modeled_slippage_bps)
+        grouped[closed_day] = grouped.get(closed_day, 0.0) + profit
+    return [[observed.isoformat(), value] for observed, value in sorted(grouped.items())]
 
 
 def _daily_distribution(daily_profit: list, starting_balance: float) -> dict:
@@ -400,11 +432,26 @@ def load_freqtrade_result(
         starting_balance,
     )
     net_return = float(organic_summary["net_return"])
-    daily = _daily_distribution(strategy.get("daily_profit") or [], starting_balance)
+    organic_daily_profit = _organic_daily_profit(
+        organic, modeled_slippage_bps=modeled_slippage_bps
+    )
+    if organic_daily_profit is None:
+        daily_profit = strategy.get("daily_profit") or []
+        daily_accounting = {
+            "status": "UNRECONCILED_SOURCE_FALLBACK",
+            "basis": "Freqtrade daily_profit; one or more organic trades lack close_date, so force-exit exclusion and modeled slippage cannot be reconciled by close day.",
+        }
+    else:
+        daily_profit = organic_daily_profit
+        daily_accounting = {
+            "status": "RECONCILED",
+            "basis": "organic trade profit_abs grouped by UTC close date, less the same modeled slippage used by organic net PnL; force exits excluded.",
+        }
+    daily = _daily_distribution(daily_profit, starting_balance)
     coverage_start = date.fromisoformat(str(strategy["backtest_start"])[:10]) if strategy.get("backtest_start") else None
     coverage_end = date.fromisoformat(str(strategy["backtest_end"])[:10]) if strategy.get("backtest_end") else None
     monthly = _monthly_distribution(
-        strategy.get("daily_profit") or [],
+        daily_profit,
         starting_balance,
         coverage_start=coverage_start,
         coverage_end=coverage_end,
@@ -429,7 +476,8 @@ def load_freqtrade_result(
         "calmar": strategy.get("calmar"),
         "expectancy": strategy.get("expectancy"),
         "daily": daily,
-        "equity_basis": "closed_trade_daily_profit_not_mark_to_market",
+        "equity_basis": "organic_closed_trade_daily_profit_not_mark_to_market",
+        "daily_accounting": daily_accounting,
         "monthly": monthly,
         "positive_day_ratio": daily.get("positive_day_ratio", float(strategy.get("winning_days") or 0) / days),
         "daily_geometric_return": daily.get("geometric_daily_return", (1 + net_return) ** (1 / days) - 1 if net_return > -1 else -1.0),

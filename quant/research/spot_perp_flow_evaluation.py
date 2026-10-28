@@ -69,6 +69,7 @@ def extract_market_observations(
     totals = {boundary: 0.0 for boundary in boundaries}
     signed = {boundary: 0.0 for boundary in boundaries}
     references: dict[int, dict[str, Any]] = {}
+    feature_index = 0
     entry_index = 0
     pending_exits: list[tuple[int, int]] = []  # (scheduled exit, boundary)
     previous_id: int | None = None
@@ -90,8 +91,14 @@ def extract_market_observations(
             coverage_previous = timestamp
             saw_coverage_row = True
 
-        for boundary in boundaries:
-            if boundary - config.observation_window_ms <= timestamp < boundary:
+        # The ten-minute windows are separated by four hours.  Advancing this
+        # pointer makes extraction O(rows + boundaries), rather than scanning
+        # every one of the quarter's boundaries for each aggregate trade.
+        while feature_index < len(boundaries) and timestamp >= boundaries[feature_index]:
+            feature_index += 1
+        if feature_index < len(boundaries):
+            boundary = boundaries[feature_index]
+            if timestamp >= boundary - config.observation_window_ms:
                 totals[boundary] += quantity
                 signed[boundary] += (-quantity if buyer_maker else quantity)
 

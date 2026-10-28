@@ -347,6 +347,7 @@ from scripts.sync_alpha007_registry import (
     event_has_compact_archive,
     receipt_health as alpha007_receipt_health,
     registry_status as alpha007_registry_status,
+    terminal_collection_failure as alpha007_terminal_collection_failure,
     write_once_json as write_alpha007_receipt_once,
 )
 from scripts.manage_alpha001_forward_dryrun import (
@@ -3359,6 +3360,21 @@ class OrderBookTests(unittest.TestCase):
             self.assertEqual(report["eligible_timing_runs"], 1)
             self.assertEqual(report["excluded_timing_runs"], 1)
             self.assertEqual(report["data_integrity"]["status"], "PASS_WITH_TIMING_EXCLUSIONS")
+            (root / "campaign-state.json").write_text(
+                json.dumps(
+                    {
+                        "status": "FINISHED",
+                        "terminal_reason": "deadline_reached",
+                        "started_at": "2025-01-01T00:00:00+00:00",
+                        "deadline_at": "2025-01-02T00:00:00+00:00",
+                        "ended_at": "2025-01-02T00:00:00+00:00",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            terminal_report = analyze_microstructure(root)
+            self.assertEqual(terminal_report["status"], "FAIL")
+            self.assertTrue(terminal_report["collection_termination"]["insufficient_complete_days"])
 
     def test_microstructure_complete_days_require_current_protocol(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -10801,6 +10817,30 @@ class ResearchTests(unittest.TestCase):
         self.assertTrue(result["locked_validation_opened"])
         self.assertNotIn("verified_runs", result["accumulation"]["data_integrity"])
         self.assertEqual(alpha007_registry_status("FAIL"), "FAIL")
+
+    def test_alpha007_ended_collection_failure_closes_without_opening_locked_oos(self) -> None:
+        report = {
+            "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+            "status": "FAIL",
+            "complete_days": 11,
+            "collection_termination": {
+                "terminal": True,
+                "campaign_status": "FINISHED",
+                "insufficient_complete_days": True,
+            },
+            "data_integrity": {"verified_runs": []},
+            "checks": [{"name": "complete_collection_days", "passed": False}],
+        }
+        self.assertTrue(alpha007_terminal_collection_failure(report))
+        result = build_alpha007_registry_result(
+            report,
+            source_hash="a" * 64,
+            evidence_archive="research/evidence/alpha007/result.json.gz",
+        )
+        self.assertEqual(result["status"], "FAIL")
+        self.assertEqual(result["gate"]["stage"], "collection_failed")
+        self.assertFalse(result["validation_opened"])
+        self.assertFalse(result["locked_validation_opened"])
 
     def test_alpha007_terminal_health_requires_valid_sealed_receipt(self) -> None:
         self.assertEqual(

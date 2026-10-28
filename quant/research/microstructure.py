@@ -28,6 +28,33 @@ CONFIG = {
     "horizons_seconds": (5, 30, 60, 300),
 }
 
+TERMINAL_CAMPAIGN_STATES = {"FINISHED", "STOPPED", "PREFLIGHT_FAILED"}
+
+
+def _collection_terminal(root: Path) -> dict:
+    """Expose a bounded collector's immutable terminal state to the evaluator.
+
+    A finite campaign that ends before creating the preregistered number of
+    complete days cannot remain an accumulating sample.  It is a fail-closed
+    collection failure, not permission to extend the sample or change signals.
+    """
+    path = root / "campaign-state.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, json.JSONDecodeError):
+        return {"present": False, "terminal": False}
+    status = payload.get("status")
+    terminal = status in TERMINAL_CAMPAIGN_STATES
+    return {
+        "present": True,
+        "terminal": terminal,
+        "campaign_status": status,
+        "terminal_reason": payload.get("terminal_reason"),
+        "started_at": payload.get("started_at"),
+        "deadline_at": payload.get("deadline_at"),
+        "ended_at": payload.get("ended_at"),
+    }
+
 
 def _read_gzip_jsonl(path: Path) -> list[dict]:
     if not path.exists():
@@ -475,6 +502,7 @@ def _bootstrap_hourly_lower(hourly: dict[str, list[float]], simulations: int = 2
 
 
 def analyze_microstructure(root: Path) -> dict:
+    collection_terminal = _collection_terminal(root)
     run_dirs = sorted(path.parent for path in root.glob("*/manifest.json"))
     integrity = [_verify_run(run_dir) for run_dir in run_dirs]
     eligible_pairs = [
@@ -556,9 +584,14 @@ def analyze_microstructure(root: Path) -> dict:
     ]
     # The locked window is fixed. Once all 17 days exist, too few signals or
     # fills is itself a failed hypothesis rather than permission to extend the
-    # sample until significance appears.
+    # sample until significance appears. A bounded campaign that has already
+    # ended before reaching 17 complete days also fails closed: the missing
+    # coverage cannot be backfilled or extended after observing the sample.
     collection_ready = checks[0]["passed"]
-    status = "PASS" if all(check["passed"] for check in checks) else ("FAIL" if collection_ready else "ACCUMULATING")
+    collection_ended_early = bool(collection_terminal["terminal"] and not collection_ready)
+    status = "PASS" if all(check["passed"] for check in checks) else (
+        "FAIL" if collection_ready or collection_ended_early else "ACCUMULATING"
+    )
     return {
         "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
         "status": status,
@@ -580,9 +613,19 @@ def analyze_microstructure(root: Path) -> dict:
         },
         "coverage": coverage,
         "complete_days": complete_days,
+        "collection_termination": {
+            **collection_terminal,
+            "insufficient_complete_days": collection_ended_early,
+            "required_complete_days": 17,
+        },
         "all_detected_signals": len(signals),
         "incomplete_day_signals_excluded": sum(signal["phase"] == "UNASSIGNED_INCOMPLETE" for signal in signals),
         "phases": summaries,
         "checks": checks,
-        "warning": "A PASS is shadow evidence only and still requires a separate dry-run gate before promotion.",
+        "warning": (
+            "The bounded collector ended before the preregistered 17 complete UTC days; "
+            "this evidence fails closed and must not be extended or backfilled."
+            if collection_ended_early
+            else "A PASS is shadow evidence only and still requires a separate dry-run gate before promotion."
+        ),
     }

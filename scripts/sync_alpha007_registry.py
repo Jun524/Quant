@@ -27,6 +27,22 @@ PARTIAL_FILL_REPORT_PATH = PROJECT_ROOT / "reports" / "alpha007-partial-fill-str
 TERMINAL_STATUSES = {"PASS", "FAIL"}
 
 
+def terminal_collection_failure(report: dict) -> bool:
+    """Allow a sealed fail only for an explicitly ended, under-covered campaign."""
+    termination = report.get("collection_termination") or {}
+    try:
+        complete_days = int(report.get("complete_days") or 0)
+    except (TypeError, ValueError):
+        return False
+    return bool(
+        report.get("status") == "FAIL"
+        and complete_days < 17
+        and termination.get("terminal") is True
+        and termination.get("insufficient_complete_days") is True
+        and termination.get("campaign_status") in {"FINISHED", "STOPPED", "PREFLIGHT_FAILED"}
+    )
+
+
 def archive_report(report_path: Path, archive_root: Path) -> tuple[str, Path]:
     """Seal the exact report bytes outside the registry and return its digest/path."""
     payload = report_path.read_bytes()
@@ -125,6 +141,7 @@ def compact_accumulation(report: dict) -> dict:
         "collection_totals",
         "coverage",
         "complete_days",
+        "collection_termination",
         "all_detected_signals",
         "incomplete_day_signals_excluded",
         "phases",
@@ -158,12 +175,14 @@ def build_registry_result(
     evidence_archive: str,
 ) -> dict:
     status = registry_status(str(report.get("status") or ""))
+    incomplete_collection = terminal_collection_failure(report)
+    terminal_evidence = report["status"] in TERMINAL_STATUSES and not incomplete_collection
     return {
         "status": status,
         "shadow_status": report["status"],
         "promotion_eligible": False,
-        "validation_opened": report["status"] in TERMINAL_STATUSES,
-        "locked_validation_opened": report["status"] in TERMINAL_STATUSES,
+        "validation_opened": terminal_evidence,
+        "locked_validation_opened": terminal_evidence,
         "source_report": "reports/alpha007-accumulation.json",
         "source_sha256": source_hash,
         "evidence_archive": evidence_archive,
@@ -174,7 +193,7 @@ def build_registry_result(
             "status": status,
             "stage": "forward_collection"
             if report["status"] == "ACCUMULATING"
-            else "locked_oos",
+            else ("collection_failed" if incomplete_collection else "locked_oos"),
             "checks": report["checks"],
         },
         "warning": (
@@ -182,7 +201,12 @@ def build_registry_result(
             "without the separate 10bp cost stress, partial-fill veto, and an "
             "order-path dry-run gate."
             if report["status"] == "PASS"
-            else "Alpha #7 has not produced live-promotion evidence."
+            else (
+                "Alpha #7 ended with insufficient preregistered complete-day coverage; "
+                "the candidate is closed without an OOS performance verdict."
+                if incomplete_collection
+                else "Alpha #7 has not produced live-promotion evidence."
+            )
         ),
     }
 
@@ -229,7 +253,9 @@ def receipt_health(
         complete_days = int(report.get("complete_days") or 0)
     except (TypeError, ValueError):
         complete_days = -1
-    if report_status not in TERMINAL_STATUSES or complete_days < 17:
+    if report_status not in TERMINAL_STATUSES or (
+        complete_days < 17 and not terminal_collection_failure(report)
+    ):
         failures.append("report_not_terminal")
     if receipt.get("report_status") != report_status:
         failures.append("receipt_report_status_mismatch")
@@ -379,7 +405,7 @@ def main() -> None:
         print(json.dumps({"status": "UNCHANGED", "source_sha256": source_hash}, indent=2))
         return
     if terminal:
-        if int(report.get("complete_days") or 0) < 17:
+        if int(report.get("complete_days") or 0) < 17 and not terminal_collection_failure(report):
             raise SystemExit("FAIL: Alpha #7 terminal report has fewer than 17 complete days")
         try:
             replay_report(report)

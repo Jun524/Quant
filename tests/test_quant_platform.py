@@ -6937,6 +6937,7 @@ class ResearchTests(unittest.TestCase):
                 "maximum_historical_drawdown": 0.1,
                 "maximum_combined_cost_stress_drawdown": 0.1,
                 "liquidation_exits": 0,
+                "rule_violations": 0,
                 "maximum_planned_account_risk_per_trade": 0.0025,
                 "maximum_planned_leverage": 1.0,
                 "maximum_simultaneous_positions": 2,
@@ -6953,6 +6954,11 @@ class ResearchTests(unittest.TestCase):
         version_rejected = validate_risk_policy_contract(missing_version, objective)
         self.assertEqual(version_rejected["status"], "FAIL")
         self.assertIn("semantic versioning", " ".join(version_rejected["failures"]))
+        objective["capital_preservation_requirements"]["rule_violations"] = 1
+        rule_budget_rejected = validate_risk_policy_contract(risk, objective)
+        self.assertEqual(rule_budget_rejected["status"], "FAIL")
+        self.assertIn("rule_violations", " ".join(rule_budget_rejected["failures"]))
+        objective["capital_preservation_requirements"]["rule_violations"] = 0
         objective["return_objective"]["monthly_return_target"] = 0.1
         rejected = validate_risk_policy_contract(risk, objective)
         self.assertEqual(rejected["status"], "FAIL")
@@ -12015,6 +12021,7 @@ class ResearchTests(unittest.TestCase):
                 "modeled_slippage_bps": 5.0,
                 "maximum_combined_cost_stress_drawdown": 0.10,
                 "liquidation_exits": 0,
+                "rule_violations": 0,
                 "adverse_position_adds": "FORBIDDEN",
                 "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
                 "data_integrity": "PASS",

@@ -61,6 +61,7 @@ def validate_risk_policy_contract(
         "maximum_historical_drawdown": "maximum_cost_after_mtm_drawdown",
         "maximum_combined_cost_stress_drawdown": "maximum_cost_stress_mtm_drawdown",
         "liquidation_exits": "liquidation_exits",
+        "rule_violations": "rule_violations",
         "maximum_planned_account_risk_per_trade": "maximum_planned_account_risk_per_trade",
         "maximum_planned_leverage": "maximum_planned_leverage",
         "maximum_simultaneous_positions": "maximum_simultaneous_positions",

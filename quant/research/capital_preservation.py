@@ -113,6 +113,8 @@ def evaluate_capital_preservation(
     maximum_leverage = _number(requirements, "maximum_planned_leverage")
     maximum_risk = _number(requirements, "maximum_planned_account_risk_per_trade")
     maximum_positions = int(_number(requirements, "maximum_simultaneous_positions"))
+    maximum_liquidations = int(_number(requirements, "liquidation_exits"))
+    maximum_rule_violations = int(_number(requirements, "rule_violations"))
     modeled_slippage_bps = _number(requirements, "modeled_slippage_bps")
     maximum_cost_stress_drawdown = _number(requirements, "maximum_combined_cost_stress_drawdown")
 
@@ -149,8 +151,8 @@ def evaluate_capital_preservation(
         _check("planned_risk_per_trade", float(execution_contract.get("planned_account_risk_per_trade") or 1.0) <= maximum_risk, required=f"<= {maximum_risk}", actual=execution_contract.get("planned_account_risk_per_trade"), kind="risk"),
         _check("simultaneous_positions", int(execution_contract.get("maximum_simultaneous_positions") or 0) <= maximum_positions, required=f"<= {maximum_positions}", actual=execution_contract.get("maximum_simultaneous_positions"), kind="risk"),
         _check("adverse_position_adds_forbidden", execution_contract.get("adverse_position_adds") is False, required=False, actual=execution_contract.get("adverse_position_adds"), kind="risk"),
-        _check("liquidation_exits", all(int((result.get("trade_risk") or {}).get("liquidation_exits") or 0) == 0 for result in (development, post_development)), required=0, actual={"development": (development.get("trade_risk") or {}).get("liquidation_exits"), "post_development": (post_development.get("trade_risk") or {}).get("liquidation_exits")}, kind="risk"),
-        _check("rule_violations", type(rule_violations) is int and rule_violations == 0, required=0, actual=rule_violations, kind="integrity"),
+        _check("liquidation_exits", all(int((result.get("trade_risk") or {}).get("liquidation_exits") or 0) <= maximum_liquidations for result in (development, post_development)), required=f"<= {maximum_liquidations}", actual={"development": (development.get("trade_risk") or {}).get("liquidation_exits"), "post_development": (post_development.get("trade_risk") or {}).get("liquidation_exits")}, kind="risk"),
+        _check("rule_violations", type(rule_violations) is int and rule_violations <= maximum_rule_violations, required=f"<= {maximum_rule_violations}", actual=rule_violations, kind="integrity"),
         _check("data_integrity", integrity.get("data_integrity") == "PASS", required="PASS", actual=integrity.get("data_integrity"), kind="integrity"),
         _check("lookahead_analysis", integrity.get("lookahead") == "PASS", required="PASS", actual=integrity.get("lookahead"), kind="integrity"),
         _check("recursive_analysis", integrity.get("recursive") == "PASS", required="PASS", actual=integrity.get("recursive"), kind="integrity"),

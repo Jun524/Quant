@@ -169,7 +169,7 @@
       },
       {
         "path": "research/alpha015-capital-preservation-amendment-012.json",
-        "sha256": "4eaa32c34c3fbfa8e95df41213faedffaad2498a74fcac8768f6b1204fcb2ae1"
+        "sha256": "69c1cb06af028dfcae29b9e9195081d25b4c561efd0c3784576ec10ce00f768e"
       }
     ]
   },
@@ -187,11 +187,11 @@
       },
       {
         "path": "quant/research/candidate_activation.py",
-        "sha256": "dd521e34bd8a90caca37c15181173d93043e9dad380aa0597884a6150b67c400"
+        "sha256": "70e6a67e3f1ed26f030a04fb1884bbd29ca63dd93e5db3d533ea2b841bc6ea43"
       },
       {
         "path": "scripts/alpha015_readiness.py",
-        "sha256": "d0eea87f834408e6bf28014cacfa6151eb03e39090ccacf47e657f2cb935ac97"
+        "sha256": "5c2579b7e6d60e159688ea0c9a40fb82974b25679d26a752d4c1aa6da95133e5"
       }
     ],
     "return_data_used": false

@@ -23,14 +23,23 @@
     "lookahead_analysis": "PASS",
     "recursive_analysis": "PASS"
   },
+  "candidate_compatibility": {
+    "status": "VETO_MAXIMUM_SIMULTANEOUS_POSITIONS",
+    "policy_limit": 2,
+    "template_minimum_instruments": 30,
+    "template_buckets": 5,
+    "minimum_concurrent_futures_positions": 12,
+    "reason": "The fixed equal-weight top-quintile and bottom-quintile construction requires six long and six short USD-M futures positions at the minimum 30-instrument universe. A cross-sectional basket is not one futures position for the two-position risk limit.",
+    "required_action": "Do not preregister or acquire Alpha 015 return data under the current policy. A materially different, separately screened and preregistered two-position hypothesis is required before research can resume."
+  },
   "supersedes_for_this_unregistered_candidate": [
     "The 15 percent development and locked-validation minute MTM drawdown acceptance threshold in the template and risk amendment 010.",
     "The post-validation portfolio-level 10 percent monthly-return target gate."
   ],
   "replacement": [
-    "Development and locked validation both require base and stress minute MTM drawdown at or below 10 percent.",
+    "Development and locked validation would require base and stress minute MTM drawdown at or below 10 percent if a future eligible two-position successor is registered.",
     "Long-horizon positive cost-after expectancy is required; a monthly return number is not a pass/fail gate.",
-    "A validation REVIEW remains non-promotional and cannot enable live orders."
+    "The present Alpha 015 template is vetoed before data acquisition because its required concurrent futures positions exceed the policy limit."
   ],
   "nonchanges": [
     "The candidate remains deferred and Experiment 0015 remains unregistered.",

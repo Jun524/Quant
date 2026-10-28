@@ -7522,6 +7522,12 @@ class ResearchTests(unittest.TestCase):
                         "authoritative_risk_contract": {
                             "maximum_base_minute_mark_to_market_drawdown_fraction": 0.10,
                             "maximum_stress_minute_mark_to_market_drawdown_fraction": 0.10,
+                            "maximum_simultaneous_positions": 2,
+                        },
+                        "candidate_compatibility": {
+                            "status": "COMPATIBLE",
+                            "policy_limit": 2,
+                            "minimum_concurrent_futures_positions": 2,
                         },
                     }
                 ),
@@ -7529,10 +7535,12 @@ class ResearchTests(unittest.TestCase):
             )
             template = {
                 "portfolio": {
+                    "buckets": 5,
                     "decision_grid": "10-minute UTC epoch grid",
                     "entry_latency_minutes": 1,
                     "holding_minutes": 10,
                 },
+                "model": {"minimum_symbols": 5},
                 "costs": {
                     "base_all_in_basis_points_per_unit_realized_turnover": 10.0,
                     "stress_all_in_basis_points_per_unit_realized_turnover": 20.0,

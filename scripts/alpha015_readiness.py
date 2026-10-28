@@ -157,6 +157,7 @@ def main() -> None:
     print(json.dumps(report, indent=2))
     if report["status"] in {
         "ACTIVATION_CONTRACT_BLOCK",
+        "INCOMPATIBLE_WITH_CAPITAL_PRESERVATION_POLICY",
         "DATA_INTEGRITY_BLOCK",
         "PREMATURE_EXPERIMENT_REGISTERED",
     }:

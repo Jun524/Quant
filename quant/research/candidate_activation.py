@@ -151,6 +151,7 @@ def verify_alpha015_contract_semantics(
     costs = contract.get("costs") or {}
     calibration = contract.get("execution_calibration") or {}
     portfolio = template.get("portfolio") or {}
+    model = template.get("model") or {}
     template_costs = template.get("costs") or {}
     development_gate = template.get("development_gate") or {}
     validation_gate = template.get("locked_validation_gate") or {}
@@ -250,6 +251,7 @@ def verify_alpha015_contract_semantics(
 
     preservation_contract = preservation.get("authoritative_risk_contract") or {}
     required_policy = preservation.get("policy_binding") or {}
+    candidate_compatible = False
     try:
         base_drawdown = float(
             preservation_contract["maximum_base_minute_mark_to_market_drawdown_fraction"]
@@ -297,6 +299,30 @@ def verify_alpha015_contract_semantics(
             for item in (template.get("post_validation_requirements") or [])
         ):
             failures.append("template_monthly_return_target_forbidden")
+        compatibility = preservation.get("candidate_compatibility") or {}
+        try:
+            maximum_positions = int(
+                preservation_contract["maximum_simultaneous_positions"]
+            )
+            minimum_symbols = int(model["minimum_symbols"])
+            buckets = int(portfolio["buckets"])
+            template_positions = 2 * (minimum_symbols // buckets)
+        except (KeyError, TypeError, ValueError, ZeroDivisionError):
+            failures.append("capital_preservation_position_limit_schema_invalid")
+        else:
+            candidate_compatible = template_positions <= maximum_positions
+            expected_compatibility_status = (
+                "COMPATIBLE" if candidate_compatible else "VETO_MAXIMUM_SIMULTANEOUS_POSITIONS"
+            )
+            if (
+                compatibility.get("status") != expected_compatibility_status
+                or int(compatibility.get("policy_limit") or -1) != maximum_positions
+                or int(compatibility.get("minimum_concurrent_futures_positions") or -1)
+                != template_positions
+            ):
+                failures.append("capital_preservation_position_veto_invalid")
+            if template_positions > maximum_positions:
+                failures.append("template_simultaneous_position_limit_breach")
     return {
         "status": "PASS" if not failures else "FAIL",
         "failures": failures,
@@ -310,6 +336,7 @@ def verify_alpha015_contract_semantics(
             "amendment_path": str(preservation_path.relative_to(root)),
             "maximum_minute_mark_to_market_drawdown": 0.10,
             "monthly_return_target": "NOT_A_GATE",
+            "candidate_compatible": candidate_compatible,
         },
         "calibration_path": calibration_path,
         "calibration_measured_scopes": expected_scopes,
@@ -352,6 +379,15 @@ def evaluate_alpha015_activation(
     }
     methodology_audit = methodology_audit or {}
     resolution = methodology_audit.get("resolution_status") or {}
+    capital_preservation = (
+        (methodology_audit.get("contract_semantics") or {}).get(
+            "capital_preservation"
+        )
+        or {}
+    )
+    capital_preservation_candidate_compatible = (
+        capital_preservation.get("candidate_compatible") is not False
+    )
     unresolved_methodology = sorted(
         name for name, passed in resolution.items() if passed is not True
     )
@@ -376,6 +412,7 @@ def evaluate_alpha015_activation(
         "methodology_audit_current": methodology_current,
         "methodology_artifact_integrity": artifact_integrity_ok,
         "methodology_contract_consistency": resolution.get("contract_terms_consistent") is True,
+        "capital_preservation_candidate_compatible": capital_preservation_candidate_compatible,
         "methodology_resolved_before_preregistration": methodology_current and not unresolved_methodology,
         "screening_did_not_select_candidate_for_immediate_test": selected != candidate,
     }
@@ -388,10 +425,13 @@ def evaluate_alpha015_activation(
         "methodology_audit_current",
         "methodology_artifact_integrity",
         "methodology_contract_consistency",
+        "capital_preservation_candidate_compatible",
         "screening_did_not_select_candidate_for_immediate_test",
     )
     activation_contract_ok = all(checks[name] for name in contract_checks)
-    if len(alpha15_records) > 1:
+    if not capital_preservation_candidate_compatible:
+        status = "INCOMPATIBLE_WITH_CAPITAL_PRESERVATION_POLICY"
+    elif len(alpha15_records) > 1:
         status = "ACTIVATION_CONTRACT_BLOCK"
     elif alpha15_records and not preregistration_verified:
         status = "PREMATURE_EXPERIMENT_REGISTERED"
@@ -432,12 +472,16 @@ def evaluate_alpha015_activation(
                 "Resolve every methodology ambiguity without inspecting returns; do not open Experiment 0015."
                 if status == "WAITING_METHODOLOGY_LOCK"
                 else (
+                    "Alpha 015 requires more concurrent futures positions than the policy permits. Do not alter its locked model; screen a new two-position candidate before acquiring any returns."
+                    if status == "INCOMPATIBLE_WITH_CAPITAL_PRESERVATION_POLICY"
+                    else (
                     "Repair the activation contract and rerun every source check; do not acquire returns."
                     if status == "ACTIVATION_CONTRACT_BLOCK"
                     else (
                         "Create and replay the write-once prior-day universe activation lock; do not acquire returns."
                         if status == "WAITING_ACTIVATION_LOCK"
                         else "Continue sealed daily universe collection; do not open Experiment 0015."
+                    )
                     )
                 )
             )

@@ -37,6 +37,7 @@ HISTORICAL_FUNDING_BATCH_LIMIT ?= 25
 	alpha007-external-cost-stress alpha007-partial-fill-register alpha007-partial-fill-stress alpha007-exchange-filter-audit alpha007-order-path-register alpha007-order-path-status \
 	alpha001-forward-start alpha001-forward-status alpha001-forward-stop \
 	alpha001-forward-report research-health historical-research-status historical-cost-policy-status selection-bias-audit signal-diagnostics alpha013-signal-panel portfolio-activation-readiness portfolio-risk-audit portfolio-execution-audit portfolio-promotion goal-readiness \
+	risk-policy-status \
 	alpha005-development alpha005-validation alpha005-cost-stress \
 	alpha006-development alpha006-validation alpha006-cost-stress \
 	alpha008-development alpha009-development alpha010-register alpha010-metrics-download alpha010-development alpha010-sync alpha010-postmortem alpha011-register alpha011-amendment alpha011-download alpha011-update alpha011-funding-reconcile alpha011-scheduler-start alpha011-scheduler-status alpha011-scheduler-stop alpha011-status alpha011-development alpha011-sync alpha011-validation-open alpha011-validation alpha011-validation-sync alpha012-register alpha012-development alpha012-sync alpha013-register alpha013-download-day alpha013-update alpha013-funding-reconcile alpha013-forward-report alpha013-decision-availability-audit alpha013-causal-veto-sync alpha013-sync alpha013-validation-open alpha013-validation alpha013-validation-sync alpha013-scheduler-start alpha013-scheduler-status alpha013-scheduler-stop alpha013-status alpha014-register alpha014-amendment alpha014-development alpha014-sync alpha015-readiness alpha015-activation-lock alpha015-register alpha015-acquisition-plan alpha015-size-probe alpha015-download-batch alpha015-development alpha015-validation-open alpha015-validation-acquisition-plan alpha015-validation-size-probe alpha015-validation-download-batch alpha015-funding-reconcile alpha015-validation equity-record equity-daily
@@ -364,6 +365,9 @@ historical-funding-ledger-audit:
 
 goal-readiness: platform-scoreboard
 	$(PYTHON) scripts/goal_readiness_report.py
+
+risk-policy-status:
+	$(PYTHON) scripts/risk_policy_status.py
 
 portfolio-activation-readiness:
 	$(PYTHON) scripts/portfolio_activation_readiness.py

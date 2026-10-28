@@ -132,6 +132,7 @@ from quant.research.goal_readiness import (
     audit_portfolio_promotion_receipt,
     build_goal_readiness,
 )
+from quant.research.risk_policy_contract import validate_risk_policy_contract
 from quant.research.historical_admission import (
     HistoricalAdmissionError,
     evaluate_historical_admission,
@@ -6894,6 +6895,51 @@ class ResearchTests(unittest.TestCase):
         self.assertTrue(
             any("Alpha 007" in blocker for blocker in readiness["ordered_blockers"])
         )
+
+    def test_risk_policy_contract_rejects_permissive_or_drifting_objective(self) -> None:
+        risk = {
+            "policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
+            "live_order_authorization": "CLOSED",
+            "primary_objective": "Validate positive long-horizon cost-after expectancy while preserving capital; a monthly return target is not a pass/fail gate.",
+            "non_negotiables": {
+                "maximum_cost_after_mtm_drawdown": 0.1,
+                "maximum_cost_stress_mtm_drawdown": 0.1,
+                "liquidation_exits": 0,
+                "rule_violations": 0,
+                "maximum_planned_account_risk_per_trade": 0.0025,
+                "maximum_planned_leverage": 1.0,
+                "maximum_simultaneous_positions": 2,
+                "adverse_position_adds": "FORBIDDEN",
+                "cost_stress_net_return": "> 0",
+                "lookahead_analysis": "PASS",
+                "recursive_analysis": "PASS",
+                "data_integrity": "PASS",
+            },
+        }
+        objective = {
+            "live_order_authorization": "CLOSED",
+            "return_objective": {
+                "monthly_return_target": "NOT_A_GATE",
+                "promotion_requirement": "positive_long_horizon_cost_after_expectancy",
+            },
+            "capital_preservation_requirements": {
+                "maximum_historical_drawdown": 0.1,
+                "maximum_combined_cost_stress_drawdown": 0.1,
+                "liquidation_exits": 0,
+                "maximum_planned_account_risk_per_trade": 0.0025,
+                "maximum_planned_leverage": 1.0,
+                "maximum_simultaneous_positions": 2,
+                "adverse_position_adds": "FORBIDDEN",
+                "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
+                "lookahead_analysis": "PASS",
+                "recursive_analysis": "PASS",
+            },
+        }
+        self.assertEqual(validate_risk_policy_contract(risk, objective)["status"], "PASS")
+        objective["return_objective"]["monthly_return_target"] = 0.1
+        rejected = validate_risk_policy_contract(risk, objective)
+        self.assertEqual(rejected["status"], "FAIL")
+        self.assertIn("monthly return gate", " ".join(rejected["failures"]))
 
     def test_goal_readiness_exposes_historical_policy_as_non_promotion_evidence(self) -> None:
         readiness = build_goal_readiness(

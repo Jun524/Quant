@@ -21,6 +21,85 @@ def _sha256(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
 
 
+def build_registry_result(report: dict, *, report_file_sha256: str) -> dict:
+    """Project a sealed Alpha #16 development FAIL into the common registry view."""
+    if report.get("candidate") != CANDIDATE or report.get("status") != "FAIL":
+        raise ValueError("Alpha #16 result projection requires a sealed development FAIL")
+    base = report.get("base") or {}
+    evidence = report.get("evidence") or {}
+    failed_checks = [
+        str(item.get("name"))
+        for item in report.get("checks") or []
+        if isinstance(item, dict) and item.get("passed") is not True
+    ]
+    if not failed_checks:
+        raise ValueError("Alpha #16 FAIL has no failed gate")
+    return {
+        "status": "FAIL",
+        "development_data_acquired": True,
+        "validation_opened": False,
+        "locked_validation_opened": False,
+        "promotion_eligible": False,
+        "live_promotion_eligible": False,
+        "source_report": "reports/alpha016-development.json",
+        "source_sha256": report_file_sha256,
+        "source_manifest": report.get("source_manifest"),
+        "source_manifest_sha256": report.get("source_manifest_sha256"),
+        "report_sha256": report.get("report_sha256"),
+        "development": {
+            "organic": {
+                "trades": int(base.get("trades") or 0),
+                "net_profit": float(base.get("sum_net_return") or 0.0),
+                "net_return": float(base.get("compounded_net_return") or 0.0),
+                "profit_factor": base.get("profit_factor"),
+            },
+            "pnl_components": {
+                "price_pnl_estimate": float(base.get("gross_price_return") or 0.0),
+                "trading_fees": -float(base.get("trading_fee_drag") or 0.0),
+                "funding_pnl": float(base.get("funding_return") or 0.0),
+                "modeled_slippage": -float(base.get("slippage_drag") or 0.0),
+                "net_pnl": float(base.get("sum_net_return") or 0.0),
+            },
+            "breakout_metrics": {
+                "maximum_drawdown": base.get("maximum_drawdown"),
+                "largest_winner_profit_concentration": base.get(
+                    "largest_winner_profit_concentration"
+                ),
+            },
+        },
+        "gate": {
+            "status": "FAIL",
+            "stage": "sealed_historical_development",
+            "policy": {"min_oos_trades": 100},
+            "checks": [
+                {
+                    "name": item["name"],
+                    "passed": item["passed"],
+                    "actual": evidence.get(item["name"]),
+                    "required": True,
+                    "severity": "fail",
+                }
+                for item in report.get("checks") or []
+                if isinstance(item, dict)
+            ],
+        },
+        "failure_reasons": [
+            "INSUFFICIENT_SAMPLE",
+            "NO_SIGNAL_EDGE",
+            "COST_STRESS_FAILURE",
+            "RANDOM_CONTROL_UNDERPERFORMANCE",
+            "BOOTSTRAP_CONFIDENCE_FAILURE",
+        ],
+        "locked_oos": "UNOPENED_DEVELOPMENT_FAIL",
+        "orders_submitted": False,
+        "live_order_authorization": "CLOSED",
+        "warning": (
+            "Alpha #16 failed its sealed development gate. Do not open locked OOS, "
+            "retune the hypothesis, or use this simulation-only result for promotion."
+        ),
+    }
+
+
 def main() -> None:
     report_path = PROJECT_ROOT / "reports/alpha016-development.json"
     preregistration_path = PROJECT_ROOT / "research/alpha016-preregistration.json"
@@ -48,13 +127,14 @@ def main() -> None:
         raise SystemExit("FAIL: Alpha 016 must have exactly one registered experiment")
     experiment_id = int(experiments[0]["experiment_id"])
     report_digest = _sha256(report_path)
+    result = build_registry_result(report, report_file_sha256=report_digest)
     for event in snapshot.get("events") or []:
         if (
             event.get("experiment_id") == experiment_id
-            and event.get("event_type") == "alpha016_development_closed"
-            and event.get("payload", {}).get("report_file_sha256") == report_digest
+            and event.get("event_type") == "result_update"
+            and (event.get("payload") or {}).get("source_sha256") == report_digest
         ):
-            print(json.dumps({"status": "ALREADY_RECORDED", "event_id": event["event_id"]}, indent=2))
+            print(json.dumps({"status": "ALREADY_MATERIALIZED", "event_id": event["event_id"]}, indent=2))
             return
     evidence = report["evidence"]
     payload = {
@@ -80,12 +160,23 @@ def main() -> None:
         "orders_submitted": False,
         "live_order_authorization": "CLOSED",
     }
+    if not any(
+        event.get("experiment_id") == experiment_id
+        and event.get("event_type") == "alpha016_development_closed"
+        and (event.get("payload") or {}).get("report_file_sha256") == report_digest
+        for event in snapshot.get("events") or []
+    ):
+        registry.append_event(
+            experiment_id=experiment_id,
+            event_type="alpha016_development_closed",
+            payload=payload,
+        )
     event = registry.append_event(
         experiment_id=experiment_id,
-        event_type="alpha016_development_closed",
-        payload=payload,
+        event_type="result_update",
+        payload={"source_sha256": report_digest, "result": result},
     )
-    print(json.dumps({"status": "RECORDED", "event_id": event["event_id"], "verdict": "FAIL"}, indent=2))
+    print(json.dumps({"status": "MATERIALIZED", "event_id": event["event_id"], "verdict": "FAIL"}, indent=2))
 
 
 if __name__ == "__main__":

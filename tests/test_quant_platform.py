@@ -354,6 +354,9 @@ from scripts.close_alpha007_collection_shortfall import (
     build_collection_closure,
     validate_collection_closure,
 )
+from scripts.record_alpha016_development import (
+    build_registry_result as build_alpha016_registry_result,
+)
 from scripts.manage_alpha001_forward_dryrun import (
     forward_operational_health,
     inspect_bot_log,
@@ -11213,6 +11216,71 @@ class ResearchTests(unittest.TestCase):
         scoreboard = build_scoreboard(registry)
         self.assertEqual(scoreboard["events"], 1)
         self.assertEqual(scoreboard["experiments_detail"][0]["status"], "FAIL")
+
+    def test_alpha016_sealed_development_fail_materializes_scoreboard_result(self) -> None:
+        report = {
+            "candidate": "ALPHA_016_SPOT_PERP_FLOW_DIVERGENCE",
+            "status": "FAIL",
+            "source_manifest": "research/alpha016/raw/development/manifest.json",
+            "source_manifest_sha256": "a" * 64,
+            "report_sha256": "b" * 64,
+            "base": {
+                "trades": 3,
+                "sum_net_return": -0.0082,
+                "compounded_net_return": -0.0081,
+                "profit_factor": 0.0067,
+                "gross_price_return": -0.0004,
+                "trading_fee_drag": 0.006,
+                "slippage_drag": 0.0018,
+                "funding_return": 0.0,
+                "maximum_drawdown": 0.0082,
+                "largest_winner_profit_concentration": 1.0,
+            },
+            "evidence": {
+                "natural_virtual_trades": 3,
+                "net_return": -0.0081,
+                "profit_factor": 0.0067,
+                "double_fee_net_return": -0.0141,
+                "slippage_stress_net_return": -0.0093,
+                "random_control_excess_return": -0.0136,
+                "bootstrap_ci95_lower": -0.0321,
+                "data_integrity_pass": True,
+                "lookahead_pass": True,
+            },
+            "checks": [
+                {"name": "natural_virtual_trades_minimum", "passed": False},
+                {"name": "data_integrity_pass", "passed": True},
+                {"name": "lookahead_pass", "passed": True},
+            ],
+        }
+        result = build_alpha016_registry_result(report, report_file_sha256="c" * 64)
+        self.assertEqual(result["status"], "FAIL")
+        self.assertFalse(result["validation_opened"])
+        self.assertEqual(result["development"]["organic"]["trades"], 3)
+        scoreboard = build_scoreboard(
+            {
+                "experiments": [
+                    {
+                        "experiment_id": 16,
+                        "strategy": report["candidate"],
+                        "result": {"gate": {"status": "ACCUMULATING"}},
+                    }
+                ],
+                "events": [
+                    {
+                        "event_id": 1,
+                        "experiment_id": 16,
+                        "event_type": "result_update",
+                        "payload": {"source_sha256": "c" * 64, "result": result},
+                    }
+                ],
+            }
+        )
+        row = scoreboard["experiments_detail"][0]
+        self.assertEqual(row["status"], "FAIL")
+        self.assertEqual(row["trade_count"], 3)
+        self.assertAlmostEqual(row["profit_factor"], 0.0067)
+        self.assertIn("INSUFFICIENT_SAMPLE", row["failure_reasons"])
 
     def test_edge_budget_and_scoreboard_classify_cost_failure(self) -> None:
         self.assertFalse(EdgeBudget(7, 10, 0, 2, 0).viable)

@@ -92,7 +92,8 @@ def classify_experiment(record: dict) -> dict:
     development = _development_result(record)
     has_validation = bool(validation)
     evaluation = validation if has_validation else development
-    validation_organic = evaluation.get("organic") or {}
+    validation_organic = validation.get("organic") or {}
+    evaluation_organic = evaluation.get("organic") or {}
     development_organic = development.get("organic") or {}
     components = _pnl_components(evaluation)
     slippage_stress = result.get("slippage_stress") or {}
@@ -110,7 +111,7 @@ def classify_experiment(record: dict) -> dict:
         or evaluation.get("carry_metrics")
         or {}
     )
-    trades = int(validation_organic.get("trades") or 0)
+    trades = int(evaluation_organic.get("trades") or 0)
     policy = gate.get("policy") or {}
     minimum = int(policy.get("min_oos_trades") or 30)
     status = gate.get("status") or "UNKNOWN"
@@ -189,8 +190,8 @@ def classify_experiment(record: dict) -> dict:
         "mae_mean": specialized_metrics.get("mae_mean"),
         "winner_concentration": specialized_metrics.get("largest_winner_profit_concentration"),
         "pnl_by_regime": specialized_metrics.get("pnl_by_regime"),
-        "profit_factor": validation_organic.get("profit_factor"),
-        "net_return": _number(validation_organic, "net_return"),
+        "profit_factor": evaluation_organic.get("profit_factor"),
+        "net_return": _number(evaluation_organic, "net_return"),
         "gross_price_edge": components["price_pnl"],
         "trading_fee_drag": -components["trading_fees"],
         "funding_drag": -components["funding_pnl"],

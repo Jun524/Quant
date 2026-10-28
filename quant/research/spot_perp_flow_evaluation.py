@@ -70,6 +70,7 @@ def extract_market_observations(
 
     totals = {boundary: 0.0 for boundary in boundaries}
     signed = {boundary: 0.0 for boundary in boundaries}
+    feature_last_time: dict[int, int | None] = {boundary: None for boundary in boundaries}
     references: dict[int, dict[str, Any]] = {}
     feature_index = 0
     entry_index = 0
@@ -103,6 +104,7 @@ def extract_market_observations(
             if timestamp >= boundary - config.observation_window_ms:
                 totals[boundary] += quantity
                 signed[boundary] += (-quantity if buyer_maker else quantity)
+                feature_last_time[boundary] = timestamp
 
         if not spot_references:
             continue
@@ -145,6 +147,7 @@ def extract_market_observations(
             "maximum_intertrade_gap_ms": config.maximum_intertrade_gap_ms,
         },
         "imbalances": {boundary: signed[boundary] / totals[boundary] for boundary in boundaries},
+        "feature_last_time_ms": feature_last_time,
         "spot_references": {
             boundary: SpotReference(**reference) for boundary, reference in references.items()
         },

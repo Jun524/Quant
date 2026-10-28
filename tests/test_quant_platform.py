@@ -9087,6 +9087,19 @@ class ResearchTests(unittest.TestCase):
                 expected_digest=sha256(archive.read_bytes()).hexdigest(),
             )
             self.assertEqual(metadata["rows"], 1)
+            archive_without_header = Path(directory) / "BTCUSDT-aggTrades-2025-01-01-no-header.zip"
+            with ZipFile(archive_without_header, "w") as output:
+                output.writestr("BTCUSDT-aggTrades-2025-01-01.csv", row)
+            self.assertEqual(
+                inspect_spot_perp_flow_archive(
+                    archive_without_header,
+                    market="spot",
+                    symbol="BTCUSDT",
+                    day=day,
+                    expected_digest=sha256(archive_without_header.read_bytes()).hexdigest(),
+                )["rows"],
+                1,
+            )
             chained = verify_spot_perp_flow_day_chains(
                 [
                     {**metadata, "date": "2025-01-01", "first_agg_trade_id": 100, "last_agg_trade_id": 101},

@@ -74,6 +74,23 @@ def _expected_columns(market: str) -> tuple[str, ...]:
     return SPOT_COLUMNS if market == "spot" else FUTURES_COLUMNS
 
 
+def _csv_rows(binary: Any, *, market: str) -> Iterator[dict[str, str]]:
+    """Normalize Binance's headered USD-M and headerless spot CSV variants."""
+    columns = _expected_columns(market)
+    reader = csv.reader(TextIOWrapper(binary, encoding="utf-8", newline=""))
+    first = next(reader, None)
+    if first is None:
+        return
+    if tuple(first) != columns:
+        if len(first) != len(columns):
+            raise SpotPerpFlowDataError("aggregate-trade CSV schema mismatch")
+        yield dict(zip(columns, first, strict=True))
+    for values in reader:
+        if len(values) != len(columns):
+            raise SpotPerpFlowDataError("aggregate-trade CSV row has invalid column count")
+        yield dict(zip(columns, values, strict=True))
+
+
 def inspect_archive(
     path: Path,
     *,
@@ -99,14 +116,11 @@ def inspect_archive(
             if info.is_dir() or info.file_size <= 0 or info.file_size > MAX_UNCOMPRESSED_BYTES:
                 raise SpotPerpFlowDataError("aggregate-trade CSV has invalid size")
             with archive.open(info) as binary:
-                reader = csv.DictReader(TextIOWrapper(binary, encoding="utf-8", newline=""))
-                if tuple(reader.fieldnames or ()) != _expected_columns(market):
-                    raise SpotPerpFlowDataError("aggregate-trade CSV schema mismatch")
                 previous_id: int | None = None
                 previous_time: int | None = None
                 rows = 0
                 first_id = last_id = first_time = last_time = None
-                for row in reader:
+                for row in _csv_rows(binary, market=market):
                     trade_id = int(row["agg_trade_id"])
                     timestamp = int(row["transact_time"])
                     price = float(row["price"])
@@ -174,10 +188,7 @@ def iter_verified_rows(path: Path, *, market: str, symbol: str, day: date) -> It
     spec = archive_spec(market=market, symbol=symbol, day=day)
     try:
         with ZipFile(path) as archive, archive.open(spec["csv_name"]) as binary:
-            reader = csv.DictReader(TextIOWrapper(binary, encoding="utf-8", newline=""))
-            if tuple(reader.fieldnames or ()) != _expected_columns(market):
-                raise SpotPerpFlowDataError("aggregate-trade CSV schema mismatch during replay")
-            for row in reader:
+            for row in _csv_rows(binary, market=market):
                 yield {
                     "agg_trade_id": int(row["agg_trade_id"]),
                     "transact_time": int(row["transact_time"]),

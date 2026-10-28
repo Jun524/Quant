@@ -12440,6 +12440,26 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(drawdown_failed["status"], "FAIL")
         self.assertIn("development_combined_cost_stress_drawdown", drawdown_failed["failures"])
 
+        # The stress drawdown bound must include paid/favorable funding being
+        # flipped to an adverse cost, not merely fee and modeled slippage.
+        funding_drawdown = dict(result)
+        funding_drawdown["organic"] = {"trades": 50, "net_return": 0.03, "profit_factor": 1.30}
+        funding_drawdown["funding_net"] = 25.0
+        funding_drawdown["cost_drag"] = {"slippage_drag_pct": 0.02}
+        funding_drawdown["max_drawdown"] = 0.06
+        funding_drawdown_failed = evaluate_capital_preservation(
+            result, funding_drawdown, result, funding_drawdown,
+            objective=objective,
+            risk_policy=risk_policy,
+            execution_contract=contract,
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+        )
+        self.assertEqual(funding_drawdown_failed["status"], "FAIL")
+        self.assertIn(
+            "development_combined_cost_stress_drawdown",
+            funding_drawdown_failed["failures"],
+        )
+
         equity_failed_result = dict(result)
         equity_failed_result["daily"] = {"minimum_equity": 0.0}
         equity_failed = evaluate_capital_preservation(

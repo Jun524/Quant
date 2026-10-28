@@ -65,18 +65,22 @@ def _combined_cost_drawdown_upper_bound(result: Mapping[str, Any]) -> float | No
     """Bound stress drawdown when detailed intraday slippage timing is unavailable.
 
     The Freqtrade stress run supplies the double-fee mark-to-market drawdown.
-    Allocating the complete modeled slippage drag to that worst point gives a
-    deliberately conservative upper bound rather than pretending to know the
-    entry/exit ordering inside candles.
+    Allocating the complete modeled slippage drag *and* the additional
+    adverse-funding drag to that worst point gives a deliberately conservative
+    upper bound.  We do not know the exact entry/exit/funding ordering inside
+    historical candles, so treating the three adverse costs as coincident is
+    safer than reporting a lower drawdown that cannot be reproduced.
     """
     try:
         drawdown = float(result["max_drawdown"])
         slippage_drag = float((result["cost_drag"] or {})["slippage_drag_pct"])
+        starting_balance = float(result["starting_balance"])
+        funding = float(result["funding_net"])
     except (KeyError, TypeError, ValueError):
         return None
-    if drawdown < 0.0 or slippage_drag < 0.0:
+    if drawdown < 0.0 or slippage_drag < 0.0 or starting_balance <= 0.0:
         return None
-    return drawdown + slippage_drag
+    return drawdown + slippage_drag + abs(funding) / starting_balance
 
 
 def _minimum_reported_closed_trade_equity(result: Mapping[str, Any]) -> float | None:

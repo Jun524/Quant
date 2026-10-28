@@ -309,6 +309,11 @@ from quant.research.spot_perp_flow_protocol import (
     evaluate_phase_gate as evaluate_spot_perp_flow_gate,
     phase_calendar as spot_perp_flow_phase_calendar,
 )
+from quant.research.spot_perp_flow_data import (
+    SpotPerpFlowDataError,
+    inspect_archive as inspect_spot_perp_flow_archive,
+    verify_adjacent_day_chains as verify_spot_perp_flow_day_chains,
+)
 from quant.research.campaign import microstructure_campaign_preflight, microstructure_run_audit
 from quant.research.protocol import protocol_digests
 from quant.research.forward_dryrun import audit_mtm_segments, build_forward_report, load_forward_trades, summarize_mtm
@@ -9065,6 +9070,37 @@ class ResearchTests(unittest.TestCase):
         )
         self.assertEqual(plan["status"], "AUTHORIZED_PLAN_NO_SOURCE_BYTES_ACQUIRED")
         self.assertFalse(plan["orders_submitted"])
+
+    def test_spot_perp_flow_data_admission_checks_market_schema_and_day_chain(self) -> None:
+        day = date(2025, 1, 1)
+        header = "agg_trade_id,price,quantity,first_trade_id,last_trade_id,transact_time,is_buyer_maker,is_best_match\n"
+        row = "100,100.0,0.1,100,100,1735689600000,False,True\n"
+        with tempfile.TemporaryDirectory() as directory:
+            archive = Path(directory) / "BTCUSDT-aggTrades-2025-01-01.zip"
+            with ZipFile(archive, "w") as output:
+                output.writestr("BTCUSDT-aggTrades-2025-01-01.csv", header + row)
+            metadata = inspect_spot_perp_flow_archive(
+                archive,
+                market="spot",
+                symbol="BTCUSDT",
+                day=day,
+                expected_digest=sha256(archive.read_bytes()).hexdigest(),
+            )
+            self.assertEqual(metadata["rows"], 1)
+            chained = verify_spot_perp_flow_day_chains(
+                [
+                    {**metadata, "date": "2025-01-01", "first_agg_trade_id": 100, "last_agg_trade_id": 101},
+                    {**metadata, "date": "2025-01-02", "first_agg_trade_id": 102, "last_agg_trade_id": 103},
+                ]
+            )
+            self.assertEqual(chained["status"], "PASS")
+            with self.assertRaisesRegex(SpotPerpFlowDataError, "discontinuous"):
+                verify_spot_perp_flow_day_chains(
+                    [
+                        {**metadata, "date": "2025-01-01", "first_agg_trade_id": 100, "last_agg_trade_id": 101},
+                        {**metadata, "date": "2025-01-02", "first_agg_trade_id": 103, "last_agg_trade_id": 103},
+                    ]
+                )
 
     def test_metrics_normalization_collapses_only_exact_duplicates(self) -> None:
         times = pd.date_range("2021-01-01", periods=288, freq="5min", tz="UTC")

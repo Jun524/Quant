@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import Any, Mapping
 
+from quant.research.risk_policy_contract import validate_risk_policy_contract
+
 
 class CapitalPreservationPolicyError(ValueError):
     """The separate capital-preservation objective is incomplete or unsafe."""
@@ -83,6 +85,7 @@ def evaluate_capital_preservation(
     post_development_stress: Mapping[str, Any],
     *,
     objective: Mapping[str, Any],
+    risk_policy: Mapping[str, Any],
     execution_contract: Mapping[str, Any],
     integrity: Mapping[str, Any],
     sample_role: str = "historical_diagnostic",
@@ -92,8 +95,14 @@ def evaluate_capital_preservation(
     ``post_development`` is intentionally not called OOS here: callers must
     separately prove a locked, unseen partition before making that claim.
     """
-    if objective.get("id") != "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V1":
+    if objective.get("id") != "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V2":
         raise CapitalPreservationPolicyError("unexpected capital-preservation objective")
+    policy_contract = validate_risk_policy_contract(dict(risk_policy), dict(objective))
+    if policy_contract["status"] != "PASS":
+        raise CapitalPreservationPolicyError(
+            "capital-preservation policy contract failed: "
+            + "; ".join(str(item) for item in policy_contract["failures"])
+        )
     requirements = objective.get("capital_preservation_requirements")
     if not isinstance(requirements, Mapping):
         raise CapitalPreservationPolicyError("capital-preservation requirements are missing")
@@ -116,9 +125,11 @@ def evaluate_capital_preservation(
     post_adverse_funding = _adverse_funding_net_return(post_development_stress)
     dev_cost_drawdown = _combined_cost_drawdown_upper_bound(development_stress)
     post_cost_drawdown = _combined_cost_drawdown_upper_bound(post_development_stress)
+    rule_violations = integrity.get("rule_violations")
     checks = [
         _check("objective_active", objective.get("status") == "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS", required="ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS", actual=objective.get("status"), kind="governance"),
         _check("live_order_authorization_closed", objective.get("live_order_authorization") == "CLOSED", required="CLOSED", actual=objective.get("live_order_authorization"), kind="governance"),
+        _check("risk_policy_contract", policy_contract["status"] == "PASS", required="PASS", actual=policy_contract["status"], kind="governance"),
         _check("development_organic_net_positive", float(dev.get("net_return") or 0.0) > 0.0, required="> 0", actual=dev.get("net_return"), kind="performance"),
         _check("development_profit_factor", dev.get("profit_factor") is not None and float(dev["profit_factor"]) >= minimum_pf, required=f">= {minimum_pf}", actual=dev.get("profit_factor"), kind="performance"),
         _check("development_combined_fee_slippage_model", float(development_stress.get("modeled_slippage_bps") or -1.0) == modeled_slippage_bps, required=modeled_slippage_bps, actual=development_stress.get("modeled_slippage_bps"), kind="cost"),
@@ -139,6 +150,8 @@ def evaluate_capital_preservation(
         _check("simultaneous_positions", int(execution_contract.get("maximum_simultaneous_positions") or 0) <= maximum_positions, required=f"<= {maximum_positions}", actual=execution_contract.get("maximum_simultaneous_positions"), kind="risk"),
         _check("adverse_position_adds_forbidden", execution_contract.get("adverse_position_adds") is False, required=False, actual=execution_contract.get("adverse_position_adds"), kind="risk"),
         _check("liquidation_exits", all(int((result.get("trade_risk") or {}).get("liquidation_exits") or 0) == 0 for result in (development, post_development)), required=0, actual={"development": (development.get("trade_risk") or {}).get("liquidation_exits"), "post_development": (post_development.get("trade_risk") or {}).get("liquidation_exits")}, kind="risk"),
+        _check("rule_violations", type(rule_violations) is int and rule_violations == 0, required=0, actual=rule_violations, kind="integrity"),
+        _check("data_integrity", integrity.get("data_integrity") == "PASS", required="PASS", actual=integrity.get("data_integrity"), kind="integrity"),
         _check("lookahead_analysis", integrity.get("lookahead") == "PASS", required="PASS", actual=integrity.get("lookahead"), kind="integrity"),
         _check("recursive_analysis", integrity.get("recursive") == "PASS", required="PASS", actual=integrity.get("recursive"), kind="integrity"),
     ]
@@ -156,8 +169,12 @@ def evaluate_capital_preservation(
         "status": status,
         "promotion_eligible": False,
         "sample_role": sample_role,
+        "policy": {
+            "risk_policy_id": risk_policy.get("policy_id"),
+            "objective_id": objective.get("id"),
+            "monthly_return_target": (objective.get("return_objective") or {}).get("monthly_return_target"),
+        },
         "checks": checks,
         "failures": failures,
-        "aspirational_monthly_target": (objective.get("return_objective") or {}).get("aspirational_net_geometric_monthly_return"),
         "warning": "A historical diagnostic cannot authorize live trading or replace separately locked forward evidence.",
     }

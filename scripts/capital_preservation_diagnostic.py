@@ -25,10 +25,30 @@ def main() -> None:
     parser.add_argument("--post-development", type=Path, required=True)
     parser.add_argument("--post-development-stress", type=Path, required=True)
     parser.add_argument("--objective", type=Path, default=Path("research/capital-preservation-objective.json"))
+    parser.add_argument("--risk-policy", type=Path, default=Path("research/risk-policy.json"))
+    parser.add_argument(
+        "--execution-contract",
+        type=Path,
+        required=True,
+        help="sealed candidate-specific leverage, risk, position-count, and adverse-add contract",
+    )
+    parser.add_argument(
+        "--integrity-receipt",
+        type=Path,
+        required=True,
+        help="sealed receipt proving data, lookahead, recursive, and rule-violation checks",
+    )
     parser.add_argument("--output", type=Path, default=Path("reports/capital-preservation-diagnostic.json"))
     args = parser.parse_args()
 
     objective = json.loads(args.objective.read_text(encoding="utf-8"))
+    risk_policy = json.loads(args.risk_policy.read_text(encoding="utf-8"))
+    execution_contract = json.loads(args.execution_contract.read_text(encoding="utf-8"))
+    integrity = json.loads(args.integrity_receipt.read_text(encoding="utf-8"))
+    if not isinstance(execution_contract, dict):
+        raise SystemExit("execution contract must be a JSON object")
+    if not isinstance(integrity, dict):
+        raise SystemExit("integrity receipt must be a JSON object")
     requirements = objective.get("capital_preservation_requirements") or {}
     modeled_slippage_bps = float(requirements["modeled_slippage_bps"])
     development = load_freqtrade_result(args.development, args.strategy)
@@ -43,26 +63,24 @@ def main() -> None:
         args.strategy,
         modeled_slippage_bps=modeled_slippage_bps,
     )
-    execution_contract = {
-        "leverage": 1.0,
-        "planned_account_risk_per_trade": 0.0025,
-        "maximum_simultaneous_positions": 2,
-        "adverse_position_adds": False,
-    }
     gate = evaluate_capital_preservation(
         development,
         development_stress,
         post_development,
         post_development_stress,
         objective=objective,
+        risk_policy=risk_policy,
         execution_contract=execution_contract,
-        integrity={"lookahead": "PASS", "recursive": "PASS"},
+        integrity=integrity,
     )
     payload = {
         "candidate": args.strategy,
         "kind": "HISTORICAL_CAPITAL_PRESERVATION_DIAGNOSTIC_ONLY",
         "inputs": {
             "objective": artifact_reference(args.objective),
+            "risk_policy": artifact_reference(args.risk_policy),
+            "execution_contract": artifact_reference(args.execution_contract),
+            "integrity_receipt": artifact_reference(args.integrity_receipt),
             "development": artifact_reference(args.development),
             "development_stress": artifact_reference(args.development_stress),
             "post_development": artifact_reference(args.post_development),

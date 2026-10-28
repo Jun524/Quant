@@ -62,6 +62,7 @@ def validate_risk_policy_contract(
         "maximum_simultaneous_positions": "maximum_simultaneous_positions",
         "adverse_position_adds": "adverse_position_adds",
         "double_fee_plus_modeled_slippage_stress_net_return": "cost_stress_net_return",
+        "data_integrity": "data_integrity",
         "lookahead_analysis": "lookahead_analysis",
         "recursive_analysis": "recursive_analysis",
     }

@@ -6940,6 +6940,7 @@ class ResearchTests(unittest.TestCase):
                 "maximum_simultaneous_positions": 2,
                 "adverse_position_adds": "FORBIDDEN",
                 "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
+                "data_integrity": "PASS",
                 "lookahead_analysis": "PASS",
                 "recursive_analysis": "PASS",
             },
@@ -11906,7 +11907,7 @@ class ResearchTests(unittest.TestCase):
 
     def test_capital_preservation_gate_uses_organic_returns_and_stays_non_promotional(self) -> None:
         objective = {
-            "id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V1",
+            "id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V2",
             "status": "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS",
             "live_order_authorization": "CLOSED",
             "return_objective": {
@@ -11923,8 +11924,19 @@ class ResearchTests(unittest.TestCase):
                 "maximum_simultaneous_positions": 2,
                 "modeled_slippage_bps": 5.0,
                 "maximum_combined_cost_stress_drawdown": 0.10,
+                "liquidation_exits": 0,
+                "adverse_position_adds": "FORBIDDEN",
+                "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
+                "data_integrity": "PASS",
+                "lookahead_analysis": "PASS",
+                "recursive_analysis": "PASS",
             },
         }
+        risk_policy = json.loads(
+            (Path(__file__).resolve().parents[1] / "research" / "risk-policy.json").read_text(
+                encoding="utf-8"
+            )
+        )
         result = {
             "organic": {"trades": 50, "net_return": 0.02, "profit_factor": 1.30},
             "starting_balance": 1_000.0,
@@ -11944,8 +11956,9 @@ class ResearchTests(unittest.TestCase):
         passed = evaluate_capital_preservation(
             result, result, result, result,
             objective=objective,
+            risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"lookahead": "PASS", "recursive": "PASS"},
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
         )
         self.assertEqual(passed["status"], "DIAGNOSTIC_PASS_NOT_PROMOTABLE")
         self.assertFalse(passed["promotion_eligible"])
@@ -11955,8 +11968,9 @@ class ResearchTests(unittest.TestCase):
         funding_failed = evaluate_capital_preservation(
             result, funding_subsidized, result, funding_subsidized,
             objective=objective,
+            risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"lookahead": "PASS", "recursive": "PASS"},
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
         )
         self.assertEqual(funding_failed["status"], "FAIL")
         self.assertIn("development_adverse_funding_net_positive", funding_failed["failures"])
@@ -11966,8 +11980,9 @@ class ResearchTests(unittest.TestCase):
         slippage_failed = evaluate_capital_preservation(
             result, missing_slippage, result, missing_slippage,
             objective=objective,
+            risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"lookahead": "PASS", "recursive": "PASS"},
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
         )
         self.assertEqual(slippage_failed["status"], "FAIL")
         self.assertIn("development_combined_fee_slippage_model", slippage_failed["failures"])
@@ -11978,19 +11993,32 @@ class ResearchTests(unittest.TestCase):
         drawdown_failed = evaluate_capital_preservation(
             result, stress_drawdown, result, stress_drawdown,
             objective=objective,
+            risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"lookahead": "PASS", "recursive": "PASS"},
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
         )
         self.assertEqual(drawdown_failed["status"], "FAIL")
         self.assertIn("development_combined_cost_stress_drawdown", drawdown_failed["failures"])
+
+        integrity_failed = evaluate_capital_preservation(
+            result, result, result, result,
+            objective=objective,
+            risk_policy=risk_policy,
+            execution_contract=contract,
+            integrity={"data_integrity": "FAIL", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 1},
+        )
+        self.assertEqual(integrity_failed["status"], "FAIL")
+        self.assertIn("data_integrity", integrity_failed["failures"])
+        self.assertIn("rule_violations", integrity_failed["failures"])
 
         failed_result = dict(result)
         failed_result["organic"] = {"trades": 50, "net_return": -0.01, "profit_factor": 0.8}
         failed = evaluate_capital_preservation(
             failed_result, failed_result, result, result,
             objective=objective,
+            risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"lookahead": "PASS", "recursive": "PASS"},
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
         )
         self.assertEqual(failed["status"], "FAIL")
         self.assertIn("development_organic_net_positive", failed["failures"])

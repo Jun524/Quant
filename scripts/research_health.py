@@ -33,6 +33,7 @@ from scripts.manage_liquidation_telemetry_campaign import (
 from scripts.run_liquidation_overlay_scheduler import (
     status_payload as liquidation_overlay_scheduler_status,
 )
+from quant.research.risk_policy_contract import validate_risk_policy_contract
 
 
 HEALTHY_ALPHA001 = {"RUNNING_HEALTHY", "RUNNING_STARTING"}
@@ -309,6 +310,7 @@ def classify_research_health(
     liquidation_telemetry_health: str = "WAITING_ELIGIBLE_START",
     alpha015_health: str = "WAITING_POINT_IN_TIME_UNIVERSE",
     alpha001_entry_evidence_health: str = "CONTINUOUS",
+    risk_policy_health: str = "PASS",
 ) -> str:
     if (
         alpha001_health in HEALTHY_ALPHA001
@@ -320,6 +322,7 @@ def classify_research_health(
         and universe_health in HEALTHY_UNIVERSE
         and liquidation_telemetry_health in HEALTHY_LIQUIDATION_TELEMETRY
         and alpha015_health in HEALTHY_ALPHA015
+        and risk_policy_health == "PASS"
     ):
         return "HEALTHY"
     if (
@@ -333,6 +336,7 @@ def classify_research_health(
         and liquidation_telemetry_health
         in HEALTHY_LIQUIDATION_TELEMETRY | WARNING_LIQUIDATION_TELEMETRY
         and alpha015_health in HEALTHY_ALPHA015
+        and risk_policy_health == "PASS"
         and (
             alpha007_health in WARNING_ALPHA007
             or universe_health in WARNING_UNIVERSE
@@ -341,6 +345,24 @@ def classify_research_health(
     ):
         return "DEGRADED"
     return "ATTENTION_REQUIRED"
+
+
+def capital_preservation_policy_health(
+    *, project_root: Path = PROJECT_ROOT
+) -> dict:
+    """Load both policy artifacts and fail closed when their contract drifts."""
+    try:
+        risk = json.loads((project_root / "research/risk-policy.json").read_text(encoding="utf-8"))
+        objective = json.loads(
+            (project_root / "research/capital-preservation-objective.json").read_text(encoding="utf-8")
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        return {
+            "status": "FAIL",
+            "live_order_authorization": "CLOSED",
+            "failures": [f"policy_artifact_unreadable:{type(error).__name__}"],
+        }
+    return validate_risk_policy_contract(risk, objective)
 
 
 def resolve_alpha013_health(payload: dict, scheduler_health: str) -> str:
@@ -373,6 +395,7 @@ def resolve_alpha007_terminal_health(
 
 
 def build_health_report() -> dict:
+    policy_contract = capital_preservation_policy_health()
     alpha001 = alpha001_status_payload()
     alpha007 = alpha007_status_payload(PROJECT_ROOT / "research" / "microstructure")
     alpha007_protocol_audit = alpha007_complete_day_protocol_health()
@@ -490,7 +513,9 @@ def build_health_report() -> dict:
             liquidation_health,
             alpha015_health,
             alpha001_entry_evidence_health=alpha001_entry_evidence["status"],
+            risk_policy_health=str(policy_contract.get("status") or "FAIL"),
         ),
+        "capital_preservation_policy": policy_contract,
         "alpha001_forward": {
             "health": alpha001_health,
             "protocol_current": alpha001.get("protocol_current"),

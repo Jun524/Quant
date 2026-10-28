@@ -368,6 +368,7 @@ from scripts.research_health import (
     classify_research_health,
     resolve_alpha007_terminal_health,
     resolve_alpha013_health,
+    capital_preservation_policy_health,
 )
 from scripts.alpha011_status import scheduler_health as alpha011_scheduler_health
 from scripts.alpha011_status import status_payload as alpha011_status_payload
@@ -2180,6 +2181,14 @@ class MonitoringTests(unittest.TestCase):
         self.assertEqual(
             classify_research_health("RUNNING_HEALTHY", "RUNNING_WITH_DATA_WARNING"),
             "DEGRADED",
+        )
+        self.assertEqual(
+            classify_research_health(
+                "RUNNING_HEALTHY",
+                "RUNNING_HEALTHY",
+                risk_policy_health="FAIL",
+            ),
+            "ATTENTION_REQUIRED",
         )
         self.assertEqual(
             classify_research_health(

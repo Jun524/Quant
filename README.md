@@ -7,6 +7,18 @@ Freqtrade 프로젝트입니다. 기본 설정은 실제 주문을 내지 않는
 > 이 저장소의 전략은 연구 기준선이지 수익을 보장하는 매매 추천이 아닙니다. 과거 성과는
 > 미래 성과를 보장하지 않으며, 손실 가능한 자금만 사용해야 합니다.
 
+## 운영 목표와 위험 원칙
+
+이 프로젝트는 Binance USDT-M 선물에서 비용·슬리피지·펀딩·데이터 무결성을 반영한 전략을
+연구합니다. 목표는 월간 수익률을 맞추는 것이 아니라 **최대낙폭 10% 이내·강제청산 0회·규칙
+위반 0회**의 조건에서 장기적인 비용 후 양의 기대값을 검증하는 것입니다. 수익은 검증된 구조의
+결과이며, 검증 전에는 실거래를 금지합니다.
+
+상위 연구 헌장은 [RESEARCH.md](RESEARCH.md), 숫자·정지·감사·재개 절차는
+[RISK_POLICY.md](RISK_POLICY.md), 기계 검증용 정책 값은
+[`research/risk-policy.json`](research/risk-policy.json)에 둡니다. 기존에 봉인된 실험은
+당시의 사전등록을 그대로 보존합니다.
+
 ## 현재 판정: 실거래 금지
 
 2026-09-17에 Binance 공개 데이터로 실행 호환성과 편향 검사를 마쳤습니다. 최초 1시간봉
@@ -165,7 +177,7 @@ make futures-logs
 - `quant/execution/maker_quality.py`, `scripts/maker_execution_report.py`: 실제 maker 체결률·미체결 비용·역선택 검증기
 - `quant/execution/shadow_maker.py`, `scripts/shadow_maker_probe.py`: 주문 없는 공개 호가/체결 queue probe
 - `scripts/collect_microstructure.py`, `quant/research/microstructure.py`: Binance 공식 순번을 검증하는 무주문 실측 수집·Alpha #7 평가
-- `quant/research/monthly_target.py`, `MONTHLY_TARGET.md`: 비용 후 월 10% 연구 목표와 승격 게이트
+- `quant/research/monthly_target.py`, `MONTHLY_TARGET.md`: 과거 월간 목표 연구의 기록. 신규 후보의 승격 목표는 `RISK_POLICY.md`의 비용 후 기대값·자본보전 게이트를 따른다.
 - `quant/research/risk.py`: 군집 손실을 보존한 7일 block bootstrap 파산확률·MDD stress
 - `quant/research/equity.py`: 끊김 없는 UTC mark-to-market 자산곡선 검증과 월별/MDD 재계산
 - `quant/research/portfolio_performance.py`, `PORTFOLIO_PROMOTION.md`: 포트폴리오 폐쇄거래·일별 노출·MTM 손익 구성요소를 원본에서 재계산하고 비용 스트레스와 자산 증감을 대조하는 승격 감사
@@ -188,7 +200,7 @@ make futures-logs
 
 ## 다음 개발 순서
 
-현재 월 10%는 주문 크기 설정이 아니라 포트폴리오 연구 게이트다. Alpha #5와 #6도 개발 게이트를
+신규 연구의 통과 기준은 월 10%가 아니라 비용 후 기대값과 자본보전 게이트다. Alpha #5와 #6도 개발 게이트를
 통과하지 못했으므로 다음 작업은 아래 순서로 진행한다.
 
 1. 공개 depth/aggTrades로 shadow maker 체결률·미체결 기회비용·역선택 표본 축적

@@ -74,6 +74,22 @@ def _expected_columns(market: str) -> tuple[str, ...]:
     return SPOT_COLUMNS if market == "spot" else FUTURES_COLUMNS
 
 
+def _timestamp_ms(value: str) -> tuple[int, str]:
+    """Accept Binance's epoch-millisecond and epoch-microsecond archive variants.
+
+    The evaluator operates on millisecond decision boundaries.  The original ZIP
+    and its publisher digest remain sealed, while this function makes the
+    precision conversion explicit and rejects an unknown unit rather than
+    guessing.  A single daily archive must use one precision throughout.
+    """
+    timestamp = int(value)
+    if 1_000_000_000_000 <= timestamp < 10_000_000_000_000:
+        return timestamp, "milliseconds"
+    if 1_000_000_000_000_000 <= timestamp < 10_000_000_000_000_000:
+        return timestamp // 1_000, "microseconds"
+    raise SpotPerpFlowDataError("aggregate-trade timestamp has unsupported precision")
+
+
 def _csv_rows(binary: Any, *, market: str) -> Iterator[dict[str, str]]:
     """Normalize Binance's headered USD-M and headerless spot CSV variants."""
     columns = _expected_columns(market)
@@ -120,13 +136,16 @@ def inspect_archive(
                 previous_time: int | None = None
                 rows = 0
                 first_id = last_id = first_time = last_time = None
+                timestamp_precision: str | None = None
                 for row in _csv_rows(binary, market=market):
                     trade_id = int(row["agg_trade_id"])
-                    timestamp = int(row["transact_time"])
+                    timestamp, precision = _timestamp_ms(row["transact_time"])
                     price = float(row["price"])
                     quantity = float(row["quantity"])
                     if not (trade_id >= 0 and start_ms <= timestamp < end_ms and price > 0 and quantity > 0):
                         raise SpotPerpFlowDataError("aggregate-trade row has invalid values")
+                    if timestamp_precision is not None and precision != timestamp_precision:
+                        raise SpotPerpFlowDataError("aggregate-trade timestamp precision changes within archive")
                     if not isfinite(price) or not isfinite(quantity):
                         raise SpotPerpFlowDataError("aggregate-trade row is non-finite")
                     if row["is_buyer_maker"].lower() not in {"true", "false"}:
@@ -139,6 +158,7 @@ def inspect_archive(
                     first_time = timestamp if first_time is None else first_time
                     last_id, last_time = trade_id, timestamp
                     previous_id, previous_time = trade_id, timestamp
+                    timestamp_precision = precision
                     rows += 1
     except (BadZipFile, UnicodeDecodeError, csv.Error, KeyError, ValueError) as error:
         if isinstance(error, SpotPerpFlowDataError):
@@ -159,6 +179,7 @@ def inspect_archive(
         "last_agg_trade_id": last_id,
         "first_transact_time_ms": first_time,
         "last_transact_time_ms": last_time,
+        "transact_time_precision": timestamp_precision,
     }
 
 
@@ -191,7 +212,7 @@ def iter_verified_rows(path: Path, *, market: str, symbol: str, day: date) -> It
             for row in _csv_rows(binary, market=market):
                 yield {
                     "agg_trade_id": int(row["agg_trade_id"]),
-                    "transact_time": int(row["transact_time"]),
+                    "transact_time": _timestamp_ms(row["transact_time"])[0],
                     "price": float(row["price"]),
                     "quantity": float(row["quantity"]),
                     "is_buyer_maker": row["is_buyer_maker"].lower() == "true",

@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V1",
+  "id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V2",
   "status": "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS",
   "scope": "New historical research candidates only. This does not alter a sealed forward protocol, an existing experiment verdict, or live authorization.",
   "live_order_authorization": "CLOSED",
   "return_objective": {
-    "aspirational_net_geometric_monthly_return": 0.1,
-    "promotion_requirement": false,
+    "promotion_requirement": "positive_long_horizon_cost_after_expectancy",
+    "monthly_return_target": "NOT_A_GATE",
     "required_direction": "positive_cost_after_return",
-    "warning": "Ten percent per month is an ambition, not a promise, a sizing instruction, or a reason to increase leverage or turnover."
+    "warning": "Return is an outcome of a validated structure, never a promise, a sizing instruction, or a reason to increase leverage or turnover."
   },
   "research_cadence": {
     "historical_research": "Start immediately from sealed historical data; do not wait for a new forward window to begin a diagnostic.",

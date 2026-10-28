@@ -9100,6 +9100,19 @@ class ResearchTests(unittest.TestCase):
                 )["rows"],
                 1,
             )
+            microsecond_row = "100,100.0,0.1,100,100,1735689600000866,False,True\n"
+            archive_with_microseconds = Path(directory) / "BTCUSDT-aggTrades-2025-01-01-microseconds.zip"
+            with ZipFile(archive_with_microseconds, "w") as output:
+                output.writestr("BTCUSDT-aggTrades-2025-01-01.csv", microsecond_row)
+            microsecond_metadata = inspect_spot_perp_flow_archive(
+                archive_with_microseconds,
+                market="spot",
+                symbol="BTCUSDT",
+                day=day,
+                expected_digest=sha256(archive_with_microseconds.read_bytes()).hexdigest(),
+            )
+            self.assertEqual(microsecond_metadata["first_transact_time_ms"], 1735689600000)
+            self.assertEqual(microsecond_metadata["transact_time_precision"], "microseconds")
             chained = verify_spot_perp_flow_day_chains(
                 [
                     {**metadata, "date": "2025-01-01", "first_agg_trade_id": 100, "last_agg_trade_id": 101},

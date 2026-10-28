@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
+  "status": "ACTIVE_FOR_NEW_CANDIDATES_AND_DRY_RUN",
+  "effective_at_utc": "2026-10-28T00:00:00Z",
+  "human_policy": "RISK_POLICY.md",
+  "scope": "New research candidates and dry-run candidates only. Sealed protocols, completed verdicts, and locked forward samples retain their original terms.",
+  "live_order_authorization": "CLOSED",
+  "primary_objective": "Validate positive long-horizon cost-after expectancy while preserving capital; a monthly return target is not a pass/fail gate.",
+  "non_negotiables": {
+    "maximum_cost_after_mtm_drawdown": 0.1,
+    "maximum_cost_stress_mtm_drawdown": 0.1,
+    "liquidation_exits": 0,
+    "rule_violations": 0,
+    "non_positive_equity": false,
+    "maximum_planned_account_risk_per_trade": 0.0025,
+    "maximum_planned_leverage": 1.0,
+    "maximum_simultaneous_positions": 2,
+    "adverse_position_adds": "FORBIDDEN",
+    "cost_stress_net_return": "> 0",
+    "lookahead_analysis": "PASS",
+    "recursive_analysis": "PASS",
+    "data_integrity": "PASS"
+  },
+  "warning_halts": {
+    "cost_after_mtm_drawdown": 0.05,
+    "daily_cost_after_loss": 0.0075,
+    "weekly_cost_after_loss": 0.025,
+    "action": "HALT_NEW_ENTRIES_AND_FREEZE_PARAMETER_CHANGES_PENDING_REVIEW"
+  },
+  "hard_halts": [
+    "drawdown_limit_breach",
+    "liquidation",
+    "non_positive_equity",
+    "unauthorized_order",
+    "risk_budget_or_exposure_breach",
+    "data_integrity_or_bias_audit_failure",
+    "unreconciled_cost_or_funding_accounting"
+  ],
+  "resume_requirements": [
+    "immutable_incident_record",
+    "root_cause_classification",
+    "affected_range_recalculation",
+    "full_regression_test_pass",
+    "reproducible_reaudit_receipt",
+    "new_preregistration_if_signal_parameters_or_cost_assumptions_changed",
+    "explicit_user_authorization_before_any_live_order"
+  ],
+  "review_cadence": {
+    "monthly": ["cost_decomposition", "mtm_drawdown", "data_integrity", "rule_violations"],
+    "quarterly": ["expectancy", "concentration", "correlation", "cost_stress"],
+    "annual": ["policy_and_methodology_review"]
+  }
+}

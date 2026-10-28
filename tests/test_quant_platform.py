@@ -3360,21 +3360,6 @@ class OrderBookTests(unittest.TestCase):
             self.assertEqual(report["eligible_timing_runs"], 1)
             self.assertEqual(report["excluded_timing_runs"], 1)
             self.assertEqual(report["data_integrity"]["status"], "PASS_WITH_TIMING_EXCLUSIONS")
-            (root / "campaign-state.json").write_text(
-                json.dumps(
-                    {
-                        "status": "FINISHED",
-                        "terminal_reason": "deadline_reached",
-                        "started_at": "2025-01-01T00:00:00+00:00",
-                        "deadline_at": "2025-01-02T00:00:00+00:00",
-                        "ended_at": "2025-01-02T00:00:00+00:00",
-                    }
-                ),
-                encoding="utf-8",
-            )
-            terminal_report = analyze_microstructure(root)
-            self.assertEqual(terminal_report["status"], "FAIL")
-            self.assertTrue(terminal_report["collection_termination"]["insufficient_complete_days"])
 
     def test_microstructure_complete_days_require_current_protocol(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-28T00:00:00Z",
+  "purpose": "Post-Alpha-016 adversarial literature screen for a new Binance USDT-M futures alpha that could satisfy the capital-preservation objective without reopening a failed or accumulating family.",
+  "search_record": {
+    "workstreams": 3,
+    "sources_reviewed": 30,
+    "project_return_data_inspected_during_screening": false,
+    "hard_filters": [
+      "independent of a sealed failed or accumulating strategy family",
+      "fixed causal decision-time inputs reproducible from documented data",
+      "cost, funding, interim mark-to-market and liquidation treatment",
+      "Binance USDT-M-only executable path without a cross-venue hedge or synthetic source"
+    ]
+  },
+  "candidates": [
+    {
+      "name": "EXECUTION_CONSTRAINED_AUTOTUNING",
+      "decision": "RETAIN_AS_VALIDATION_INFRASTRUCTURE_NOT_ALPHA",
+      "source": "https://arxiv.org/pdf/2512.22476",
+      "quality": "Primary preprint; explicitly discusses funding, slippage, window reuse and PBO, but is an alpha-agnostic configuration-selection framework with linear-cost and small-account limitations.",
+      "reason": "Its useful contribution is audit discipline already reflected in the platform's sealed trial inventory, cost stress and selection-bias gates. Bayesian configuration search would violate the no-retuning rule unless a separate multi-trial protocol is registered before data access."
+    },
+    {
+      "name": "OHLCV_FUNDING_CROSS_SECTIONAL_SCREEN",
+      "decision": "REJECT_REPLICATION_OF_NEGATIVE_FAMILY",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6701738",
+      "quality": "Recent primary post-mortem with purged walk-forward evaluation on ten Binance USDT perpetuals; author is independent and the result should be treated as corroborating rather than definitive.",
+      "reason": "The fixed linear screen was negative and the fitted ranker lost capital after costs. It corroborates the already failed funding/cross-sectional branches and does not justify another parameter search."
+    },
+    {
+      "name": "BINANCE_FUTURES_TIME_SERIES_MOMENTUM",
+      "decision": "RETAIN_ALPHA001_ONLY",
+      "source": "https://acfr.aut.ac.nz/__data/assets/pdf_file/0009/918729/Time_Series_and_Cross_Sectional_Momentum_in_the_Cryptocurrency_Market_with_IA.pdf",
+      "quality": "Academic working paper using liquid Binance futures and interim mark-to-market/liquidation treatment; it reports strong time-series momentum but weak cross-sectional momentum under realistic costs.",
+      "reason": "The long-biased, downside-defensive mechanism overlaps Alpha 001's frozen regime-filtered trend sleeve. Opening another historical timing or lookback variant would be duplicate-family tuning, not independent evidence."
+    }
+  ],
+  "selected_next_step": "NO_NEW_ALPHA_REGISTERED. Preserve Alpha 016 as FAIL; continue sealed forward collection and execution-quality evidence for Alpha 001, Alpha 007 and Alpha 011 without increasing leverage, turnover or adverse averaging.",
+  "live_order_authorization": "CLOSED"
+}

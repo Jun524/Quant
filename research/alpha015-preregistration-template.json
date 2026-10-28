@@ -66,6 +66,7 @@
     "cost_contract_amendment": "research/alpha015-contract-amendment-011.json",
     "maker_credit_without_forward_fill_evidence_forbidden": true
   },
+  "capital_preservation_policy_amendment": "research/alpha015-capital-preservation-amendment-012.json",
   "development_gate": {
     "all_checks_required": true,
     "statistical_contract": {
@@ -84,8 +85,8 @@
       "base_profit_factor_minimum": 1.2,
       "stress_profit_factor_minimum": 1.0,
       "newey_west_t_stat_base_minimum": 2.0,
-      "base_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
-      "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
+      "base_maximum_minute_mark_to_market_drawdown_fraction": 0.1,
+      "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.1,
       "positive_complete_calendar_month_fraction_minimum": 0.6,
       "largest_positive_day_share_of_total_positive_pnl_maximum": 0.2,
       "deflated_sharpe_probability_minimum": 0.95,
@@ -107,8 +108,8 @@
       "base_profit_factor_minimum": 1.2,
       "stress_profit_factor_minimum": 1.0,
       "newey_west_t_stat_base_minimum": 2.0,
-      "base_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
-      "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.15,
+      "base_maximum_minute_mark_to_market_drawdown_fraction": 0.1,
+      "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.1,
       "positive_complete_calendar_month_fraction_minimum": 0.5,
       "largest_positive_day_share_of_total_positive_pnl_maximum": 0.2,
       "no_parameter_or_universe_retuning": true
@@ -117,7 +118,7 @@
   },
   "post_validation_requirements": [
     "forward long-entry, long-exit, short-entry, short-exit, protective-stop, latency, and impact calibration on the selected symbols",
-    "portfolio-level 10% monthly target gate on 366 consecutive daily MTM observations",
+    "portfolio-level capital-preservation gate: maximum cost-after MTM drawdown at or below 10% and positive long-horizon cost-after expectancy; monthly return is not a gate",
     "portfolio maximum drawdown, liquidation, ruin, concentration, selection-bias, and source-replay gates",
     "explicit live-promotion receipt and separate user authorization"
   ],

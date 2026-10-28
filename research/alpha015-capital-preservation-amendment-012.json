@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "amendment_id": "ALPHA015_CAPITAL_PRESERVATION_AMENDMENT_012",
+  "recorded_at_utc": "2026-10-28T09:00:00Z",
+  "status": "PRE_RETURN_POLICY_ALIGNMENT",
+  "candidate": "CANDIDATE_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+  "authorization_boundary": "Experiment 0015 is unregistered. No Alpha 015 return archive, strategy PnL, development result, or locked-validation result has been acquired or inspected. This stricter alignment is recorded before any return-data authorization.",
+  "policy_binding": {
+    "risk_policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
+    "capital_objective_id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V2",
+    "primary_objective": "Validate positive long-horizon cost-after expectancy while preserving capital; a monthly return target is not a pass/fail gate."
+  },
+  "authoritative_risk_contract": {
+    "maximum_base_minute_mark_to_market_drawdown_fraction": 0.1,
+    "maximum_stress_minute_mark_to_market_drawdown_fraction": 0.1,
+    "liquidation_exits": 0,
+    "rule_violations": 0,
+    "maximum_planned_leverage": 1.0,
+    "maximum_simultaneous_positions": 2,
+    "adverse_position_adds": "FORBIDDEN",
+    "cost_stress_net_return": "> 0",
+    "data_integrity": "PASS",
+    "lookahead_analysis": "PASS",
+    "recursive_analysis": "PASS"
+  },
+  "supersedes_for_this_unregistered_candidate": [
+    "The 15 percent development and locked-validation minute MTM drawdown acceptance threshold in the template and risk amendment 010.",
+    "The post-validation portfolio-level 10 percent monthly-return target gate."
+  ],
+  "replacement": [
+    "Development and locked validation both require base and stress minute MTM drawdown at or below 10 percent.",
+    "Long-horizon positive cost-after expectancy is required; a monthly return number is not a pass/fail gate.",
+    "A validation REVIEW remains non-promotional and cannot enable live orders."
+  ],
+  "nonchanges": [
+    "The candidate remains deferred and Experiment 0015 remains unregistered.",
+    "The 180 consecutive prior-day point-in-time universe requirement, 120/60 split, causal model, timing, costs, funding accounting, source integrity, and locked-validation boundary remain unchanged.",
+    "No observed return, cost, or performance result is selected, discarded, or interpreted by this amendment."
+  ],
+  "prohibited": [
+    "acquiring or inspecting returns before activation and preregistration",
+    "weakening the 10 percent risk limit after observing returns",
+    "using any historical result to authorize live trading"
+  ]
+}

@@ -92,6 +92,16 @@ def verify_alpha015_contract_semantics(
         ),
         None,
     )
+    preservation_ref = next(
+        (
+            item
+            for item in amendments
+            if str((item or {}).get("path") or "").endswith(
+                "alpha015-capital-preservation-amendment-012.json"
+            )
+        ),
+        None,
+    )
     template_ref = next(
         (
             item
@@ -125,10 +135,16 @@ def verify_alpha015_contract_semantics(
         return payload, path
 
     amendment_loaded = load(amendment_ref, "contract_amendment")
+    preservation_loaded = load(preservation_ref, "capital_preservation_amendment")
     template_loaded = load(template_ref, "preregistration_template")
-    if amendment_loaded is None or template_loaded is None:
+    if (
+        amendment_loaded is None
+        or preservation_loaded is None
+        or template_loaded is None
+    ):
         return {"status": "FAIL", "failures": failures}
     amendment, amendment_path = amendment_loaded
+    preservation, preservation_path = preservation_loaded
     template, _ = template_loaded
     contract = amendment.get("authoritative_contract") or {}
     cadence = contract.get("cadence") or {}
@@ -136,6 +152,8 @@ def verify_alpha015_contract_semantics(
     calibration = contract.get("execution_calibration") or {}
     portfolio = template.get("portfolio") or {}
     template_costs = template.get("costs") or {}
+    development_gate = template.get("development_gate") or {}
+    validation_gate = template.get("locked_validation_gate") or {}
 
     try:
         grid_minutes = int(cadence["decision_grid_minutes"])
@@ -229,6 +247,56 @@ def verify_alpha015_contract_semantics(
         )
         if actual_unmeasured != expected_unmeasured_scopes:
             failures.append("execution_calibration_unmeasured_scope_mismatch")
+
+    preservation_contract = preservation.get("authoritative_risk_contract") or {}
+    required_policy = preservation.get("policy_binding") or {}
+    try:
+        base_drawdown = float(
+            preservation_contract["maximum_base_minute_mark_to_market_drawdown_fraction"]
+        )
+        stress_drawdown = float(
+            preservation_contract["maximum_stress_minute_mark_to_market_drawdown_fraction"]
+        )
+    except (KeyError, TypeError, ValueError):
+        failures.append("capital_preservation_amendment_schema_invalid")
+    else:
+        if (
+            preservation.get("amendment_id")
+            != "ALPHA015_CAPITAL_PRESERVATION_AMENDMENT_012"
+            or preservation.get("status") != "PRE_RETURN_POLICY_ALIGNMENT"
+            or required_policy.get("risk_policy_id")
+            != "CAPITAL_PRESERVATION_RISK_POLICY_V1"
+            or required_policy.get("capital_objective_id")
+            != "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V2"
+        ):
+            failures.append("capital_preservation_amendment_identity_invalid")
+        if (base_drawdown, stress_drawdown) != (0.10, 0.10):
+            failures.append("capital_preservation_drawdown_limit_invalid")
+        for name, gate in (
+            ("development", development_gate),
+            ("locked_validation", validation_gate),
+        ):
+            checks = gate.get("checks") or {}
+            try:
+                matches = (
+                    float(checks["base_maximum_minute_mark_to_market_drawdown_fraction"])
+                    == base_drawdown
+                    and float(checks["stress_maximum_minute_mark_to_market_drawdown_fraction"])
+                    == stress_drawdown
+                )
+            except (KeyError, TypeError, ValueError):
+                matches = False
+            if not matches:
+                failures.append(f"template_{name}_capital_preservation_drawdown_mismatch")
+        if template.get("capital_preservation_policy_amendment") != str(
+            preservation_path.relative_to(root)
+        ):
+            failures.append("template_capital_preservation_amendment_reference_mismatch")
+        if any(
+            "monthly" in str(item).lower() and "target" in str(item).lower()
+            for item in (template.get("post_validation_requirements") or [])
+        ):
+            failures.append("template_monthly_return_target_forbidden")
     return {
         "status": "PASS" if not failures else "FAIL",
         "failures": failures,
@@ -238,6 +306,11 @@ def verify_alpha015_contract_semantics(
             "entry_latency_minutes": latency_minutes,
         },
         "costs": {"base_bps": base_cost, "stress_bps": stress_cost},
+        "capital_preservation": {
+            "amendment_path": str(preservation_path.relative_to(root)),
+            "maximum_minute_mark_to_market_drawdown": 0.10,
+            "monthly_return_target": "NOT_A_GATE",
+        },
         "calibration_path": calibration_path,
         "calibration_measured_scopes": expected_scopes,
     }

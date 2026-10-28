@@ -22,6 +22,7 @@ ALPHA015_DEVELOPMENT_DAYS = 120
 ALPHA015_LOCKED_VALIDATION_DAYS = 60
 ALPHA015_MINIMUM_COMPLETE_DAILY_OBSERVATIONS = 100
 ALPHA015_NEWEY_WEST_MAXIMUM_LAG_DAYS = 5
+ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN = 0.10
 ALPHA015_DEVELOPMENT_SELECTION_POLICY = SelectionBiasPolicy(
     minimum_observations=ALPHA015_MINIMUM_COMPLETE_DAILY_OBSERVATIONS,
     minimum_deflated_sharpe_probability=0.95,
@@ -230,8 +231,8 @@ def evaluate_alpha015_development(
         {"name": "base_profit_factor", "passed": base_pf is not None and base_pf >= 1.2, "actual": base_pf, "required": ">= 1.2"},
         {"name": "stress_profit_factor", "passed": stress_pf is not None and stress_pf >= 1.0, "actual": stress_pf, "required": ">= 1.0"},
         {"name": "newey_west_t_stat_base", "passed": nw["t_statistic"] >= 2.0, "actual": nw["t_statistic"], "required": ">= 2.0"},
-        {"name": "base_minute_mark_to_market_drawdown", "passed": base_mtm_dd <= 0.15, "actual": base_mtm_dd, "required": "<= 0.15"},
-        {"name": "stress_minute_mark_to_market_drawdown", "passed": stress_mtm_dd <= 0.15, "actual": stress_mtm_dd, "required": "<= 0.15"},
+        {"name": "base_minute_mark_to_market_drawdown", "passed": base_mtm_dd <= ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN, "actual": base_mtm_dd, "required": f"<= {ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN}"},
+        {"name": "stress_minute_mark_to_market_drawdown", "passed": stress_mtm_dd <= ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN, "actual": stress_mtm_dd, "required": f"<= {ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN}"},
         {"name": "positive_complete_calendar_month_fraction", "passed": positive_month_fraction >= 0.6, "actual": positive_month_fraction, "required": ">= 0.6"},
         {"name": "largest_positive_day_share", "passed": largest_positive_day_share is not None and largest_positive_day_share <= 0.2, "actual": largest_positive_day_share, "required": "<= 0.2"},
         {"name": "deflated_sharpe_probability", "passed": selection["checks"][2]["passed"], "actual": selection["deflated_sharpe"]["probability"], "required": ">= 0.95"},
@@ -329,8 +330,8 @@ def evaluate_alpha015_locked_validation(
         {"name": "base_profit_factor", "passed": base_pf is not None and base_pf >= 1.2, "actual": base_pf, "required": ">= 1.2"},
         {"name": "stress_profit_factor", "passed": stress_pf is not None and stress_pf >= 1.0, "actual": stress_pf, "required": ">= 1.0"},
         {"name": "newey_west_t_stat_base", "passed": nw["t_statistic"] >= 2.0, "actual": nw["t_statistic"], "required": ">= 2.0"},
-        {"name": "base_minute_mark_to_market_drawdown", "passed": base_mtm_dd <= 0.15, "actual": base_mtm_dd, "required": "<= 0.15"},
-        {"name": "stress_minute_mark_to_market_drawdown", "passed": stress_mtm_dd <= 0.15, "actual": stress_mtm_dd, "required": "<= 0.15"},
+        {"name": "base_minute_mark_to_market_drawdown", "passed": base_mtm_dd <= ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN, "actual": base_mtm_dd, "required": f"<= {ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN}"},
+        {"name": "stress_minute_mark_to_market_drawdown", "passed": stress_mtm_dd <= ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN, "actual": stress_mtm_dd, "required": f"<= {ALPHA015_MAXIMUM_MINUTE_MTM_DRAWDOWN}"},
         {"name": "positive_complete_calendar_month_fraction", "passed": positive_month_fraction >= 0.5, "actual": positive_month_fraction, "required": ">= 0.5"},
         {"name": "largest_positive_day_share", "passed": largest_positive_day_share is not None and largest_positive_day_share <= 0.2, "actual": largest_positive_day_share, "required": "<= 0.2"},
         {"name": "no_parameter_or_universe_retuning", "passed": no_parameter_or_universe_retuning is True, "actual": no_parameter_or_universe_retuning, "required": True},

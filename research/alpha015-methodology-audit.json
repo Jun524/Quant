@@ -166,6 +166,10 @@
       {
         "path": "research/alpha015-contract-amendment-011.json",
         "sha256": "f946de59a2566f1ae9177cc122b9aa7d0cf9416de7b81da76e39d9fd19ac5a5f"
+      },
+      {
+        "path": "research/alpha015-capital-preservation-amendment-012.json",
+        "sha256": "4eaa32c34c3fbfa8e95df41213faedffaad2498a74fcac8768f6b1204fcb2ae1"
       }
     ]
   },
@@ -183,7 +187,7 @@
       },
       {
         "path": "quant/research/candidate_activation.py",
-        "sha256": "28c21089dabe7737c6deb403f7010cee03ae01e1f366dfc7451f32d46a571cee"
+        "sha256": "dd521e34bd8a90caca37c15181173d93043e9dad380aa0597884a6150b67c400"
       },
       {
         "path": "scripts/alpha015_readiness.py",
@@ -210,11 +214,11 @@
     "artifacts": [
       {
         "path": "research/alpha015-preregistration-template.json",
-        "sha256": "07ea1584956ac535c76615597b72a59eb68ff1a10e866e82761a4e60b25e690a"
+        "sha256": "750888ae810abf9d3fb1b91ef23be19a6d330edc77500baa46fc32e8386195ea"
       },
       {
         "path": "quant/research/alpha015_preregistration.py",
-        "sha256": "e750a5cf801c29810872c78a7b48bdfaadbc005725254af97b823d2ad8a87642"
+        "sha256": "3833d3b76733fae920b413536e2ebd7e4a0777f1c6f359e11f861497a3228c3c"
       },
       {
         "path": "quant/research/alpha015_simulation.py",
@@ -238,7 +242,7 @@
       },
       {
         "path": "quant/research/alpha015_evaluation.py",
-        "sha256": "5a026e4ac13f07d80c431d2c5db8d5508f32902ec04cb22b6025cd3d8cfbe954"
+        "sha256": "7851ce6ba24f88e5b4ee68d3ef5c145c9a7c2959d13a143bb2faf331c06fd98c"
       },
       {
         "path": "quant/research/alpha015_replay.py",

@@ -7458,6 +7458,7 @@ class ResearchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             amendment_path = root / "alpha015-contract-amendment-011.json"
+            preservation_path = root / "alpha015-capital-preservation-amendment-012.json"
             template_path = root / "alpha015-preregistration-template.json"
             calibration_path = root / "calibration.json"
             calibration_path.write_text(
@@ -7509,6 +7510,23 @@ class ResearchTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            preservation_path.write_text(
+                json.dumps(
+                    {
+                        "amendment_id": "ALPHA015_CAPITAL_PRESERVATION_AMENDMENT_012",
+                        "status": "PRE_RETURN_POLICY_ALIGNMENT",
+                        "policy_binding": {
+                            "risk_policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
+                            "capital_objective_id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V2",
+                        },
+                        "authoritative_risk_contract": {
+                            "maximum_base_minute_mark_to_market_drawdown_fraction": 0.10,
+                            "maximum_stress_minute_mark_to_market_drawdown_fraction": 0.10,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
             template = {
                 "portfolio": {
                     "decision_grid": "10-minute UTC epoch grid",
@@ -7520,10 +7538,29 @@ class ResearchTests(unittest.TestCase):
                     "stress_all_in_basis_points_per_unit_realized_turnover": 20.0,
                     "cost_contract_amendment": amendment_path.name,
                 },
+                "capital_preservation_policy_amendment": preservation_path.name,
+                "development_gate": {
+                    "checks": {
+                        "base_maximum_minute_mark_to_market_drawdown_fraction": 0.10,
+                        "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.10,
+                    }
+                },
+                "locked_validation_gate": {
+                    "checks": {
+                        "base_maximum_minute_mark_to_market_drawdown_fraction": 0.10,
+                        "stress_maximum_minute_mark_to_market_drawdown_fraction": 0.10,
+                    }
+                },
+                "post_validation_requirements": [],
             }
             template_path.write_text(json.dumps(template), encoding="utf-8")
             audit = {
-                "activation_policy": {"amendments": [{"path": amendment_path.name}]},
+                "activation_policy": {
+                    "amendments": [
+                        {"path": amendment_path.name},
+                        {"path": preservation_path.name},
+                    ]
+                },
                 "preregistration_pipeline": {"artifacts": [{"path": template_path.name}]},
                 "frozen_transfer_choices": {
                     "execution_calibration_path": calibration_path.name,
@@ -7534,6 +7571,19 @@ class ResearchTests(unittest.TestCase):
                 verify_alpha015_contract_semantics(audit, project_root=root)["status"],
                 "PASS",
             )
+            template["development_gate"]["checks"][
+                "base_maximum_minute_mark_to_market_drawdown_fraction"
+            ] = 0.15
+            template_path.write_text(json.dumps(template), encoding="utf-8")
+            risk_drift = verify_alpha015_contract_semantics(audit, project_root=root)
+            self.assertEqual(risk_drift["status"], "FAIL")
+            self.assertIn(
+                "template_development_capital_preservation_drawdown_mismatch",
+                risk_drift["failures"],
+            )
+            template["development_gate"]["checks"][
+                "base_maximum_minute_mark_to_market_drawdown_fraction"
+            ] = 0.10
             template["portfolio"]["holding_minutes"] = 13
             template_path.write_text(json.dumps(template), encoding="utf-8")
             invalid = verify_alpha015_contract_semantics(audit, project_root=root)
@@ -7561,6 +7611,7 @@ class ResearchTests(unittest.TestCase):
                 "selection_amendment_009",
                 "risk_amendment_010",
                 "contract_amendment_011",
+                "capital_preservation_amendment_012",
                 "activation_lock",
                 "primary_source_manifest",
                 "primary_source_pdf",

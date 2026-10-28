@@ -27,6 +27,9 @@ def preregistration_artifact_paths() -> dict[str, Path]:
         "selection_amendment_009": Path("research/alpha015-selection-amendment-009.json"),
         "risk_amendment_010": Path("research/alpha015-risk-amendment-010.json"),
         "contract_amendment_011": Path("research/alpha015-contract-amendment-011.json"),
+        "capital_preservation_amendment_012": Path(
+            "research/alpha015-capital-preservation-amendment-012.json"
+        ),
         "activation_lock": Path("research/alpha015_activation/activation-lock.json"),
         "primary_source_manifest": Path("research/papers/alpha015-primary-source-manifest.json"),
         "primary_source_pdf": Path("research/papers/guo-sang-tu-wang-2024-cross-cryptocurrency-return-predictability-aam.pdf"),
@@ -89,6 +92,7 @@ def build_alpha015_preregistration(
         "selection_amendment_009",
         "risk_amendment_010",
         "contract_amendment_011",
+        "capital_preservation_amendment_012",
         "activation_lock",
         "primary_source_manifest",
         "primary_source_pdf",

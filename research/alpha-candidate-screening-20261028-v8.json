@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "screened_at_utc": "2026-10-28T09:15:00Z",
+  "purpose": "Capital-preservation successor screen after the Alpha 015 two-position veto. This screen asks whether a distinct, at-most-two-position Binance USDT-M futures hypothesis can be admitted without reopening a sealed failed family or adding an unmodelled hedge.",
+  "search_record": {
+    "workstreams": 3,
+    "sources_reviewed": 30,
+    "project_return_data_inspected_during_screening": false,
+    "hard_filters": [
+      "at most two simultaneous Binance USDT-M perpetual futures positions at planned leverage no greater than one",
+      "fixed, causal decision inputs with a documented availability path",
+      "price PnL, fees, slippage, funding, interim mark-to-market and liquidation treatment",
+      "independent of a sealed failed or currently accumulating family",
+      "no spot, cross-venue, borrowing or synthetic hedge outside the USDT-M-only scope"
+    ]
+  },
+  "candidates": [
+    {
+      "name": "ALPHA015_MINUTE_CROSS_CRYPTO_PREDICTABILITY",
+      "decision": "CLOSE_DEFERRED_CANDIDATE_POLICY_VETO",
+      "source": "research/alpha015-capital-preservation-amendment-012.json",
+      "quality": "Internal pre-return contract check. The template requires a 30-instrument universe and equal-weight top/bottom quintiles, or at least 12 concurrent futures positions.",
+      "reason": "This violates the active two-position capital-preservation limit. No return data was acquired; the candidate is not retuned into a different strategy."
+    },
+    {
+      "name": "BINANCE_USDTM_COINTEGRATION_OR_COPULA_PAIR",
+      "decision": "REJECT_NEGATIVE_COST_AFTER_EVIDENCE_AND_FAMILY_OVERLAP",
+      "source": "https://aimspress.com/article/doi/10.3934/QFE.2026016",
+      "quality": "2026 peer-reviewed open-access study using ten Binance USDT perpetuals, explicit funding, fees and spread assumptions, and a market-neutral two-leg implementation.",
+      "reason": "The market-neutral variants were negative after costs even with maximum drawdowns below 20%. A two-leg version also overlaps the sealed Alpha 002 mean-reversion family; changing its pair selection or thresholds would be prohibited retuning."
+    },
+    {
+      "name": "SPOT_PERPETUAL_RANDOM_MATURITY_ARBITRAGE",
+      "decision": "REJECT_SCOPE_AND_HEDGE_REQUIREMENT",
+      "source": "https://arxiv.org/html/2212.06888v7",
+      "quality": "Academic perpetual-futures theory and empirical study that explicitly describes the capital, funding, bid-ask and liquidation risks of its random-maturity arbitrage implementation.",
+      "reason": "The mechanism requires a spot position hedged against the perpetual. It is therefore not a Binance USDT-M-futures-only two-position sleeve and overlaps the already closed same-asset spot/perpetual carry family."
+    }
+  ],
+  "selected_next_step": "NO_NEW_ALPHA_REGISTERED. Alpha 015 is closed before return-data acquisition. Preserve failed-family boundaries and continue only sealed forward/execution evidence for Alpha 001, Alpha 007 and Alpha 011. Any successor must begin as a separately screened two-position hypothesis with no return-data access before preregistration.",
+  "live_order_authorization": "CLOSED"
+}

@@ -459,6 +459,7 @@ from scripts.live_preflight import (
     bias_audit_receipt_failures,
     compose_api_binding_failures,
     execution_audit_receipt_failures,
+    live_order_authorization_failure,
     research_promotion_failures,
 )
 from scripts.audit_futures_order_feasibility import receipt_failures as order_feasibility_receipt_failures
@@ -2737,6 +2738,27 @@ class MonitoringTests(unittest.TestCase):
             )
         self.assertEqual(unsafe.returncode, 2)
         self.assertIn("automated dry-run API must bind only to loopback", unsafe.stdout)
+
+    def test_live_preflight_cannot_override_closed_risk_policy(self) -> None:
+        project_root = Path(__file__).resolve().parents[1]
+        self.assertEqual(
+            live_order_authorization_failure(),
+            "Risk Policy live order authorization is CLOSED",
+        )
+        blocked = subprocess.run(
+            [
+                sys.executable,
+                str(project_root / "scripts" / "live_preflight.py"),
+                "--base",
+                str(project_root / "user_data" / "config.futures.json"),
+                "--require-live",
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(blocked.returncode, 2)
+        self.assertIn("FAIL: Risk Policy live order authorization is CLOSED", blocked.stdout)
 
     def test_daily_equity_boundary_is_causal_and_rejects_stale_input(self) -> None:
         observations = [

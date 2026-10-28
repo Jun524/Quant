@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Fail-closed configuration and credential checks before a live launch.
+"""Fail-closed configuration and credential checks before a live review.
 
 This tool deliberately never connects to Binance and never prints secrets.
-It validates only structural safeguards; it cannot establish profitability.
+It validates only structural safeguards; it cannot establish profitability or
+override the repository-wide live-order authorization boundary.
 """
 
 from __future__ import annotations
@@ -41,6 +42,7 @@ LIVE_STARTUP_CANDLES = 1500
 MAXIMUM_RECURSIVE_VARIANCE_PCT = 0.10
 MAXIMUM_EXECUTION_AUDIT_AGE_SECONDS = 30 * 86_400
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+RISK_POLICY_PATH = PROJECT_ROOT / "research" / "risk-policy.json"
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
@@ -683,6 +685,25 @@ def load_dotenv(path: Path) -> dict[str, str]:
     return values
 
 
+def live_order_authorization_failure(
+    policy_path: Path = RISK_POLICY_PATH,
+) -> str | None:
+    """Return a fail-closed reason when current policy forbids live review.
+
+    A structural preflight must never become an implicit authorization path.
+    The active capital-preservation policy deliberately remains CLOSED until a
+    separately versioned authorization mechanism exists.
+    """
+    try:
+        policy = load_config(policy_path)
+    except SystemExit:
+        return "Risk Policy cannot be read; live review is forbidden"
+    authorization = policy.get("live_order_authorization")
+    if authorization == "CLOSED":
+        return "Risk Policy live order authorization is CLOSED"
+    return "Risk Policy has no supported explicit live-order authorization"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
@@ -764,6 +785,9 @@ def main() -> None:
                 failures.append(f"environment variable {name} is missing, placeholder-like, or too short")
 
     if args.require_live:
+        authorization_failure = live_order_authorization_failure()
+        if authorization_failure:
+            failures.append(authorization_failure)
         if args.permission_audit is None:
             failures.append("--permission-audit is required for live review")
         else:

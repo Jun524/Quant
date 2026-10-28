@@ -2990,6 +2990,28 @@ class OrderBookTests(unittest.TestCase):
         self.assertEqual(budget["sealed_success_seconds"], 3600)
         self.assertEqual(budget["excluded_failed_chunk_seconds"], 3600)
 
+    def test_terminal_campaign_is_never_reported_as_still_reachable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            log = root / "campaign.jsonl"
+            log.write_text(
+                json.dumps({"event": "chunk_complete", "duration_seconds": 400 * 3600}) + "\n",
+                encoding="utf-8",
+            )
+            budget = campaign_coverage_budget(
+                {
+                    "status": "FINISHED",
+                    "campaign_log": "campaign.jsonl",
+                    "started_at": "2025-01-01T00:00:00+00:00",
+                    "deadline_at": "2025-01-20T00:00:00+00:00",
+                },
+                project_root=root,
+                now=datetime(2025, 1, 20, tzinfo=timezone.utc),
+                required_complete_days=17,
+            )
+        self.assertTrue(budget["terminal"])
+        self.assertFalse(budget["target_still_reachable"])
+
     def test_campaign_status_cross_checks_collector_and_staleness(self) -> None:
         now = datetime(2025, 1, 1, 1, 0, tzinfo=timezone.utc)
         payload = {

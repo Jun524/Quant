@@ -209,8 +209,14 @@ def campaign_coverage_budget(
         remaining_wall_seconds = 0.0
     required_seconds = required_complete_days * 86_400 * minimum_coverage_per_day
     maximum_possible = completed_seconds + remaining_wall_seconds
+    terminal = str(payload.get("status") or "") in {
+        "FINISHED",
+        "STOPPED",
+        "PREFLIGHT_FAILED",
+    }
     return {
         "basis": "upper bound only; complete UTC days are determined from observed feature-second coverage",
+        "terminal": terminal,
         "required_complete_days": required_complete_days,
         "minimum_coverage_per_day": minimum_coverage_per_day,
         "required_eligible_seconds": required_seconds,
@@ -219,7 +225,16 @@ def campaign_coverage_budget(
         "remaining_wall_seconds": round(remaining_wall_seconds, 3),
         "maximum_possible_eligible_seconds": round(maximum_possible, 3),
         "campaign_deadline": deadline.isoformat() if deadline else None,
-        "target_still_reachable": bool(log_path and log_path.is_file() and maximum_possible >= required_seconds),
+        # A terminal campaign cannot acquire another complete UTC day.  Do not
+        # present a raw-duration upper bound as a future opportunity after the
+        # deadline; completion is instead decided by the frozen day-coverage
+        # evaluator and, where applicable, its sealed terminal receipt.
+        "target_still_reachable": bool(
+            not terminal
+            and log_path
+            and log_path.is_file()
+            and maximum_possible >= required_seconds
+        ),
     }
 
 

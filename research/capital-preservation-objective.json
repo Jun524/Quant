@@ -28,6 +28,7 @@
     "adverse_position_adds": "FORBIDDEN",
     "liquidation_exits": 0,
     "rule_violations": 0,
+    "non_positive_equity": false,
     "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
     "modeled_slippage_bps": 5.0,
     "maximum_combined_cost_stress_drawdown": 0.1,

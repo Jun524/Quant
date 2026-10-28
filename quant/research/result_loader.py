@@ -259,11 +259,13 @@ def _daily_distribution(daily_profit: list, starting_balance: float) -> dict:
     if not amounts or starting_balance <= 0:
         return {"basis": "unavailable", "days": 0}
     equity = starting_balance
+    minimum_equity = equity
     returns: list[float] = []
     for amount in amounts:
         daily_return = amount / equity if equity else 0.0
         returns.append(daily_return)
         equity += amount
+        minimum_equity = min(minimum_equity, equity)
     ordered = sorted(returns)
 
     def historical_var(level: float) -> float:
@@ -288,6 +290,7 @@ def _daily_distribution(daily_profit: list, starting_balance: float) -> dict:
         "historical_var_95": historical_var(0.95),
         "historical_var_99": historical_var(0.99),
         "max_consecutive_losing_days": longest_losing_streak,
+        "minimum_equity": minimum_equity,
         "series": [
             {"date": observed, "return": daily_return, "profit": amount}
             for observed, daily_return, amount in zip(dates, returns, amounts)

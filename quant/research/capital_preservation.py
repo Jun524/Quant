@@ -8,6 +8,7 @@ has a reproducible exit.
 
 from __future__ import annotations
 
+from math import isfinite
 from typing import Any, Mapping
 
 from quant.research.risk_policy_contract import validate_risk_policy_contract
@@ -78,6 +79,24 @@ def _combined_cost_drawdown_upper_bound(result: Mapping[str, Any]) -> float | No
     return drawdown + slippage_drag
 
 
+def _minimum_reported_closed_trade_equity(result: Mapping[str, Any]) -> float | None:
+    """Return the lowest source-replayed closed-trade daily equity.
+
+    Historical Freqtrade diagnostics are explicitly not mark-to-market proof;
+    the final portfolio gate separately requires an MTM path.  Still, a
+    diagnostic cannot call itself capital-preserving if even its replayed
+    closed-trade accounting reaches non-positive equity.
+    """
+    daily = result.get("daily")
+    if not isinstance(daily, Mapping):
+        return None
+    try:
+        minimum_equity = float(daily["minimum_equity"])
+    except (KeyError, TypeError, ValueError):
+        return None
+    return minimum_equity if isfinite(minimum_equity) else None
+
+
 def evaluate_capital_preservation(
     development: Mapping[str, Any],
     development_stress: Mapping[str, Any],
@@ -115,6 +134,7 @@ def evaluate_capital_preservation(
     maximum_positions = int(_number(requirements, "maximum_simultaneous_positions"))
     maximum_liquidations = int(_number(requirements, "liquidation_exits"))
     maximum_rule_violations = int(_number(requirements, "rule_violations"))
+    non_positive_equity_forbidden = requirements.get("non_positive_equity") is False
     modeled_slippage_bps = _number(requirements, "modeled_slippage_bps")
     maximum_cost_stress_drawdown = _number(requirements, "maximum_combined_cost_stress_drawdown")
 
@@ -127,6 +147,16 @@ def evaluate_capital_preservation(
     post_adverse_funding = _adverse_funding_net_return(post_development_stress)
     dev_cost_drawdown = _combined_cost_drawdown_upper_bound(development_stress)
     post_cost_drawdown = _combined_cost_drawdown_upper_bound(post_development_stress)
+    minimum_reported_equity = {
+        "development": _minimum_reported_closed_trade_equity(development),
+        "development_stress": _minimum_reported_closed_trade_equity(
+            development_stress
+        ),
+        "post_development": _minimum_reported_closed_trade_equity(post_development),
+        "post_development_stress": _minimum_reported_closed_trade_equity(
+            post_development_stress
+        ),
+    }
     rule_violations = integrity.get("rule_violations")
     checks = [
         _check("objective_active", objective.get("status") == "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS", required="ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS", actual=objective.get("status"), kind="governance"),
@@ -152,6 +182,7 @@ def evaluate_capital_preservation(
         _check("simultaneous_positions", int(execution_contract.get("maximum_simultaneous_positions") or 0) <= maximum_positions, required=f"<= {maximum_positions}", actual=execution_contract.get("maximum_simultaneous_positions"), kind="risk"),
         _check("adverse_position_adds_forbidden", execution_contract.get("adverse_position_adds") is False, required=False, actual=execution_contract.get("adverse_position_adds"), kind="risk"),
         _check("liquidation_exits", all(int((result.get("trade_risk") or {}).get("liquidation_exits") or 0) <= maximum_liquidations for result in (development, post_development)), required=f"<= {maximum_liquidations}", actual={"development": (development.get("trade_risk") or {}).get("liquidation_exits"), "post_development": (post_development.get("trade_risk") or {}).get("liquidation_exits")}, kind="risk"),
+        _check("non_positive_reported_closed_trade_equity", non_positive_equity_forbidden and all(value is not None and value > 0.0 for value in minimum_reported_equity.values()), required="false; every base and stress replayed closed-trade equity minimum > 0", actual=minimum_reported_equity, kind="risk"),
         _check("rule_violations", type(rule_violations) is int and rule_violations <= maximum_rule_violations, required=f"<= {maximum_rule_violations}", actual=rule_violations, kind="integrity"),
         _check("data_integrity", integrity.get("data_integrity") == "PASS", required="PASS", actual=integrity.get("data_integrity"), kind="integrity"),
         _check("lookahead_analysis", integrity.get("lookahead") == "PASS", required="PASS", actual=integrity.get("lookahead"), kind="integrity"),

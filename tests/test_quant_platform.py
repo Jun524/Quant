@@ -7045,6 +7045,7 @@ class ResearchTests(unittest.TestCase):
                 "maximum_cost_stress_mtm_drawdown": 0.1,
                 "liquidation_exits": 0,
                 "rule_violations": 0,
+                "non_positive_equity": False,
                 "maximum_planned_account_risk_per_trade": 0.0025,
                 "maximum_planned_leverage": 1.0,
                 "maximum_simultaneous_positions": 2,
@@ -7066,6 +7067,7 @@ class ResearchTests(unittest.TestCase):
                 "maximum_combined_cost_stress_drawdown": 0.1,
                 "liquidation_exits": 0,
                 "rule_violations": 0,
+                "non_positive_equity": False,
                 "maximum_planned_account_risk_per_trade": 0.0025,
                 "maximum_planned_leverage": 1.0,
                 "maximum_simultaneous_positions": 2,
@@ -12361,6 +12363,7 @@ class ResearchTests(unittest.TestCase):
                 "maximum_combined_cost_stress_drawdown": 0.10,
                 "liquidation_exits": 0,
                 "rule_violations": 0,
+                "non_positive_equity": False,
                 "adverse_position_adds": "FORBIDDEN",
                 "double_fee_plus_modeled_slippage_stress_net_return": "> 0",
                 "data_integrity": "PASS",
@@ -12380,6 +12383,7 @@ class ResearchTests(unittest.TestCase):
             "modeled_slippage_bps": 5.0,
             "cost_drag": {"slippage_drag_pct": 0.0},
             "max_drawdown": 0.04,
+            "daily": {"minimum_equity": 980.0},
             "monthly": {"worst_month": -0.02},
             "trade_risk": {"liquidation_exits": 0},
         }
@@ -12435,6 +12439,21 @@ class ResearchTests(unittest.TestCase):
         )
         self.assertEqual(drawdown_failed["status"], "FAIL")
         self.assertIn("development_combined_cost_stress_drawdown", drawdown_failed["failures"])
+
+        equity_failed_result = dict(result)
+        equity_failed_result["daily"] = {"minimum_equity": 0.0}
+        equity_failed = evaluate_capital_preservation(
+            equity_failed_result, equity_failed_result, result, result,
+            objective=objective,
+            risk_policy=risk_policy,
+            execution_contract=contract,
+            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+        )
+        self.assertEqual(equity_failed["status"], "FAIL")
+        self.assertIn(
+            "non_positive_reported_closed_trade_equity",
+            equity_failed["failures"],
+        )
 
         integrity_failed = evaluate_capital_preservation(
             result, result, result, result,

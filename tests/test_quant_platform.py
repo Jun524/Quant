@@ -6882,10 +6882,13 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(readiness["portfolio_promotion_status"], "NOT_OPENED")
         self.assertEqual(readiness["live_order_authorization"], "CLOSED")
         self.assertEqual(
-            readiness["return_target"]["aspirational_net_geometric_monthly_return"],
-            0.10,
+            readiness["return_objective"]["monthly_return_target"],
+            "NOT_A_GATE",
         )
-        self.assertFalse(readiness["return_target"]["promotion_requirement"])
+        self.assertEqual(
+            readiness["return_objective"]["promotion_requirement"],
+            "positive_long_horizon_cost_after_expectancy",
+        )
         self.assertTrue(readiness["thresholds"]["require_slippage_stress_positive"])
         self.assertTrue(readiness["thresholds"]["require_funding_stress_positive"])
         self.assertTrue(
@@ -11851,7 +11854,10 @@ class ResearchTests(unittest.TestCase):
             "id": "CAPITAL_PRESERVATION_RESEARCH_OBJECTIVE_V1",
             "status": "ACTIVE_FOR_NEW_HISTORICAL_DIAGNOSTICS",
             "live_order_authorization": "CLOSED",
-            "return_objective": {"aspirational_net_geometric_monthly_return": 0.10},
+            "return_objective": {
+                "monthly_return_target": "NOT_A_GATE",
+                "promotion_requirement": "positive_long_horizon_cost_after_expectancy",
+            },
             "capital_preservation_requirements": {
                 "minimum_organic_trades": 100,
                 "minimum_profit_factor": 1.20,

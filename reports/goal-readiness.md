@@ -1,10 +1,10 @@
-# Monthly objective readiness
+# Capital-preservation research readiness
 
 - Status: `RESEARCH_ATTENTION_REQUIRED`
 - Objective proven: `false`
 - Live order authorization: `CLOSED`
 - Research health: `ATTENTION_REQUIRED`
-- Aspirational net geometric monthly return: `10%` (promotion requirement: `false`)
+- Return objective: `positive_long_horizon_cost_after_expectancy` (monthly return: `NOT_A_GATE`)
 - Research cadence: historical diagnostics immediately; forward reviews at 30, 60, 90 days.
 
 ## Proof pipeline
@@ -13,7 +13,7 @@
 |---|---:|---:|---:|
 | forward_research_operations | ATTENTION | ATTENTION_REQUIRED | HEALTHY |
 | independent_locked_forward_sleeves | NOT_OPENED | 0 | 2 |
-| combined_monthly_objective | NOT_OPENED | NOT_OPENED | > 0 cost-after geometric monthly return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end. Monthly 10% remains aspirational and is reported separately. |
+| combined_cost_after_expectancy | NOT_OPENED | NOT_OPENED | positive cost-after return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end. |
 | combined_downside_and_diversification | NOT_OPENED | NOT_OPENED | MDD <= 10%, intratrade leverage-adjusted MAE <= 20%, trade-overlap exposure reconciliation, bootstrap ruin <= 0.5%, deterministic worst-block recurrence MDD <= 10%, zero liquidations, 1x leverage/correlation/concentration limits |
 | combined_cost_and_execution_paths | NOT_OPENED | NOT_OPENED | positive simultaneous fee+slippage+funding stress, per-trade accounting costs covering preregistered scope budgets, and every entry/exit/stop scope PASS |
 | selection_bias_control | NOT_OPENED | NOT_OPENED | complete trial inventories; DSR probability >= 95%; CSCV PBO <= 10% |
@@ -33,4 +33,4 @@
 - The multi-strategy live adapter and portfolio-specific live preflight are intentionally not built before a portfolio PASS.
 - Live order authorization remains closed; calibration and dry-run evidence cannot authorize orders.
 
-The 10% monthly target is aspirational rather than a promotion requirement. Positive cost-after returns and the stricter capital-preservation gates remain mandatory. This readiness report never promotes calibration, backtests, or partial forward samples.
+Monthly return is not a promotion requirement. Positive long-horizon cost-after expectancy and the capital-preservation gates remain mandatory. This readiness report never promotes calibration, backtests, or partial forward samples.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "objective": "Binance USDT-M futures portfolio: capital preservation and positive cost-after return are required; 10% net geometric monthly return is aspirational",
+  "objective": "Binance USDT-M futures portfolio: validate positive long-horizon cost-after expectancy while preserving capital; monthly return is not a gate",
   "status": "RESEARCH_ATTENTION_REQUIRED",
   "objective_proven": false,
   "live_order_authorization": "CLOSED",
@@ -65,11 +65,11 @@
       "maximum_portfolio_deterministic_stress_drawdown": 0.1
     }
   },
-  "return_target": {
-    "aspirational_net_geometric_monthly_return": 0.1,
-    "promotion_requirement": false,
+  "return_objective": {
+    "promotion_requirement": "positive_long_horizon_cost_after_expectancy",
+    "monthly_return_target": "NOT_A_GATE",
     "required_direction": "positive_cost_after_return",
-    "warning": "Ten percent per month is an ambition, not a promise, a sizing instruction, or a reason to increase leverage or turnover."
+    "warning": "Return is an outcome of a validated structure, never a promise, a sizing instruction, or a reason to increase leverage or turnover."
   },
   "research_cadence": {
     "historical_research": "Start immediately from sealed historical data; do not wait for a new forward window to begin a diagnostic.",
@@ -123,10 +123,10 @@
       "checks": []
     },
     {
-      "name": "combined_monthly_objective",
+      "name": "combined_cost_after_expectancy",
       "status": "NOT_OPENED",
       "actual": "NOT_OPENED",
-      "required": "> 0 cost-after geometric monthly return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end. Monthly 10% remains aspirational and is reported separately.",
+      "required": "positive cost-after return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end.",
       "checks": []
     },
     {
@@ -165,7 +165,7 @@
   "current_single_candidate_evidence": {
     "candidate": "FuturesBtcRegimeRiskBudgetLong",
     "forward_status": "ACCUMULATING",
-    "monthly_gate_status": "REVIEW",
+    "cost_after_gate_status": "REVIEW",
     "complete_months": 0,
     "natural_closed_trades": 0,
     "current_bias_audit_pass": true,
@@ -266,8 +266,8 @@
     "The multi-strategy live adapter and portfolio-specific live preflight are intentionally not built before a portfolio PASS.",
     "Live order authorization remains closed; calibration and dry-run evidence cannot authorize orders."
   ],
-  "interpretation": "The 10% monthly target is aspirational rather than a promotion requirement. Positive cost-after returns and the stricter capital-preservation gates remain mandatory. This readiness report never promotes calibration, backtests, or partial forward samples.",
-  "generated_at_utc": "2026-10-19T06:35:16.990022+00:00",
+  "interpretation": "Monthly return is not a promotion requirement. Positive long-horizon cost-after expectancy and the capital-preservation gates remain mandatory. This readiness report never promotes calibration, backtests, or partial forward samples.",
+  "generated_at_utc": "2026-10-28T08:37:21.596276+00:00",
   "sources": [
     {
       "path": "reports/platform-scoreboard.json",
@@ -322,7 +322,7 @@
     {
       "path": "research/capital-preservation-objective.json",
       "present": true,
-      "sha256": "7df813952138fee6833bc3fc0a8e9ca41e1c1f18da3c452d354e96f853904f7a"
+      "sha256": "9450337abca3a8db9a7da150ea0fb8b116d9f79a056f501ecda36202c0be1d3d"
     },
     {
       "path": "research/promotion-policy.json",

@@ -332,7 +332,7 @@ def build_goal_readiness(
     if raw_portfolio_status != "NOT_OPENED" and receipt_integrity.get("status") == "FAIL":
         portfolio_status = "STALE_OR_INVALID_EVIDENCE"
 
-    monthly_status, monthly_checks = _group_status(
+    expectancy_status, expectancy_checks = _group_status(
         portfolio_promotion,
         (
             "portfolio_performance_source_replay",
@@ -455,11 +455,11 @@ def build_goal_readiness(
             "checks": sleeve_checks,
         },
         {
-            "name": "combined_monthly_objective",
-            "status": monthly_status,
+            "name": "combined_cost_after_expectancy",
+            "status": expectancy_status,
             "actual": portfolio_status,
-            "required": "> 0 cost-after geometric monthly return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end. Monthly 10% remains aspirational and is reported separately.",
-            "checks": monthly_checks,
+            "required": "positive cost-after return; trade and daily MTM PF >= 1.20; >= 12 complete locked-forward months; >= 100 organic trades; force_exit only at the exact sample end.",
+            "checks": expectancy_checks,
         },
         {
             "name": "combined_downside_and_diversification",
@@ -551,18 +551,12 @@ def build_goal_readiness(
         else None
     )
     if not isinstance(return_objective, dict):
-        # Keep the headline target visible even when the optional policy
-        # artifact is absent.  It is deliberately not added to promotion
-        # thresholds: capital preservation and positive cost-after return
-        # remain the fail-closed requirements.
+        # Do not invent a return target if the policy artifact is absent.
         return_objective = {
-            "aspirational_net_geometric_monthly_return": 0.10,
-            "promotion_requirement": False,
+            "promotion_requirement": "positive_long_horizon_cost_after_expectancy",
+            "monthly_return_target": "NOT_A_GATE",
             "required_direction": "positive_cost_after_return",
-            "warning": (
-                "Ten percent per month is an ambition, not a promise, a sizing "
-                "instruction, or a reason to increase leverage or turnover."
-            ),
+            "warning": "Return is an outcome of validated structure, not a sizing instruction.",
         }
 
     research_cadence = (
@@ -579,7 +573,7 @@ def build_goal_readiness(
 
     return {
         "schema_version": 1,
-        "objective": "Binance USDT-M futures portfolio: capital preservation and positive cost-after return are required; 10% net geometric monthly return is aspirational",
+        "objective": "Binance USDT-M futures portfolio: validate positive long-horizon cost-after expectancy while preserving capital; monthly return is not a gate",
         "status": overall,
         "objective_proven": objective_proven,
         "live_order_authorization": "CLOSED",
@@ -588,7 +582,7 @@ def build_goal_readiness(
             **asdict(PORTFOLIO_MONTHLY_POLICY),
             "portfolio": asdict(PortfolioPromotionPolicy()),
         },
-        "return_target": return_objective,
+        "return_objective": return_objective,
         "research_cadence": research_cadence,
         "experiment_counts": {
             "total": int(scoreboard.get("experiments") or 0),
@@ -602,7 +596,7 @@ def build_goal_readiness(
         "current_single_candidate_evidence": {
             "candidate": (alpha001_forward or {}).get("candidate"),
             "forward_status": (alpha001_forward or {}).get("status"),
-            "monthly_gate_status": alpha001_gate.get("status"),
+            "cost_after_gate_status": alpha001_gate.get("status"),
             "complete_months": alpha001_monthly.get("complete_months"),
             "natural_closed_trades": alpha001_trades.get("natural_closed_trades"),
             "current_bias_audit_pass": alpha001_bias_pass,
@@ -615,8 +609,8 @@ def build_goal_readiness(
         "supporting_non_promotion_gates": supporting_non_promotion,
         "ordered_blockers": blockers,
         "interpretation": (
-            "The 10% monthly target is aspirational rather than a promotion requirement. "
-            "Positive cost-after returns and the stricter capital-preservation gates remain mandatory. "
+            "Monthly return is not a promotion requirement. Positive long-horizon cost-after expectancy "
+            "and the capital-preservation gates remain mandatory. "
             "This readiness report never promotes calibration, backtests, or partial forward samples."
         ),
     }

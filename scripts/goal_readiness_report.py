@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write a single fail-closed readiness report for the monthly objective."""
+"""Write a single fail-closed readiness report for capital preservation."""
 
 from __future__ import annotations
 
@@ -192,15 +192,15 @@ def replay_portfolio_promotion_receipt(
 
 def _markdown(report: dict) -> str:
     lines = [
-        "# Monthly objective readiness",
+        "# Capital-preservation research readiness",
         "",
         f"- Status: `{report['status']}`",
         f"- Objective proven: `{str(report['objective_proven']).lower()}`",
         f"- Live order authorization: `{report['live_order_authorization']}`",
         f"- Research health: `{report['research_health']}`",
-        "- Aspirational net geometric monthly return: "
-        f"`{report['return_target']['aspirational_net_geometric_monthly_return']:.0%}` "
-        f"(promotion requirement: `{str(report['return_target']['promotion_requirement']).lower()}`)",
+        "- Return objective: "
+        f"`{report['return_objective']['promotion_requirement']}` "
+        f"(monthly return: `{report['return_objective']['monthly_return_target']}`)",
         "- Research cadence: historical diagnostics immediately; forward reviews at "
         + ", ".join(str(day) for day in report["research_cadence"]["forward_review_days"])
         + " days.",

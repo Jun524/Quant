@@ -94,6 +94,7 @@ class PortfolioPromotionPolicy:
     maximum_gross_leverage: float = 1.0
     maximum_absolute_net_leverage: float = 1.0
     maximum_portfolio_trade_leverage_adjusted_mae: float = 0.20
+    maximum_portfolio_rule_violations: int = 0
     minimum_portfolio_daily_mtm_profit_factor: float = 1.20
     minimum_execution_observations_per_scope: int = 30
     minimum_passive_fills_per_scope: int = 10
@@ -1011,9 +1012,35 @@ def _portfolio_performance_failures(
                 failures.append(f"portfolio performance {name} source is invalid")
     if audit.get("candidate_order") != candidates:
         failures.append("portfolio performance candidates do not match manifest")
-    for name in ("trade_rows", "organic_trades", "accounting_rows", "liquidations"):
+    for name in (
+        "trade_rows",
+        "organic_trades",
+        "accounting_rows",
+        "liquidations",
+        "rule_violations",
+    ):
         if not isinstance(audit.get(name), int) or audit[name] < 0:
             failures.append(f"portfolio performance {name} is invalid")
+    rule_violation_evidence = audit.get("rule_violation_evidence")
+    expected_rule_violation_categories = {
+        "trade_maximum_leverage",
+        "trade_leverage_adjusted_mae",
+        "daily_gross_leverage",
+        "daily_absolute_net_leverage",
+        "liquidation_exit",
+    }
+    if (
+        not isinstance(rule_violation_evidence, dict)
+        or set(rule_violation_evidence) != expected_rule_violation_categories
+        or any(
+            not isinstance(values, list)
+            or not all(isinstance(value, str) and value for value in values)
+            for values in rule_violation_evidence.values()
+        )
+        or audit.get("rule_violations")
+        != sum(len(values) for values in rule_violation_evidence.values())
+    ):
+        failures.append("portfolio performance rule-violation evidence is invalid")
     for name in (
         "maximum_daily_accounting_reconciliation_error",
         "closed_trade_mtm_total_reconciliation_error",
@@ -1250,6 +1277,7 @@ def _portfolio_performance_failures(
         "closed_trade_mtm_total_reconciliation",
         "closed_trade_mtm_component_reconciliation",
         "preregistered_execution_cost_floor",
+        "capital_preservation_rule_violations",
         "monthly_target_gate",
         "daily_mtm_profit_factor",
         "simultaneous_cost_funding_stress",
@@ -1680,6 +1708,8 @@ def evaluate_portfolio_promotion(
             == performance_audit.get("maximum_trade_leverage_adjusted_mae")
             and portfolio_report.get("liquidations")
             == performance_audit.get("liquidations")
+            and portfolio_report.get("rule_violations")
+            == performance_audit.get("rule_violations")
             and portfolio_report.get("simultaneous_cost_funding_stress_net_return")
             == (performance_audit.get("stress_returns") or {}).get("simultaneous")
             and portfolio_report.get("simultaneous_cost_funding_stress_max_drawdown")
@@ -1698,6 +1728,7 @@ def evaluate_portfolio_promotion(
                     "maximum_trade_leverage_adjusted_mae"
                 ),
                 "liquidations": portfolio_report.get("liquidations"),
+                "rule_violations": portfolio_report.get("rule_violations"),
                 "simultaneous_cost_funding_stress_net_return": portfolio_report.get(
                     "simultaneous_cost_funding_stress_net_return"
                 ),
@@ -1798,6 +1829,17 @@ def evaluate_portfolio_promotion(
             if isinstance(performance_audit, dict)
             else None,
             0,
+            "risk",
+        ),
+        _check(
+            "zero_rule_violations",
+            isinstance(performance_audit, dict)
+            and performance_audit.get("rule_violations")
+            == policy.maximum_portfolio_rule_violations,
+            performance_audit.get("rule_violations")
+            if isinstance(performance_audit, dict)
+            else None,
+            policy.maximum_portfolio_rule_violations,
             "risk",
         ),
         _check(

@@ -365,6 +365,7 @@ def _build_portfolio_performance_audit(
     execution_scopes: list[dict],
     maximum_simultaneous_stress_drawdown: float,
     minimum_daily_mtm_profit_factor: float,
+    promotion_policy: PortfolioPromotionPolicy,
 ) -> tuple[dict, dict[str, dict[str, str]]]:
     try:
         trade_bytes = trades_path.read_bytes()
@@ -385,6 +386,12 @@ def _build_portfolio_performance_audit(
             execution_scopes=execution_scopes,
             maximum_simultaneous_stress_drawdown=maximum_simultaneous_stress_drawdown,
             minimum_daily_mtm_profit_factor=minimum_daily_mtm_profit_factor,
+            maximum_gross_leverage=promotion_policy.maximum_gross_leverage,
+            maximum_absolute_net_leverage=promotion_policy.maximum_absolute_net_leverage,
+            maximum_trade_leverage_adjusted_mae=(
+                promotion_policy.maximum_portfolio_trade_leverage_adjusted_mae
+            ),
+            maximum_rule_violations=promotion_policy.maximum_portfolio_rule_violations,
         )
     except (OSError, UnicodeError, ValueError) as exc:
         raise SystemExit(f"portfolio performance replay failed: {exc}") from exc
@@ -544,6 +551,7 @@ def main() -> None:
             minimum_daily_mtm_profit_factor=(
                 promotion_policy.minimum_portfolio_daily_mtm_profit_factor
             ),
+            promotion_policy=promotion_policy,
         )
     )
     embedded_portfolio_selection = portfolio_report.get("selection_bias_audit")
@@ -587,6 +595,7 @@ def main() -> None:
             "maximum_trade_leverage_adjusted_mae"
         ),
         "liquidations": portfolio_performance_audit.get("liquidations"),
+        "rule_violations": portfolio_performance_audit.get("rule_violations"),
         "simultaneous_cost_funding_stress_net_return": (
             portfolio_performance_audit.get("stress_returns") or {}
         ).get("simultaneous"),

@@ -66,6 +66,52 @@ def _parse_utc(value: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
+def _rule_violation_evidence(
+    *,
+    trades: list[dict[str, Any]],
+    exposure: list[dict[str, Any]],
+    maximum_gross_leverage: float,
+    maximum_absolute_net_leverage: float,
+    maximum_trade_leverage_adjusted_mae: float,
+) -> dict[str, list[str]]:
+    """Count every source-ledger breach of the preservation execution envelope.
+
+    A single evidence row can breach more than one rule. Those are retained as
+    separate violations so a later audit has a source-addressable explanation
+    instead of a hand-maintained aggregate counter.
+    """
+    return {
+        "trade_maximum_leverage": sorted(
+            item["trade_id"]
+            for item in trades
+            if float(item["maximum_leverage"]) > maximum_gross_leverage
+        ),
+        "trade_leverage_adjusted_mae": sorted(
+            item["trade_id"]
+            for item in trades
+            if float(item["maximum_leverage"])
+            * float(item["maximum_adverse_excursion"])
+            > maximum_trade_leverage_adjusted_mae
+        ),
+        "daily_gross_leverage": [
+            item["timestamp"].isoformat()
+            for item in exposure
+            if float(item["maximum_gross_leverage"]) > maximum_gross_leverage
+        ],
+        "daily_absolute_net_leverage": [
+            item["timestamp"].isoformat()
+            for item in exposure
+            if float(item["maximum_absolute_net_leverage"])
+            > maximum_absolute_net_leverage
+        ],
+        "liquidation_exit": sorted(
+            item["trade_id"]
+            for item in trades
+            if item["exit_reason"] == "liquidation"
+        ),
+    }
+
+
 def load_portfolio_trades(path: Path, candidates: list[str]) -> list[dict[str, Any]]:
     allowed_candidates = set(candidates)
     trades: list[dict[str, Any]] = []
@@ -357,7 +403,27 @@ def evaluate_portfolio_performance(
     execution_scopes: list[dict[str, Any]] | None = None,
     maximum_simultaneous_stress_drawdown: float = MAX_SIMULTANEOUS_STRESS_DRAWDOWN,
     minimum_daily_mtm_profit_factor: float = MINIMUM_DAILY_MTM_PROFIT_FACTOR,
+    maximum_gross_leverage: float = 1.0,
+    maximum_absolute_net_leverage: float = 1.0,
+    maximum_trade_leverage_adjusted_mae: float = 0.20,
+    maximum_rule_violations: int = 0,
 ) -> dict[str, Any]:
+    if (
+        not all(
+            isinstance(value, (int, float))
+            and isfinite(float(value))
+            and float(value) >= 0.0
+            for value in (
+                maximum_gross_leverage,
+                maximum_absolute_net_leverage,
+                maximum_trade_leverage_adjusted_mae,
+            )
+        )
+        or not isinstance(maximum_rule_violations, int)
+        or isinstance(maximum_rule_violations, bool)
+        or maximum_rule_violations < 0
+    ):
+        raise ValueError("portfolio rule-violation policy is invalid")
     daily = equity.get("daily") or {}
     monthly = equity.get("monthly") or {}
     daily_series = daily.get("series") or []
@@ -532,6 +598,16 @@ def evaluate_portfolio_performance(
         daily_series=daily_series,
         initial_equity=float(initial_equity),
     )
+    rule_violation_evidence = _rule_violation_evidence(
+        trades=trades,
+        exposure=exposure,
+        maximum_gross_leverage=float(maximum_gross_leverage),
+        maximum_absolute_net_leverage=float(maximum_absolute_net_leverage),
+        maximum_trade_leverage_adjusted_mae=float(
+            maximum_trade_leverage_adjusted_mae
+        ),
+    )
+    rule_violations = sum(len(values) for values in rule_violation_evidence.values())
     daily_gross_profit = sum(value for value in daily_accounting_net if value > 0.0)
     daily_gross_loss = -sum(value for value in daily_accounting_net if value < 0.0)
     daily_mtm_profit_factor = _profit_factor(daily_accounting_net)
@@ -701,6 +777,15 @@ def evaluate_portfolio_performance(
             "required": "every trade charges at least its preregistered entry/exit fee and all-in drag budgets",
         },
         {
+            "name": "capital_preservation_rule_violations",
+            "passed": rule_violations <= maximum_rule_violations,
+            "actual": {
+                "count": rule_violations,
+                "evidence": rule_violation_evidence,
+            },
+            "required": f"<= {maximum_rule_violations} source-ledger risk-envelope violations",
+        },
+        {
             "name": "monthly_target_gate",
             "passed": monthly_gate["status"] == "PASS",
             "actual": monthly_gate["status"],
@@ -749,6 +834,8 @@ def evaluate_portfolio_performance(
         "closed_trade_mtm_total_reconciliation_error": trade_mtm_reconciliation_error,
         "closed_trade_mtm_component_reconciliation_errors": component_reconciliation_errors,
         "execution_cost_floor": execution_cost_floor,
+        "rule_violations": rule_violations,
+        "rule_violation_evidence": rule_violation_evidence,
         "exposure_reconciliation": exposure_reconciliation,
         "boundary_force_exit_audit": boundary_force_exit_audit,
         "monthly_target_gate": monthly_gate,
@@ -781,5 +868,6 @@ def evaluate_portfolio_performance(
             "organic": "all closed trades except force_exit and liquidation",
             "stress_source": "daily accounting ledger including realized and unrealized mark-to-market PnL",
             "closed_trade_boundary": "the complete ledger, including deterministic boundary force exits, must reconcile to final minus initial MTM equity; force exits remain excluded from organic trade count and profit factor",
+            "rule_violations": "each source-ledger breach of the gross leverage, absolute-net leverage, leverage-adjusted MAE, or no-liquidation execution envelope; multiple breached rules on one row count separately",
         },
     }

@@ -5029,7 +5029,7 @@ class ResearchTests(unittest.TestCase):
                     f"{timestamp.isoformat()},{equity_value},mark_to_market"
                 )
                 if offset > 0:
-                    exposure_rows.append(f"{timestamp.isoformat()},2.0,1.0")
+                    exposure_rows.append(f"{timestamp.isoformat()},1.0,1.0")
                     previous_equity = equity_value / 1.004
                     equity_change = equity_value - previous_equity
                     accounting_rows.append(
@@ -5162,6 +5162,32 @@ class ResearchTests(unittest.TestCase):
             self.assertLessEqual(
                 result["stress_paths"]["simultaneous"]["maximum_drawdown"], 0.20
             )
+            self.assertEqual(result["rule_violations"], 0)
+
+            loaded_trades[0]["maximum_leverage"] = 1.1
+            rule_breach = evaluate_portfolio_performance(
+                trades=loaded_trades,
+                exposure=loaded_exposure,
+                accounting=loaded_accounting,
+                equity=loaded_equity,
+                portfolio_risk_audit=safe_risk,
+                evidence=locked_evidence,
+                candidates=["ALPHA_LONG", "ALPHA_SHORT"],
+                execution_scopes=execution_scopes,
+            )
+            self.assertEqual(rule_breach["rule_violations"], 1)
+            self.assertEqual(
+                rule_breach["rule_violation_evidence"]["trade_maximum_leverage"],
+                ["T0"],
+            )
+            self.assertFalse(
+                next(
+                    item["passed"]
+                    for item in rule_breach["checks"]
+                    if item["name"] == "capital_preservation_rule_violations"
+                )
+            )
+            loaded_trades[0]["maximum_leverage"] = 1.0
 
             recovered = _stressed_equity_path(
                 [
@@ -6271,6 +6297,14 @@ class ResearchTests(unittest.TestCase):
                     "required_close_at_utc": "2026-01-01T00:00:00+00:00",
                 },
                 "liquidations": 0,
+                "rule_violations": 0,
+                "rule_violation_evidence": {
+                    "trade_maximum_leverage": [],
+                    "trade_leverage_adjusted_mae": [],
+                    "daily_gross_leverage": [],
+                    "daily_absolute_net_leverage": [],
+                    "liquidation_exit": [],
+                },
                 "stress_returns": {
                     "double_fee": 0.02,
                     "double_slippage": 0.02,
@@ -6304,6 +6338,7 @@ class ResearchTests(unittest.TestCase):
                         "closed_trade_mtm_total_reconciliation",
                         "closed_trade_mtm_component_reconciliation",
                         "preregistered_execution_cost_floor",
+                        "capital_preservation_rule_violations",
                         "monthly_target_gate",
                         "daily_mtm_profit_factor",
                         "simultaneous_cost_funding_stress",
@@ -6343,6 +6378,7 @@ class ResearchTests(unittest.TestCase):
             "maximum_absolute_net_leverage": 1.0,
             "maximum_trade_leverage_adjusted_mae": 0.02,
             "liquidations": 0,
+            "rule_violations": 0,
             "simultaneous_cost_funding_stress_net_return": 0.01,
             "simultaneous_cost_funding_stress_max_drawdown": 0.05,
             "pairwise_daily_correlations": [
@@ -6637,6 +6673,35 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(rejected["status"], "FAIL")
         self.assertIn("portfolio_performance_source_replay", failed)
         self.assertIn("maximum_intratrade_leverage_adjusted_mae", failed)
+
+    def test_portfolio_promotion_rejects_rule_violations(self) -> None:
+        manifest, report, sleeves, execution, digest, policy_digest = self._passing_portfolio_inputs()
+        performance = report["portfolio_performance_audit"]
+        performance["rule_violation_evidence"]["trade_maximum_leverage"] = ["T1"]
+        performance["rule_violations"] = 1
+        report["rule_violations"] = 1
+        rule_check = next(
+            item
+            for item in performance["checks"]
+            if item["name"] == "capital_preservation_rule_violations"
+        )
+        rule_check["passed"] = False
+        rule_check["actual"] = {
+            "count": 1,
+            "evidence": performance["rule_violation_evidence"],
+        }
+        rejected = evaluate_portfolio_promotion(
+            manifest,
+            report,
+            sleeves,
+            execution,
+            manifest_sha256=digest,
+            policy_sha256=policy_digest,
+        )
+        failed = {item["name"] for item in rejected["checks"] if not item["passed"]}
+        self.assertEqual(rejected["status"], "FAIL")
+        self.assertIn("portfolio_performance_source_replay", failed)
+        self.assertIn("zero_rule_violations", failed)
 
     def test_portfolio_promotion_rejects_underreported_intraday_exposure(self) -> None:
         manifest, report, sleeves, execution, digest, policy_digest = self._passing_portfolio_inputs()

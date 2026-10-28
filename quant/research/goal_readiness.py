@@ -366,6 +366,7 @@ def build_goal_readiness(
             "intraday_exposure_reconciliation",
             "maximum_intratrade_leverage_adjusted_mae",
             "zero_liquidations",
+            "zero_rule_violations",
             "maximum_absolute_pairwise_correlation",
             "single_sleeve_positive_pnl_concentration",
             "portfolio_multi_block_risk",
@@ -481,7 +482,7 @@ def build_goal_readiness(
             "name": "combined_downside_and_diversification",
             "status": risk_status,
             "actual": portfolio_status,
-            "required": "MDD <= 10%, intratrade leverage-adjusted MAE <= 20%, trade-overlap exposure reconciliation, bootstrap ruin <= 0.5%, deterministic worst-block recurrence MDD <= 10%, zero liquidations, 1x leverage/correlation/concentration limits",
+            "required": "MDD <= 10%, intratrade leverage-adjusted MAE <= 20%, trade-overlap exposure reconciliation, bootstrap ruin <= 0.5%, deterministic worst-block recurrence MDD <= 10%, zero liquidations and rule violations, 1x leverage/correlation/concentration limits",
             "checks": risk_checks,
         },
         {

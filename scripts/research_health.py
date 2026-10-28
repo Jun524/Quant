@@ -715,6 +715,7 @@ def build_health_report() -> dict:
             "closed_validation_days": alpha011.get("closed_validation_days"),
             "validation_days_remaining": alpha011.get("validation_days_remaining"),
             "validation_report_status": alpha011.get("validation_report_status"),
+            "policy_scope": alpha011.get("policy_scope"),
             "scheduler_health": alpha011_scheduler_health,
             "scheduler_running": (alpha011.get("scheduler") or {}).get("running"),
             "scheduler_last_exit_code": (alpha011.get("scheduler") or {}).get("last_exit_code"),

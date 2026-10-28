@@ -378,7 +378,10 @@ from scripts.research_health import (
     capital_preservation_policy_health,
 )
 from scripts.alpha011_status import scheduler_health as alpha011_scheduler_health
-from scripts.alpha011_status import status_payload as alpha011_status_payload
+from scripts.alpha011_status import (
+    policy_scope as alpha011_policy_scope,
+    status_payload as alpha011_status_payload,
+)
 from scripts.calibration_execution_report import validate_calibration_rows
 from scripts.build_platform_scoreboard import auxiliary_gate_snapshot
 from scripts.scheduled_shadow_calibration import (
@@ -1886,6 +1889,13 @@ class MonitoringTests(unittest.TestCase):
                 "file_0_archive_metadata_mismatch",
                 tampered["invalid_manifests"][0]["failures"],
             )
+
+    def test_alpha011_frozen_pre_policy_cohort_is_not_current_policy_evidence(self) -> None:
+        scope = alpha011_policy_scope()
+        self.assertEqual(scope["cohort"], "FROZEN_PRE_POLICY_FORWARD_COHORT")
+        self.assertFalse(scope["current_capital_preservation_policy_eligibility"])
+        self.assertEqual(scope["frozen_maximum_drawdown"], 0.20)
+        self.assertEqual(scope["current_maximum_drawdown"], 0.10)
 
     @staticmethod
     def _safe_binance_permissions() -> dict:
@@ -7069,6 +7079,35 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(evidence["cohort"], "FROZEN_LEGACY_FORWARD_COHORT")
         self.assertFalse(evidence["current_capital_preservation_policy_eligible"])
         self.assertTrue(any("frozen legacy" in item for item in readiness["ordered_blockers"]))
+
+    def test_goal_readiness_marks_alpha011_pre_policy_cohort_research_only(self) -> None:
+        readiness = build_goal_readiness(
+            {
+                "experiments": 1,
+                "status_counts": {"ACCUMULATING": 1},
+                "experiments_detail": [
+                    {
+                        "experiment_id": 11,
+                        "strategy": "ALPHA_011_QUARTER_HOUR_FLOW_CONTINUATION",
+                        "status": "ACCUMULATING",
+                    }
+                ],
+                "auxiliary_gates": {},
+            },
+            {
+                "status": "HEALTHY",
+                "alpha011_forward": {
+                    "policy_scope": {
+                        "cohort": "FROZEN_PRE_POLICY_FORWARD_COHORT",
+                        "current_capital_preservation_policy_eligibility": False,
+                    }
+                },
+            },
+        )
+        alpha011 = readiness["active_forward_candidates"][0]
+        self.assertEqual(alpha011["policy_scope"], "FROZEN_PRE_POLICY_FORWARD_COHORT")
+        self.assertFalse(alpha011["current_capital_preservation_policy_eligible"])
+        self.assertTrue(any("Alpha #11" in item for item in readiness["ordered_blockers"]))
 
     def test_goal_readiness_requires_portfolio_pass_and_still_keeps_live_closed(self) -> None:
         manifest, report, sleeves, execution, digest, policy_digest = self._passing_portfolio_inputs()

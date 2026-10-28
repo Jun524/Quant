@@ -318,6 +318,18 @@ def build_goal_readiness(
         for item in details
         if isinstance(item, dict) and item.get("status") == "ACCUMULATING"
     ]
+    alpha011_policy_scope = (
+        (research_health.get("alpha011_forward") or {}).get("policy_scope") or {}
+    )
+    for item in active:
+        if item.get("strategy") == "ALPHA_011_QUARTER_HOUR_FLOW_CONTINUATION":
+            item["policy_scope"] = alpha011_policy_scope.get("cohort")
+            item["current_capital_preservation_policy_eligible"] = (
+                alpha011_policy_scope.get(
+                    "current_capital_preservation_policy_eligibility"
+                )
+                is True
+            )
     research_pass_candidates = int(status_counts.get("PASS") or 0)
     raw_portfolio_status = (
         str(portfolio_promotion.get("status"))
@@ -515,6 +527,15 @@ def build_goal_readiness(
         blockers.append(
             "Alpha #1 is a frozen legacy forward cohort and is not eligible evidence under the current "
             "capital-preservation policy."
+        )
+    if (
+        alpha011_policy_scope
+        and alpha011_policy_scope.get("current_capital_preservation_policy_eligibility")
+        is not True
+    ):
+        blockers.append(
+            "Alpha #11 is a frozen pre-policy forward cohort and remains research-only; "
+            "its result cannot serve as current capital-preservation promotion evidence."
         )
     if research_pass_candidates < PortfolioPromotionPolicy().minimum_sleeves:
         blockers.append(

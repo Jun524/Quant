@@ -34,6 +34,56 @@ DEVELOPMENT_DAYS = 60
 VALIDATION_DAYS = 60
 PUBLISHER_GRACE = timedelta(hours=24)
 SCHEDULER_STATUS_PATH = PROJECT_ROOT / "research" / "alpha011" / "update-scheduler-status.json"
+PREREGISTRATION_PATH = PROJECT_ROOT / "research" / "alpha011-preregistration.json"
+RISK_POLICY_PATH = PROJECT_ROOT / "research" / "risk-policy.json"
+
+
+def policy_scope(
+    *,
+    preregistration_path: Path = PREREGISTRATION_PATH,
+    risk_policy_path: Path = RISK_POLICY_PATH,
+) -> dict:
+    """Describe why Alpha #11 remains research-only under the current policy.
+
+    Alpha #11's forward sample began before the capital-preservation policy.
+    Its frozen 20% drawdown gate cannot be silently tightened or retroactively
+    treated as a new-policy 10% gate, even if the final realized drawdown is
+    small. Preserve the experiment for its original question, but make its
+    ineligibility as promotion evidence explicit.
+    """
+    try:
+        preregistration = json.loads(preregistration_path.read_text(encoding="utf-8"))
+        risk_policy = json.loads(risk_policy_path.read_text(encoding="utf-8"))
+        frozen_drawdown = float(
+            (preregistration.get("development_gate") or {}).get(
+                "maximum_drawdown_maximum"
+            )
+        )
+        current_drawdown = float(
+            (risk_policy.get("non_negotiables") or {}).get(
+                "maximum_cost_after_mtm_drawdown"
+            )
+        )
+    except (OSError, TypeError, ValueError, json.JSONDecodeError):
+        return {
+            "cohort": "POLICY_SCOPE_UNVERIFIABLE",
+            "current_capital_preservation_policy_eligibility": False,
+            "reason": "Alpha #11 preregistration or active Risk Policy is unreadable.",
+        }
+    return {
+        "cohort": "FROZEN_PRE_POLICY_FORWARD_COHORT",
+        "current_capital_preservation_policy_eligibility": False,
+        "reason": (
+            "Alpha #11 began before the active capital-preservation policy and its "
+            "sealed development gate permits a larger drawdown than the current policy. "
+            "It remains research-only and cannot supply current-policy promotion evidence."
+        ),
+        "preregistration_registered_at_utc": preregistration.get("registered_at_utc"),
+        "current_policy_id": risk_policy.get("policy_id"),
+        "current_policy_effective_at_utc": risk_policy.get("effective_at_utc"),
+        "frozen_maximum_drawdown": frozen_drawdown,
+        "current_maximum_drawdown": current_drawdown,
+    }
 
 
 def _scheduler_process_running(pid: int) -> bool:
@@ -387,6 +437,7 @@ def status_payload(
         "schema_version": 1,
         "observed_at": now.isoformat(),
         "candidate": "ALPHA_011_QUARTER_HOUR_FLOW_CONTINUATION",
+        "policy_scope": policy_scope(),
         "status": status,
         "eligible_start": ELIGIBLE_START.isoformat(),
         "last_complete_utc_day": last_complete_day.isoformat(),

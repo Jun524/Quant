@@ -22,6 +22,13 @@ from scripts.alpha015_readiness import build_report as alpha015_readiness_report
 from scripts.alpha015_universe_diagnostic import build_report as alpha015_universe_diagnostic_report
 from scripts.sync_alpha007_registry import receipt_health as alpha007_receipt_health
 from scripts.alpha007_order_path_status import build_report as alpha007_order_path_status
+from scripts.close_alpha007_collection_shortfall import (
+    CAMPAIGN_STATE_PATH as ALPHA007_CAMPAIGN_STATE_PATH,
+    CLOSURE_PATH as ALPHA007_COLLECTION_CLOSURE_PATH,
+    PRIMARY_PATH as ALPHA007_PRIMARY_REPORT_PATH,
+    digest as alpha007_closure_digest,
+    validate_collection_closure,
+)
 from quant.data.universe_history import assess_forward_universe_history
 from quant.data.universe_protocol import policy_document as universe_policy_document
 from quant.data.universe_protocol import protocol_digests as universe_protocol_digests
@@ -46,6 +53,7 @@ HEALTHY_ALPHA007 = {
     "SHADOW_REVIEW_SEALED",
     "SHADOW_REVIEW_AUXILIARY_VETOED",
     "SHADOW_FAIL_SEALED",
+    "COLLECTION_SHORTFALL_CLOSED",
 }
 WARNING_ALPHA007 = {
     "RUNNING_WITH_DATA_WARNING",
@@ -303,6 +311,51 @@ def alpha007_complete_day_protocol_health(
     }
 
 
+def alpha007_collection_shortfall_closure_health(
+    *,
+    closure_path: Path = ALPHA007_COLLECTION_CLOSURE_PATH,
+    primary_path: Path = ALPHA007_PRIMARY_REPORT_PATH,
+    campaign_path: Path = ALPHA007_CAMPAIGN_STATE_PATH,
+) -> dict:
+    """Validate the independent terminal receipt for an ended short campaign.
+
+    The receipt is intentionally separate from the frozen Alpha #7 evaluator.
+    It may only convert an already-ended, under-covered collection into a
+    terminal FAIL; it cannot turn it into evidence for OOS or promotion.
+    """
+    if not closure_path.exists():
+        return {"present": False, "valid": False, "failures": []}
+    try:
+        closure = json.loads(closure_path.read_text(encoding="utf-8"))
+        primary = json.loads(primary_path.read_text(encoding="utf-8"))
+        campaign = json.loads(campaign_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        return {
+            "present": True,
+            "valid": False,
+            "failures": [f"collection_shortfall_receipt_unreadable:{type(error).__name__}"],
+        }
+    valid = validate_collection_closure(
+        closure,
+        primary,
+        campaign,
+        primary_sha256=alpha007_closure_digest(primary_path),
+        campaign_sha256=alpha007_closure_digest(campaign_path),
+    )
+    return {
+        "present": True,
+        "valid": valid,
+        "status": closure.get("status"),
+        "failure_class": closure.get("failure_class"),
+        "actual_complete_days": closure.get("actual_complete_days"),
+        "required_complete_days": closure.get("required_complete_days"),
+        "promotion_eligible": closure.get("promotion_eligible"),
+        "locked_oos_opened": closure.get("locked_oos_opened"),
+        "orders_submitted": closure.get("orders_submitted"),
+        "failures": [] if valid else ["collection_shortfall_receipt_evidence_mismatch"],
+    }
+
+
 def classify_research_health(
     alpha001_health: str,
     alpha007_health: str,
@@ -468,6 +521,7 @@ def build_health_report() -> dict:
     except (OSError, json.JSONDecodeError):
         alpha007_report = {}
     alpha007_receipt = alpha007_receipt_health()
+    alpha007_collection_closure = alpha007_collection_shortfall_closure_health()
     try:
         alpha007_order_path = alpha007_order_path_status()
     except (OSError, ValueError, KeyError, json.JSONDecodeError) as error:
@@ -527,6 +581,13 @@ def build_health_report() -> dict:
     alpha007_telemetry_warning = alpha007_nonterminal_performance_warning(alpha007_report)
     if alpha007_protocol_audit["health"] == "FAIL":
         alpha007_health = "COMPLETE_DAY_PROTOCOL_AUDIT_FAIL"
+    elif (
+        alpha007_collection_closure["present"]
+        and alpha007_collection_closure["valid"] is not True
+    ):
+        alpha007_health = "COLLECTION_SHORTFALL_CLOSURE_INVALID"
+    elif alpha007_collection_closure["valid"] is True:
+        alpha007_health = "COLLECTION_SHORTFALL_CLOSED"
     elif alpha007_order_path.get("status") in {"INTEGRITY_FAIL", "MISSING_OR_INVALID"}:
         alpha007_health = "ORDER_PATH_POLICY_INTEGRITY_FAIL"
     elif alpha007_telemetry_warning["status"] == "WARNING":
@@ -615,6 +676,7 @@ def build_health_report() -> dict:
             "sleep_guard": (alpha007.get("sleep_guard") or {}).get("running"),
             "complete_day_protocol_audit": alpha007_protocol_audit,
             "shadow_report_status": alpha007_report.get("status"),
+            "collection_shortfall_closure": alpha007_collection_closure,
             "nonterminal_performance_warning": alpha007_telemetry_warning,
             "terminal_receipt_valid": alpha007_receipt.get("valid"),
             "partial_fill_veto_status": alpha007_receipt.get(
@@ -626,7 +688,9 @@ def build_health_report() -> dict:
                 "live_order_authorization"
             ),
             "terminal_registry_status": (
-                "REVIEW"
+                "FAIL"
+                if alpha007_collection_closure.get("valid") is True
+                else "REVIEW"
                 if alpha007_report.get("status") == "PASS"
                 else alpha007_report.get("status")
             ),

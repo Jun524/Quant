@@ -350,6 +350,10 @@ from scripts.sync_alpha007_registry import (
     terminal_collection_failure as alpha007_terminal_collection_failure,
     write_once_json as write_alpha007_receipt_once,
 )
+from scripts.close_alpha007_collection_shortfall import (
+    build_collection_closure,
+    validate_collection_closure,
+)
 from scripts.manage_alpha001_forward_dryrun import (
     forward_operational_health,
     inspect_bot_log,
@@ -365,6 +369,7 @@ from scripts.shadow_maker_probe import immediate_limit_fill, queue_ahead_at_limi
 from scripts.research_health import (
     assess_alpha001_entry_execution_continuity,
     assess_mtm_continuity,
+    alpha007_collection_shortfall_closure_health,
     alpha007_complete_day_protocol_health,
     alpha007_nonterminal_performance_warning,
     classify_research_health,
@@ -10826,6 +10831,81 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(result["gate"]["stage"], "collection_failed")
         self.assertFalse(result["validation_opened"])
         self.assertFalse(result["locked_validation_opened"])
+
+    def test_alpha007_collection_shortfall_closure_binds_primary_and_campaign(self) -> None:
+        primary = {
+            "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+            "status": "ACCUMULATING",
+            "complete_days": 11,
+            "checks": [{"name": "complete_collection_days", "passed": False}],
+            "complete_day_protocol_audit": {"status": "PASS"},
+        }
+        campaign = {
+            "status": "FINISHED",
+            "terminal_reason": "deadline_reached",
+            "started_at": "2026-10-09T00:00:00+00:00",
+            "deadline_at": "2026-10-28T00:00:00+00:00",
+            "ended_at": "2026-10-28T00:00:01+00:00",
+            "completed_chunks": 1,
+            "failed_chunks": 0,
+        }
+        closure = build_collection_closure(primary, campaign, primary_sha256="a" * 64, campaign_sha256="b" * 64)
+        self.assertEqual(closure["status"], "FAIL")
+        self.assertFalse(closure["locked_oos_opened"])
+        self.assertTrue(validate_collection_closure(closure, primary, campaign, primary_sha256="a" * 64, campaign_sha256="b" * 64))
+        self.assertFalse(validate_collection_closure(closure, {**primary, "complete_days": 12}, campaign, primary_sha256="a" * 64, campaign_sha256="b" * 64))
+
+    def test_alpha007_collection_shortfall_health_requires_exact_bound_sources(self) -> None:
+        primary = {
+            "candidate": "ALPHA_007_IMBALANCE_GUIDED_MAKER",
+            "status": "ACCUMULATING",
+            "complete_days": 11,
+            "checks": [{"name": "complete_collection_days", "passed": False}],
+            "complete_day_protocol_audit": {"status": "PASS"},
+        }
+        campaign = {
+            "status": "FINISHED",
+            "terminal_reason": "deadline_reached",
+            "started_at": "2026-10-09T00:00:00+00:00",
+            "deadline_at": "2026-10-28T00:00:00+00:00",
+            "ended_at": "2026-10-28T00:00:01+00:00",
+            "completed_chunks": 1,
+            "failed_chunks": 0,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            primary_path = root / "alpha007-accumulation.json"
+            campaign_path = root / "campaign-state.json"
+            closure_path = root / "alpha007-collection-closure.json"
+            primary_path.write_text(json.dumps(primary), encoding="utf-8")
+            campaign_path.write_text(json.dumps(campaign), encoding="utf-8")
+            closure = build_collection_closure(
+                primary,
+                campaign,
+                primary_sha256=sha256(primary_path.read_bytes()).hexdigest(),
+                campaign_sha256=sha256(campaign_path.read_bytes()).hexdigest(),
+            )
+            closure_path.write_text(json.dumps(closure), encoding="utf-8")
+            healthy = alpha007_collection_shortfall_closure_health(
+                closure_path=closure_path,
+                primary_path=primary_path,
+                campaign_path=campaign_path,
+            )
+            self.assertTrue(healthy["present"])
+            self.assertTrue(healthy["valid"])
+            self.assertEqual(healthy["failure_class"], "INSUFFICIENT_COMPLETE_DAY_COLLECTION")
+            primary_path.write_text(json.dumps({**primary, "complete_days": 12}), encoding="utf-8")
+            invalid = alpha007_collection_shortfall_closure_health(
+                closure_path=closure_path,
+                primary_path=primary_path,
+                campaign_path=campaign_path,
+            )
+            self.assertFalse(invalid["valid"])
+
+        self.assertEqual(
+            classify_research_health("RUNNING_HEALTHY", "COLLECTION_SHORTFALL_CLOSED"),
+            "HEALTHY",
+        )
 
     def test_alpha007_terminal_health_requires_valid_sealed_receipt(self) -> None:
         self.assertEqual(

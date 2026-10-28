@@ -9,9 +9,11 @@ reference fills.  It does not fetch data or submit orders.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
+import random
 from typing import Any, Iterable
 
-from quant.research.spot_perp_flow_divergence import SpotPerpFlowConfig
+from quant.research.spot_perp_flow_divergence import SpotPerpFlowConfig, reprice_trades
 
 
 @dataclass(frozen=True)
@@ -147,3 +149,96 @@ def extract_market_observations(
             boundary: SpotReference(**reference) for boundary, reference in references.items()
         },
     }
+
+
+def simulate_extracted_flow(
+    spot: dict[str, Any],
+    perpetual: dict[str, Any],
+    *,
+    boundaries_ms: list[int],
+    config: SpotPerpFlowConfig = SpotPerpFlowConfig(),
+) -> list[dict[str, Any]]:
+    """Apply the fixed signal to sealed streaming observations without rereading rows."""
+    spot_imbalance = spot.get("imbalances") or {}
+    perpetual_imbalance = perpetual.get("imbalances") or {}
+    references = spot.get("spot_references") or {}
+    occupied_until = -1
+    raw_trades: list[dict[str, Any]] = []
+    for boundary in sorted(boundaries_ms):
+        if boundary < occupied_until:
+            continue
+        if boundary not in spot_imbalance or boundary not in perpetual_imbalance or boundary not in references:
+            raise SpotPerpFlowEvaluationError("streaming observations lack a fixed decision boundary")
+        if not (
+            float(perpetual_imbalance[boundary]) >= config.perp_imbalance_minimum
+            and float(spot_imbalance[boundary]) <= config.spot_imbalance_maximum
+        ):
+            continue
+        reference = references[boundary]
+        raw_trades.append(
+            {
+                "signal_at_ms": boundary,
+                "observation_start_ms": boundary - config.observation_window_ms,
+                "observation_end_ms": boundary,
+                "perp_imbalance": float(perpetual_imbalance[boundary]),
+                "spot_imbalance": float(spot_imbalance[boundary]),
+                "direction": "simulated_spot_long",
+                "entry_time_ms": reference.entry_time_ms,
+                "exit_time_ms": reference.exit_time_ms,
+                "raw_entry": reference.entry_price,
+                "raw_exit": reference.exit_price,
+                "holding_hours": (reference.exit_time_ms - reference.entry_time_ms) / 3_600_000,
+                "exit_reason": "fixed_holding_period",
+            }
+        )
+        occupied_until = reference.exit_time_ms
+    return reprice_trades(
+        raw_trades,
+        fee_per_side_bps=config.fee_per_side_bps,
+        slippage_per_side_bps=config.slippage_per_side_bps,
+    )
+
+
+def matched_controls_from_references(
+    signal_trades: list[dict[str, Any]],
+    *,
+    references: dict[int, SpotReference],
+    boundaries_ms: list[int],
+    config: SpotPerpFlowConfig = SpotPerpFlowConfig(),
+    seed: int = 16,
+) -> list[dict[str, Any]]:
+    """Create the preregistered same-day random-hold controls from sealed fills."""
+    signal_boundaries = {int(item["signal_at_ms"]) for item in signal_trades}
+    by_day: dict[str, list[dict[str, Any]]] = {}
+    for boundary in sorted(boundaries_ms):
+        if boundary in signal_boundaries:
+            continue
+        reference = references.get(boundary)
+        if reference is None:
+            raise SpotPerpFlowEvaluationError("random-control reference is unavailable")
+        day = datetime.fromtimestamp(boundary / 1000, tz=timezone.utc).date().isoformat()
+        by_day.setdefault(day, []).append(
+            {
+                "signal_at_ms": boundary,
+                "entry_time_ms": reference.entry_time_ms,
+                "exit_time_ms": reference.exit_time_ms,
+                "raw_entry": reference.entry_price,
+                "raw_exit": reference.exit_price,
+                "direction": "random_spot_long_control",
+                "holding_hours": (reference.exit_time_ms - reference.entry_time_ms) / 3_600_000,
+                "exit_reason": "fixed_holding_period",
+            }
+        )
+    generator = random.Random(seed)
+    selected: list[dict[str, Any]] = []
+    for signal in signal_trades:
+        day = datetime.fromtimestamp(int(signal["signal_at_ms"]) / 1000, tz=timezone.utc).date().isoformat()
+        options = by_day.get(day) or []
+        if not options:
+            raise SpotPerpFlowEvaluationError("no same-day eligible random control exists for a signal")
+        selected.append(options.pop(generator.randrange(len(options))))
+    return reprice_trades(
+        selected,
+        fee_per_side_bps=config.fee_per_side_bps,
+        slippage_per_side_bps=config.slippage_per_side_bps,
+    )

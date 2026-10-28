@@ -315,8 +315,11 @@ from quant.research.spot_perp_flow_data import (
     verify_adjacent_day_chains as verify_spot_perp_flow_day_chains,
 )
 from quant.research.spot_perp_flow_evaluation import (
+    SpotReference,
     SpotPerpFlowEvaluationError,
     extract_market_observations as extract_spot_perp_flow_market_observations,
+    matched_controls_from_references as matched_spot_perp_flow_controls,
+    simulate_extracted_flow as simulate_extracted_spot_perp_flow,
 )
 from quant.research.campaign import microstructure_campaign_preflight, microstructure_run_audit
 from quant.research.protocol import protocol_digests
@@ -9181,6 +9184,26 @@ class ResearchTests(unittest.TestCase):
                     maximum_intertrade_gap_ms=minute,
                 ),
             )
+
+    def test_spot_perp_flow_streaming_results_preserve_nonoverlap_and_controls(self) -> None:
+        boundary = 20 * 60_000
+        later_boundary = boundary + 4 * 60 * 60_000
+        references = {
+            boundary: SpotReference(boundary + 60_000, 100.0, boundary + 4 * 60 * 60_000 + 60_000, 101.0),
+            later_boundary: SpotReference(later_boundary + 60_000, 101.0, later_boundary + 4 * 60 * 60_000 + 60_000, 102.0),
+        }
+        spot = {"imbalances": {boundary: -0.2, later_boundary: -0.2}, "spot_references": references}
+        perpetual = {"imbalances": {boundary: 0.3, later_boundary: 0.3}}
+        trades = simulate_extracted_spot_perp_flow(
+            spot, perpetual, boundaries_ms=[boundary, later_boundary]
+        )
+        self.assertEqual(len(trades), 1)
+        self.assertEqual(trades[0]["signal_at_ms"], boundary)
+        controls = matched_spot_perp_flow_controls(
+            trades, references=references, boundaries_ms=[boundary, later_boundary]
+        )
+        self.assertEqual(len(controls), 1)
+        self.assertEqual(controls[0]["signal_at_ms"], later_boundary)
 
     def test_metrics_normalization_collapses_only_exact_duplicates(self) -> None:
         times = pd.date_range("2021-01-01", periods=288, freq="5min", tz="UTC")

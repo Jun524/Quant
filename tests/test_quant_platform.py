@@ -7002,6 +7002,24 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(readiness["supporting_non_promotion_gates"]["historical_one_day_funding_coverage"]["status"], "PASS")
         self.assertFalse(readiness["supporting_non_promotion_gates"]["historical_funding_ledger_replay"]["promotion_eligible"])
 
+    def test_goal_readiness_marks_legacy_forward_cohort_ineligible_under_current_policy(self) -> None:
+        readiness = build_goal_readiness(
+            {"experiments": 0, "status_counts": {}, "experiments_detail": [], "auxiliary_gates": {}},
+            {"status": "HEALTHY"},
+            alpha001_forward={
+                "candidate": "FuturesBtcRegimeRiskBudgetLong",
+                "policy_scope": {
+                    "cohort": "FROZEN_LEGACY_FORWARD_COHORT",
+                    "current_capital_preservation_policy_eligibility": False,
+                    "reason": "sealed launch terms",
+                },
+            },
+        )
+        evidence = readiness["current_single_candidate_evidence"]
+        self.assertEqual(evidence["cohort"], "FROZEN_LEGACY_FORWARD_COHORT")
+        self.assertFalse(evidence["current_capital_preservation_policy_eligible"])
+        self.assertTrue(any("frozen legacy" in item for item in readiness["ordered_blockers"]))
+
     def test_goal_readiness_requires_portfolio_pass_and_still_keeps_live_closed(self) -> None:
         manifest, report, sleeves, execution, digest, policy_digest = self._passing_portfolio_inputs()
         promotion = evaluate_portfolio_promotion(

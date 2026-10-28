@@ -379,6 +379,10 @@ def build_goal_readiness(
     alpha001_gate = (alpha001_forward or {}).get("gate") or {}
     alpha001_monthly = (alpha001_forward or {}).get("mtm", {}).get("monthly") or {}
     alpha001_trades = (alpha001_forward or {}).get("trades") or {}
+    alpha001_policy_scope = (alpha001_forward or {}).get("policy_scope") or {}
+    alpha001_current_policy_eligible = (
+        alpha001_policy_scope.get("current_capital_preservation_policy_eligibility") is True
+    )
     alpha001_bias_pass = bool(
         (alpha001_bias_audit or {}).get("status") == "PASS"
         and (alpha001_bias_audit or {}).get("lookahead", {}).get("passed") is True
@@ -507,6 +511,11 @@ def build_goal_readiness(
             "Alpha #1 entry-execution evidence contains an unreplayed observation interval; "
             "it is ineligible for any future promotion evidence even while the replacement recorder runs."
         )
+    if alpha001_forward and not alpha001_current_policy_eligible:
+        blockers.append(
+            "Alpha #1 is a frozen legacy forward cohort and is not eligible evidence under the current "
+            "capital-preservation policy."
+        )
     if research_pass_candidates < PortfolioPromotionPolicy().minimum_sleeves:
         blockers.append(
             f"No eligible portfolio yet: {research_pass_candidates} research PASS candidates; "
@@ -600,6 +609,9 @@ def build_goal_readiness(
             "complete_months": alpha001_monthly.get("complete_months"),
             "natural_closed_trades": alpha001_trades.get("natural_closed_trades"),
             "current_bias_audit_pass": alpha001_bias_pass,
+            "cohort": alpha001_policy_scope.get("cohort"),
+            "current_capital_preservation_policy_eligible": alpha001_current_policy_eligible,
+            "policy_scope_reason": alpha001_policy_scope.get("reason"),
             "entry_execution_evidence_continuity": entry_evidence.get("status"),
             "entry_execution_promotion_evidence_eligible": entry_evidence.get(
                 "promotion_evidence_eligible"

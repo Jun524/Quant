@@ -103,10 +103,17 @@ def enforce_data_integrity(report: dict, integrity: dict, *, protocol_current: b
 def markdown(report: dict) -> str:
     mtm = report["mtm"]
     trades = report["trades"]
+    policy_scope = report["policy_scope"]
     lines = [
         "# Alpha #1 — forward dry-run 누적 보고서",
         "",
         f"현재 판정은 **{report['status']}**이다. 이 보고서는 실거래 수익을 주장하지 않는다.",
+        "",
+        "## 정책 적용 범위",
+        "",
+        f"- Cohort: `{policy_scope['cohort']}`",
+        "- 현행 자본보전 정책의 승격 근거: 아니오",
+        f"- {policy_scope['reason']}",
         "",
         "## 수집 상태",
         "",

@@ -6909,6 +6909,7 @@ class ResearchTests(unittest.TestCase):
     def test_risk_policy_contract_rejects_permissive_or_drifting_objective(self) -> None:
         risk = {
             "policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
+            "policy_version": "1.0.0",
             "live_order_authorization": "CLOSED",
             "primary_objective": "Validate positive long-horizon cost-after expectancy while preserving capital; a monthly return target is not a pass/fail gate.",
             "non_negotiables": {
@@ -6947,6 +6948,11 @@ class ResearchTests(unittest.TestCase):
             },
         }
         self.assertEqual(validate_risk_policy_contract(risk, objective)["status"], "PASS")
+        missing_version = dict(risk)
+        missing_version.pop("policy_version")
+        version_rejected = validate_risk_policy_contract(missing_version, objective)
+        self.assertEqual(version_rejected["status"], "FAIL")
+        self.assertIn("semantic versioning", " ".join(version_rejected["failures"]))
         objective["return_objective"]["monthly_return_target"] = 0.1
         rejected = validate_risk_policy_contract(risk, objective)
         self.assertEqual(rejected["status"], "FAIL")
@@ -9599,6 +9605,8 @@ class ResearchTests(unittest.TestCase):
         }
         report = build_forward_report(observations=observations, trades=trades, protocol_current=True)
         self.assertEqual(report["status"], "ACCUMULATING")
+        self.assertEqual(report["policy_scope"]["cohort"], "FROZEN_LEGACY_FORWARD_COHORT")
+        self.assertFalse(report["policy_scope"]["current_capital_preservation_policy_eligibility"])
 
     def test_forward_trade_loader_excludes_forced_exits_and_decomposes_costs(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -21,6 +21,7 @@ def main() -> None:
         (PROJECT_ROOT / "research/capital-preservation-objective.json").read_text(encoding="utf-8")
     )
     result = validate_risk_policy_contract(risk, objective)
+    result["human_policy"] = risk.get("human_policy")
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if result["status"] != "PASS":
         raise SystemExit(2)

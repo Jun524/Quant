@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
+  "policy_version": "1.0.0",
   "status": "ACTIVE_FOR_NEW_CANDIDATES_AND_DRY_RUN",
   "effective_at_utc": "2026-10-28T00:00:00Z",
   "human_policy": "RISK_POLICY.md",

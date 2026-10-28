@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from re import fullmatch
 from typing import Any
 
 
@@ -20,6 +21,9 @@ def validate_risk_policy_contract(
     failures: list[str] = []
     if risk_policy.get("policy_id") != REQUIRED_POLICY_ID:
         failures.append("risk policy identifier is not current")
+    policy_version = risk_policy.get("policy_version")
+    if not isinstance(policy_version, str) or fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", policy_version) is None:
+        failures.append("risk policy version must use semantic versioning")
     if risk_policy.get("live_order_authorization") != "CLOSED":
         failures.append("risk policy must keep live order authorization CLOSED")
     if capital_objective.get("live_order_authorization") != "CLOSED":
@@ -72,6 +76,7 @@ def validate_risk_policy_contract(
     return {
         "status": "PASS" if not failures else "FAIL",
         "policy_id": risk_policy.get("policy_id"),
+        "policy_version": risk_policy.get("policy_version"),
         "live_order_authorization": "CLOSED",
         "failures": failures,
     }

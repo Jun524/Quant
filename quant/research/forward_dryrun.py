@@ -334,6 +334,14 @@ def build_forward_report(
         "schema_version": 1,
         "candidate": "FuturesBtcRegimeRiskBudgetLong",
         "status": gate["status"] if sample_ready else "ACCUMULATING",
+        "policy_scope": {
+            "cohort": "FROZEN_LEGACY_FORWARD_COHORT",
+            "current_capital_preservation_policy_eligibility": False,
+            "reason": (
+                "This sealed cohort retains its launch protocol. It cannot be reinterpreted as a pass under "
+                "the current Risk Policy and cannot authorize live trading."
+            ),
+        },
         "basis": "credential-free Binance futures dry-run with append-only Freqtrade total_bot MTM observations",
         "protocol_current": protocol_current,
         "data_integrity": data_integrity,

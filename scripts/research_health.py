@@ -47,7 +47,10 @@ HEALTHY_ALPHA007 = {
     "SHADOW_REVIEW_AUXILIARY_VETOED",
     "SHADOW_FAIL_SEALED",
 }
-WARNING_ALPHA007 = {"RUNNING_WITH_DATA_WARNING"}
+WARNING_ALPHA007 = {
+    "RUNNING_WITH_DATA_WARNING",
+    "RUNNING_WITH_NEGATIVE_LOCKED_TELEMETRY",
+}
 HEALTHY_ALPHA011 = {
     "WAITING_FIRST_COMPLETE_UTC_DAY",
     "WAITING_PUBLISHER_ARCHIVE",
@@ -394,6 +397,63 @@ def resolve_alpha007_terminal_health(
     return "SHADOW_REVIEW_SEALED" if status == "PASS" else "SHADOW_FAIL_SEALED"
 
 
+def alpha007_nonterminal_performance_warning(report: dict) -> dict:
+    """Surface negative locked telemetry without ending or retuning the cohort.
+
+    The fixed Alpha #7 protocol must collect all 17 UTC days even when early
+    observations are bad.  This is therefore a monitoring warning, never an
+    early verdict or an instruction to alter its thresholds, cost model, or
+    collection duration.
+    """
+    if report.get("status") != "ACCUMULATING":
+        return {"status": "NOT_APPLICABLE", "reasons": []}
+    try:
+        complete_days = int(report.get("complete_days") or 0)
+    except (TypeError, ValueError):
+        complete_days = 0
+    checks = {
+        str(item.get("name")): item
+        for item in (report.get("checks") or [])
+        if isinstance(item, dict)
+    }
+    critical = (
+        "locked_net_60s_markout",
+        "hour_block_bootstrap_95pct_lower_bound",
+        "plus_100ms_latency_net_60s_markout",
+    )
+    failed_critical = [
+        name
+        for name in critical
+        if checks.get(name, {}).get("passed") is False
+        and isinstance(checks.get(name, {}).get("actual"), (int, float))
+        and not isinstance(checks.get(name, {}).get("actual"), bool)
+        and float(checks[name]["actual"]) <= 0.0
+    ]
+    concentration = checks.get("single_hour_profit_concentration") or {}
+    concentration_failed = (
+        concentration.get("passed") is False
+        and isinstance(concentration.get("actual"), (int, float))
+        and not isinstance(concentration.get("actual"), bool)
+        and float(concentration["actual"]) > 0.20
+    )
+    warning = complete_days >= 7 and len(failed_critical) == len(critical)
+    reasons = failed_critical + (
+        ["single_hour_profit_concentration"] if concentration_failed else []
+    )
+    return {
+        "status": "WARNING" if warning else "NO_EARLY_WARNING",
+        "complete_days": complete_days,
+        "minimum_complete_days": 7,
+        "reasons": reasons,
+        "nonterminal": True,
+        "action": (
+            "Continue the fixed collection unchanged; do not promote, retune, or extend the cohort."
+            if warning
+            else "Continue the fixed collection unchanged."
+        ),
+    }
+
+
 def build_health_report() -> dict:
     policy_contract = capital_preservation_policy_health()
     alpha001 = alpha001_status_payload()
@@ -464,10 +524,13 @@ def build_health_report() -> dict:
     if alpha001_mtm_continuity["status"] != "PASS":
         alpha001_health = "RUNNING_MTM_CONTINUITY_FAILURE"
     alpha007_health = str((alpha007.get("operational") or {}).get("health") or "UNKNOWN")
+    alpha007_telemetry_warning = alpha007_nonterminal_performance_warning(alpha007_report)
     if alpha007_protocol_audit["health"] == "FAIL":
         alpha007_health = "COMPLETE_DAY_PROTOCOL_AUDIT_FAIL"
     elif alpha007_order_path.get("status") in {"INTEGRITY_FAIL", "MISSING_OR_INVALID"}:
         alpha007_health = "ORDER_PATH_POLICY_INTEGRITY_FAIL"
+    elif alpha007_telemetry_warning["status"] == "WARNING":
+        alpha007_health = "RUNNING_WITH_NEGATIVE_LOCKED_TELEMETRY"
     else:
         alpha007_health = resolve_alpha007_terminal_health(
             alpha007_health, alpha007_report, alpha007_receipt
@@ -552,6 +615,7 @@ def build_health_report() -> dict:
             "sleep_guard": (alpha007.get("sleep_guard") or {}).get("running"),
             "complete_day_protocol_audit": alpha007_protocol_audit,
             "shadow_report_status": alpha007_report.get("status"),
+            "nonterminal_performance_warning": alpha007_telemetry_warning,
             "terminal_receipt_valid": alpha007_receipt.get("valid"),
             "partial_fill_veto_status": alpha007_receipt.get(
                 "partial_fill_veto_status"

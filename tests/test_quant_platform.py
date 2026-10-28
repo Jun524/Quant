@@ -365,6 +365,7 @@ from scripts.research_health import (
     assess_alpha001_entry_execution_continuity,
     assess_mtm_continuity,
     alpha007_complete_day_protocol_health,
+    alpha007_nonterminal_performance_warning,
     classify_research_health,
     resolve_alpha007_terminal_health,
     resolve_alpha013_health,
@@ -10801,6 +10802,28 @@ class ResearchTests(unittest.TestCase):
                 "COMPLETE", {"status": "FAIL"}, {"valid": True}
             ),
             "SHADOW_FAIL_SEALED",
+        )
+
+    def test_alpha007_nonterminal_warning_does_not_close_or_retune_cohort(self) -> None:
+        report = {
+            "status": "ACCUMULATING",
+            "complete_days": 7,
+            "checks": [
+                {"name": "locked_net_60s_markout", "passed": False, "actual": -0.001},
+                {"name": "hour_block_bootstrap_95pct_lower_bound", "passed": False, "actual": -0.002},
+                {"name": "plus_100ms_latency_net_60s_markout", "passed": False, "actual": -0.0015},
+                {"name": "single_hour_profit_concentration", "passed": False, "actual": 0.21},
+            ],
+        }
+        warning = alpha007_nonterminal_performance_warning(report)
+        self.assertEqual(warning["status"], "WARNING")
+        self.assertTrue(warning["nonterminal"])
+        self.assertIn("Continue the fixed collection unchanged", warning["action"])
+
+        immature = dict(report, complete_days=6)
+        self.assertEqual(
+            alpha007_nonterminal_performance_warning(immature)["status"],
+            "NO_EARLY_WARNING",
         )
 
     def test_alpha007_terminal_receipt_binds_exact_manifest_inventory(self) -> None:

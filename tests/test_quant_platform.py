@@ -314,6 +314,10 @@ from quant.research.spot_perp_flow_data import (
     inspect_archive as inspect_spot_perp_flow_archive,
     verify_adjacent_day_chains as verify_spot_perp_flow_day_chains,
 )
+from quant.research.spot_perp_flow_evaluation import (
+    SpotPerpFlowEvaluationError,
+    extract_market_observations as extract_spot_perp_flow_market_observations,
+)
 from quant.research.campaign import microstructure_campaign_preflight, microstructure_run_audit
 from quant.research.protocol import protocol_digests
 from quant.research.forward_dryrun import audit_mtm_segments, build_forward_report, load_forward_trades, summarize_mtm
@@ -9127,6 +9131,56 @@ class ResearchTests(unittest.TestCase):
                         {**metadata, "date": "2025-01-02", "first_agg_trade_id": 103, "last_agg_trade_id": 103},
                     ]
                 )
+
+    def test_spot_perp_flow_streaming_extractor_bounds_gaps_and_references(self) -> None:
+        minute = 60_000
+        boundary = 20 * minute
+        rows = [
+            {
+                "agg_trade_id": index,
+                "transact_time": index * minute,
+                "price": 100.0 + index,
+                "quantity": 1.0,
+                "is_buyer_maker": index % 2 == 0,
+            }
+            for index in range(1, 28)
+        ]
+        result = extract_spot_perp_flow_market_observations(
+            rows,
+            market="spot",
+            boundaries_ms=[boundary],
+            coverage_start_ms=10 * minute,
+            coverage_end_ms=28 * minute,
+            config=SpotPerpFlowConfig(
+                observation_window_ms=10 * minute,
+                entry_delay_ms=minute,
+                holding_ms=4 * minute,
+                maximum_reference_delay_ms=minute,
+                maximum_intertrade_gap_ms=minute,
+            ),
+            spot_references=True,
+        )
+        self.assertEqual(result["coverage"]["status"], "PASS")
+        self.assertEqual(result["spot_references"][boundary].entry_time_ms, 21 * minute)
+        self.assertEqual(result["spot_references"][boundary].exit_time_ms, 25 * minute)
+        time_gap_rows = [
+            {**row, "agg_trade_id": index}
+            for index, row in enumerate(
+                (row for row in rows if row["transact_time"] != 15 * minute), start=1
+            )
+        ]
+        with self.assertRaisesRegex(SpotPerpFlowEvaluationError, "coverage gap"):
+            extract_spot_perp_flow_market_observations(
+                time_gap_rows,
+                market="perpetual",
+                boundaries_ms=[boundary],
+                coverage_start_ms=10 * minute,
+                coverage_end_ms=28 * minute,
+                config=SpotPerpFlowConfig(
+                    observation_window_ms=10 * minute,
+                    maximum_intertrade_gap_ms=minute,
+                ),
+            )
 
     def test_metrics_normalization_collapses_only_exact_duplicates(self) -> None:
         times = pd.date_range("2021-01-01", periods=288, freq="5min", tz="UTC")

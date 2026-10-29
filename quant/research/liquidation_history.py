@@ -4,9 +4,16 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta, timezone
+import gzip
 from hashlib import sha256
 import json
 from pathlib import Path
+
+
+# The collector reconnects after a 15 second mark-stream receive timeout.
+# A longer event-time silence therefore represents a known data interruption,
+# rather than ordinary one-second stream jitter or a campaign chunk boundary.
+MARK_PRICE_MAXIMUM_EVENT_SILENCE_MS = 15_000
 
 
 def merged_seconds(intervals: list[tuple[datetime, datetime]]) -> float:
@@ -24,6 +31,65 @@ def merged_seconds(intervals: list[tuple[datetime, datetime]]) -> float:
     return total + (end - start).total_seconds()
 
 
+def mark_price_gap_failures(
+    sources: list[Path], *, maximum_silence_ms: int = MARK_PRICE_MAXIMUM_EVENT_SILENCE_MS
+) -> dict[str, list[dict]]:
+    """Return UTC days containing a verified mark-price stream interruption.
+
+    Row counts and wall-clock chunk coverage can both look healthy after a
+    websocket reconnect.  The overlay needs a continuous mark path to measure
+    the maximum excursion of a 30-minute episode, so a silence longer than the
+    collector's own receive timeout makes each touched UTC day incomplete.
+    """
+    if maximum_silence_ms <= 0:
+        raise ValueError("maximum mark-price silence must be positive")
+    previous: dict[str, int] = {}
+    failures: dict[str, list[dict]] = defaultdict(list)
+    for source in sources:
+        local: dict[str, list[int]] = defaultdict(list)
+        try:
+            with gzip.open(source, "rt", encoding="utf-8") as handle:
+                for line in handle:
+                    row = json.loads(line)
+                    if row.get("kind") != "mark_price":
+                        continue
+                    symbol = str(row["symbol"]).upper()
+                    timestamp = int(row["event_time_ms"])
+                    if not symbol or timestamp <= 0:
+                        raise ValueError("invalid mark-price row")
+                    local[symbol].append(timestamp)
+        except (OSError, UnicodeDecodeError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+            failures["__unreadable__"].append(
+                {"path": str(source), "failure": "mark_price_stream_unreadable"}
+            )
+            continue
+        for symbol, timestamps in local.items():
+            for timestamp in sorted(set(timestamps)):
+                previous_timestamp = previous.get(symbol)
+                if previous_timestamp is not None and timestamp > previous_timestamp:
+                    gap_ms = timestamp - previous_timestamp
+                    if gap_ms > maximum_silence_ms:
+                        record = {
+                            "symbol": symbol,
+                            "start_ms": previous_timestamp,
+                            "end_ms": timestamp,
+                            "gap_ms": gap_ms,
+                            "maximum_silence_ms": maximum_silence_ms,
+                        }
+                        start_day = datetime.fromtimestamp(
+                            previous_timestamp / 1_000, timezone.utc
+                        ).date().isoformat()
+                        end_day = datetime.fromtimestamp(
+                            timestamp / 1_000, timezone.utc
+                        ).date().isoformat()
+                        failures[start_day].append(record)
+                        if end_day != start_day:
+                            failures[end_day].append(record)
+                if previous_timestamp is None or timestamp > previous_timestamp:
+                    previous[symbol] = timestamp
+    return {day: records for day, records in sorted(failures.items())}
+
+
 def assess_liquidation_history(
     root: Path,
     *,
@@ -37,6 +103,7 @@ def assess_liquidation_history(
     ).astimezone(timezone.utc)
     intervals_by_day: dict[date, list[tuple[datetime, datetime]]] = defaultdict(list)
     invalid: list[dict] = []
+    valid_sources: list[Path] = []
     valid_chunks = liquidation_rows = mark_rows = open_interest_rows = 0
     for path in sorted(root.glob("*/manifest.json")) if root.is_dir() else ():
         failures: list[str] = []
@@ -74,7 +141,14 @@ def assess_liquidation_history(
                 or sha256(source.read_bytes()).hexdigest() != digest
             ):
                 failures.append(f"file_mismatch:{source.name}")
+            else:
+                valid_sources.append(source)
         if failures:
+            for source in manifest.get("files") or []:
+                try:
+                    valid_sources.remove(path.parent / str(source.get("path") or ""))
+                except ValueError:
+                    pass
             invalid.append({"path": str(path), "failures": sorted(set(failures))})
             continue
         valid_chunks += 1
@@ -92,6 +166,12 @@ def assess_liquidation_history(
                 intervals_by_day[cursor].append((clipped_start, clipped_end))
             cursor += timedelta(days=1)
 
+    mark_gap_failures = mark_price_gap_failures(valid_sources)
+    unreadable_mark_sources = mark_gap_failures.pop("__unreadable__", [])
+    if unreadable_mark_sources:
+        invalid.extend(unreadable_mark_sources)
+    mark_gap_days = {date.fromisoformat(day) for day in mark_gap_failures}
+
     coverage_threshold = float(policy["development_gate"]["minimum_stream_coverage_per_day"])
     last_complete_day = now.date() - timedelta(days=1)
     due_days: list[date] = []
@@ -104,12 +184,21 @@ def assess_liquidation_history(
     for day in due_days:
         seconds = merged_seconds(intervals_by_day.get(day, []))
         ratio = min(1.0, seconds / 86_400)
-        complete = ratio >= coverage_threshold
-        daily.append({"date": day.isoformat(), "covered_seconds": seconds, "coverage_ratio": ratio, "complete": complete})
+        mark_stream_continuous = day not in mark_gap_days
+        complete = ratio >= coverage_threshold and mark_stream_continuous
+        daily.append(
+            {
+                "date": day.isoformat(),
+                "covered_seconds": seconds,
+                "coverage_ratio": ratio,
+                "mark_stream_continuous": mark_stream_continuous,
+                "complete": complete,
+            }
+        )
         if complete:
             complete_days.append(day.isoformat())
     required = int(policy["development_gate"]["complete_utc_days"])
-    if invalid:
+    if invalid or mark_gap_failures:
         status = "DATA_INTEGRITY_ATTENTION"
     elif valid_chunks == 0:
         status = "WAITING_FIRST_ELIGIBLE_CHUNK"
@@ -127,6 +216,10 @@ def assess_liquidation_history(
         "eligible_start": eligible_start.isoformat(),
         "valid_current_protocol_chunks": valid_chunks,
         "invalid_chunks": invalid,
+        "mark_price_continuity": {
+            "maximum_event_silence_ms": MARK_PRICE_MAXIMUM_EVENT_SILENCE_MS,
+            "gap_failures": mark_gap_failures,
+        },
         "complete_utc_days": complete_days,
         "complete_utc_days_count": len(complete_days),
         "development_days_required": required,

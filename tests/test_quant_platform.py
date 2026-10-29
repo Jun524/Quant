@@ -4278,7 +4278,13 @@ class ResearchTests(unittest.TestCase):
             run = root / "run-001"
             run.mkdir()
             source = run / "telemetry.jsonl.gz"
-            source.write_bytes(b"sealed")
+            with gzip.open(source, "wt", encoding="utf-8") as handle:
+                handle.write(
+                    '{"kind":"mark_price","symbol":"BTCUSDT","event_time_ms":1760054400000}\n'
+                )
+                handle.write(
+                    '{"kind":"mark_price","symbol":"BTCUSDT","event_time_ms":1760054401000}\n'
+                )
             digest = sha256(source.read_bytes()).hexdigest()
             protocol = {"collector.py": "a" * 64}
             manifest = {
@@ -4323,6 +4329,57 @@ class ResearchTests(unittest.TestCase):
             )
             self.assertEqual(tampered["status"], "DATA_INTEGRITY_ATTENTION")
             self.assertIn("file_mismatch:telemetry.jsonl.gz", tampered["invalid_chunks"][0]["failures"])
+
+    def test_liquidation_history_excludes_mark_stream_timeout_days(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run = root / "run-001"
+            run.mkdir()
+            source = run / "telemetry.jsonl.gz"
+            with gzip.open(source, "wt", encoding="utf-8") as handle:
+                handle.write(
+                    '{"kind":"mark_price","symbol":"BTCUSDT","event_time_ms":1791590400000}\n'
+                )
+                handle.write(
+                    '{"kind":"mark_price","symbol":"BTCUSDT","event_time_ms":1791590416000}\n'
+                )
+            digest = sha256(source.read_bytes()).hexdigest()
+            protocol = {"collector.py": "a" * 64}
+            manifest = {
+                "status": "PASS",
+                "purpose": "forward_risk_overlay_telemetry_not_promotion_evidence",
+                "feed_semantics": "censored_latest_snapshot_not_total_liquidation_volume",
+                "protocol_sha256": protocol,
+                "result": {
+                    "started_at": "2026-10-10T00:00:00+00:00",
+                    "ended_at": "2026-10-10T23:00:00+00:00",
+                    "rows": {"liquidation_rows": 0, "mark_rows": 2},
+                    "open_interest": {"rows": 1},
+                },
+                "files": [
+                    {"path": source.name, "bytes": source.stat().st_size, "sha256": digest}
+                ],
+            }
+            (run / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            policy = {
+                "candidate": "RISK_OVERLAY_001_OBSERVED_LIQUIDATION_SHOCK",
+                "role": "risk overlay",
+                "eligible_start_utc": "2026-10-10T00:00:00Z",
+                "development_gate": {
+                    "minimum_stream_coverage_per_day": 0.95,
+                    "complete_utc_days": 1,
+                },
+            }
+            report = assess_liquidation_history(
+                root,
+                policy=policy,
+                expected_protocol=protocol,
+                now=datetime(2026, 10, 11, 1, tzinfo=timezone.utc),
+            )
+        self.assertEqual(report["status"], "DATA_INTEGRITY_ATTENTION")
+        self.assertEqual(report["complete_utc_days_count"], 0)
+        self.assertFalse(report["daily_coverage"][0]["mark_stream_continuous"])
+        self.assertIn("2026-10-10", report["mark_price_continuity"]["gap_failures"])
 
     def test_alpha007_external_cost_stress_can_only_make_gate_stricter(self) -> None:
         calibration = {

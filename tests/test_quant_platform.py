@@ -7090,6 +7090,10 @@ class ResearchTests(unittest.TestCase):
             )["status"],
             "PASS",
         )
+        self.assertIsNone(PORTFOLIO_COST_AFTER_POLICY.target_geometric_monthly_return)
+        self.assertFalse(PORTFOLIO_COST_AFTER_POLICY.require_geometric_monthly_return)
+        self.assertFalse(PORTFOLIO_COST_AFTER_POLICY.require_positive_month_ratio)
+        self.assertTrue(PORTFOLIO_COST_AFTER_POLICY.require_positive_cost_after_return)
         portfolio["portfolio_requirements"]["combined_monthly_target_gate"] = "PASS"
         portfolio_rejected = validate_risk_policy_contract(
             risk, objective, portfolio_promotion_policy=portfolio

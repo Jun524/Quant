@@ -80,6 +80,10 @@ def validate_risk_policy_contract(
         if requirements.get(objective_key) != non_negotiables.get(policy_key):
             failures.append(f"capital objective {objective_key} disagrees with risk policy {policy_key}")
     if portfolio_promotion_policy is not None:
+        # Import only for the portfolio status path.  Historical diagnostics
+        # intentionally do not depend on a future portfolio implementation.
+        from quant.research.portfolio_promotion import PORTFOLIO_COST_AFTER_POLICY
+
         portfolio_machine = portfolio_promotion_policy.get("machine_policy") or {}
         portfolio_requirements = portfolio_promotion_policy.get(
             "portfolio_requirements"
@@ -116,6 +120,22 @@ def validate_risk_policy_contract(
             )
         if "combined_monthly_target_gate" in portfolio_requirements:
             failures.append("portfolio promotion policy must not retain a monthly target gate")
+        code_expected = {
+            "target_geometric_monthly_return": None,
+            "require_geometric_monthly_return": False,
+            "require_positive_month_ratio": False,
+            "require_positive_cost_after_return": True,
+            "maximum_drawdown": non_negotiables.get(
+                "maximum_cost_after_mtm_drawdown"
+            ),
+            "maximum_leverage": non_negotiables.get("maximum_planned_leverage"),
+            "maximum_worst_month_loss": 0.05,
+        }
+        for key, value in code_expected.items():
+            if getattr(PORTFOLIO_COST_AFTER_POLICY, key) != value:
+                failures.append(
+                    f"portfolio promotion code {key} is inconsistent with the preservation objective"
+                )
     return {
         "status": "PASS" if not failures else "FAIL",
         "policy_id": risk_policy.get("policy_id"),

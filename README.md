@@ -1,8 +1,8 @@
-# Binance Spot + Futures Quant Starter
+# Binance USDT-M Futures Quant Research
 
-Binance 현물 시장을 대상으로 한 **백테스트 → 편향 검사 → 드라이런 → 소액 실거래**용
-Freqtrade 프로젝트입니다. 기본 설정은 실제 주문을 내지 않는 `dry_run: true`이며 시작 상태도
-`stopped`입니다.
+Binance USDT-M 선물에서 비용·슬리피지·펀딩·데이터 무결성을 포함해 전략을 검증하는
+**연구 전용** Freqtrade 프로젝트입니다. 기본 설정은 실제 주문을 내지 않는 `dry_run: true`이며
+시작 상태도 `stopped`입니다. 이 저장소는 소액 실거래를 포함한 어떤 실주문도 승인하지 않습니다.
 
 > 이 저장소의 전략은 연구 기준선이지 수익을 보장하는 매매 추천이 아닙니다. 과거 성과는
 > 미래 성과를 보장하지 않으며, 손실 가능한 자금만 사용해야 합니다.

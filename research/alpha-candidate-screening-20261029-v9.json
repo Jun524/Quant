@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "screen_id": "ALPHA_CANDIDATE_SCREEN_20261029_V9",
+  "created_at_utc": "2026-10-29T03:00:00Z",
+  "purpose": "Adversarial literature screen for a distinct Binance USDT-M, at-most-two-position candidate after the capital-preservation policy removed all monthly-return targets. This document is a screening record only: it does not access candidate returns, create an experiment, or change any sealed protocol.",
+  "admission_constraints": [
+    "Binance USDT-M futures execution only",
+    "at most two simultaneous positions and one-times planned leverage",
+    "causal, timestamped decision data with reproducible historical provenance",
+    "actual or preregistered conservative fee, slippage, and funding accounting",
+    "a mechanism independent of sealed failed or accumulating families",
+    "no parameter search or condition added merely to revive a failed candidate"
+  ],
+  "candidates": [
+    {
+      "name": "FUNDING_DRAG_VOLATILITY_CONDITIONAL_REVERSAL",
+      "decision": "REJECT_FAILED_FAMILY_POST_HOC_CONDITIONING",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7529458",
+      "source_claim": "The paper reports that the correction speed after extreme negative funding varies materially with realized volatility across Binance perpetual events.",
+      "reason": "The observable is an extreme funding event followed by reversal, which is the same economic family as sealed ALPHA_005_FUNDING_EXTREME_REVERSAL. Adding realized-volatility conditioning after Alpha #5 failed would be a prohibited post-hoc rescue, not independent evidence.",
+      "retain": "Keep only as an explanation of why Alpha #5 cannot be generalized from an unconditioned result. Do not register a volatility-filtered Alpha #5 successor on the same family."
+    },
+    {
+      "name": "PREVIOUS_DAY_VOLUME_PROFILE_TAPE_SPEED_MEAN_REVERSION",
+      "decision": "DEFER_INSUFFICIENT_REPRODUCIBLE_INDEPENDENCE",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6932998",
+      "source_claim": "A single-contract SOL/USDT perpetual backtest reports previous-day volume-profile context, tape-speed confirmation, and transaction-cost sensitivity.",
+      "reason": "The accessible source is an independent working paper without a sealed public raw-data inventory, executable causal tape-speed definition, or a fully specified point-in-time execution protocol. Its reversion component overlaps sealed Alpha #2 and its tape-speed component overlaps the order-flow research family. Opening a trial would therefore mix an insufficiently reproducible method with two already evaluated families.",
+      "retain": "Reconsider only if a complete immutable data and code release makes the signal definition independently executable and a new mechanism can be demonstrated before any return inspection."
+    },
+    {
+      "name": "PERPETUAL_BASIS_VOLATILITY_FORECAST",
+      "decision": "RETAIN_RISK_OVERLAY_REFERENCE_NOT_ALPHA",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6697060",
+      "source_claim": "The study reports that absolute perpetual-spot basis forecasts realized volatility for several non-BTC Binance perpetuals, with weaker evidence after stronger volatility benchmarks.",
+      "reason": "The reported object is volatility, not a signed return edge. It may inform a future independently preregistered risk overlay, but it cannot by itself satisfy the positive cost-after alpha requirement and must not be relabeled as one.",
+      "retain": "Use only as a literature reference when evaluating non-directional entry-suppression overlays after the current forward telemetry study completes."
+    },
+    {
+      "name": "COST_AWARE_HOURLY_MACHINE_LEARNING_DIRECTIONAL_FILTER",
+      "decision": "REJECT_MODEL_SEARCH_NOT_PREREGISTRABLE_ALPHA",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6795938",
+      "source_claim": "The study finds that cost-aware execution filters can materially alter selected hourly BTC model outcomes after a multi-fold walk-forward model comparison.",
+      "reason": "Its reported result is conditional on a broad model and configuration search. Reproducing it would require a predeclared trial inventory, training labels, feature availability audit, and a selection-bias protocol beyond the present data release. Beginning from the reported winning setup would be outcome-following rather than an independent hypothesis.",
+      "retain": "Keep as validation-infrastructure evidence only. Do not start a machine-learning candidate without a separately sealed full trial inventory before historical return access."
+    },
+    {
+      "name": "POINT_IN_TIME_PERPETUAL_ARCHIVE_AUDIT",
+      "decision": "RETAIN_DATA_GOVERNANCE_REFERENCE_NOT_ALPHA",
+      "source": "https://arxiv.org/abs/2608.25348",
+      "source_claim": "The audit distinguishes event, publication, and availability times in public Binance BTC perpetual archives and reports negative matched-budget tests under causal constraints.",
+      "reason": "It supplies data-governance discipline and cautions against treating unverifiable open-interest publication times as decision features. It supplies no independent directional signal for a new candidate.",
+      "retain": "Apply its point-in-time discipline to every future candidate; do not count it as alpha evidence."
+    }
+  ],
+  "result": "NO_NEW_ALPHA_ADMITTED",
+  "next_action": "Continue the running forward-only liquidation-risk telemetry collection without altering its preregistered trigger or validation boundary. A new alpha may be opened only after a distinct, reproducible mechanism passes this admission screen before return analysis.",
+  "live_order_authorization": "CLOSED"
+}

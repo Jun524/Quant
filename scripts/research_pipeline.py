@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Evaluate exported Freqtrade experiments and append an auditable record."""
+"""Legacy evaluator for pre-capital-preservation Freqtrade experiments.
+
+It cannot establish current-policy promotion evidence because its older
+three-result interface lacks the required funding, adverse-cost, and
+source-replayed capital-preservation inputs.  New candidates must not invoke
+this path accidentally.
+"""
 
 from __future__ import annotations
 
@@ -16,6 +22,16 @@ if str(PROJECT_ROOT) not in sys.path:
 from quant.research.gates import GatePolicy, evaluate_candidate
 from quant.research.registry import ExperimentRegistry
 from quant.research.result_loader import load_freqtrade_result
+
+
+def require_explicit_legacy_protocol(legacy_protocol: bool) -> None:
+    """Prevent a new candidate from silently using the retired generic gate."""
+    if not legacy_protocol:
+        raise ValueError(
+            "research_pipeline uses the retired generic GatePolicy; current "
+            "capital-preservation candidates require a dedicated preregistered "
+            "cost, funding, integrity, and MTM evaluation path"
+        )
 
 
 def main() -> None:
@@ -48,7 +64,16 @@ def main() -> None:
     parser.add_argument("--max-drawdown", type=float)
     parser.add_argument("--lookahead-passed", action="store_true")
     parser.add_argument("--recursive-passed", action="store_true")
+    parser.add_argument(
+        "--legacy-protocol",
+        action="store_true",
+        help="acknowledge that this result is legacy research-only and cannot be current-policy promotion evidence",
+    )
     args = parser.parse_args()
+    try:
+        require_explicit_legacy_protocol(args.legacy_protocol)
+    except ValueError as error:
+        raise SystemExit(f"FAIL: {error}") from error
 
     policy_values = json.loads(args.policy.read_text(encoding="utf-8"))["research_policy"]
     policy = GatePolicy(
@@ -88,6 +113,7 @@ def main() -> None:
         "validation": validation,
         "cost_stress": cost_stress,
         "slippage_stress": slippage_stress,
+        "policy_scope": "LEGACY_RESEARCH_ONLY_NOT_CURRENT_CAPITAL_PRESERVATION_EVIDENCE",
     }
     record = ExperimentRegistry(args.registry).register(
         strategy=args.strategy,
@@ -105,6 +131,7 @@ def main() -> None:
             "validation_seen": args.validation_seen,
             "locked_seen": args.locked_seen,
             "locked_seen_count": args.locked_seen_count,
+            "policy_scope": "LEGACY_RESEARCH_ONLY_NOT_CURRENT_CAPITAL_PRESERVATION_EVIDENCE",
         },
     )
     args.report_dir.mkdir(parents=True, exist_ok=True)

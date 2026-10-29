@@ -367,6 +367,7 @@ from scripts.manage_alpha001_forward_dryrun import (
     select_database_path,
 )
 from scripts.record_mtm_equity import calculate_net_liquidation_equity, collect_equity
+from scripts.research_pipeline import require_explicit_legacy_protocol
 from scripts.record_alpha001_entry_execution import parse_order_attempt
 from scripts.shadow_maker_probe import get_json as shadow_get_json
 from scripts.shadow_maker_probe import immediate_limit_fill, queue_ahead_at_limit
@@ -10838,6 +10839,11 @@ class ResearchTests(unittest.TestCase):
             self.assertEqual(event["event_id"], 1)
             self.assertEqual(len(stored["experiments"]), 2)
             self.assertEqual(len(stored["events"]), 1)
+
+    def test_legacy_research_pipeline_requires_explicit_acknowledgement(self) -> None:
+        with self.assertRaisesRegex(ValueError, "retired generic GatePolicy"):
+            require_explicit_legacy_protocol(False)
+        self.assertIsNone(require_explicit_legacy_protocol(True))
 
     def test_registry_unique_strategy_is_atomic_and_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

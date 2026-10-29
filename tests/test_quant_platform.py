@@ -368,6 +368,7 @@ from scripts.manage_alpha001_forward_dryrun import (
 )
 from scripts.record_mtm_equity import calculate_net_liquidation_equity, collect_equity
 from scripts.research_pipeline import require_explicit_legacy_protocol
+from scripts.capital_preservation_pipeline import validate_current_preregistration
 from scripts.record_alpha001_entry_execution import parse_order_attempt
 from scripts.shadow_maker_probe import get_json as shadow_get_json
 from scripts.shadow_maker_probe import immediate_limit_fill, queue_ahead_at_limit
@@ -10844,6 +10845,27 @@ class ResearchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "retired generic GatePolicy"):
             require_explicit_legacy_protocol(False)
         self.assertIsNone(require_explicit_legacy_protocol(True))
+
+    def test_current_capital_preservation_pipeline_requires_locked_nonlive_preregistration(self) -> None:
+        self.assertEqual(
+            validate_current_preregistration(
+                {
+                    "candidate": "ALPHA_TEST",
+                    "status": "PREREGISTERED_HISTORICAL_DIAGNOSTIC",
+                    "live_order_authorization": "CLOSED",
+                }
+            ),
+            [],
+        )
+        failures = validate_current_preregistration(
+            {
+                "candidate": "ALPHA_TEST",
+                "status": "DRAFT",
+                "live_order_authorization": "OPEN",
+            }
+        )
+        self.assertIn("preregistration status is not locked", failures)
+        self.assertIn("live order authorization CLOSED", " ".join(failures))
 
     def test_registry_unique_strategy_is_atomic_and_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

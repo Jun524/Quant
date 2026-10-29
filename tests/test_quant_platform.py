@@ -372,6 +372,7 @@ from scripts.research_pipeline import require_explicit_legacy_protocol
 from scripts.capital_preservation_pipeline import (
     build_diagnostic_report,
     validate_current_preregistration,
+    verify_funding_reconciliation_sources,
 )
 from scripts.record_alpha001_entry_execution import parse_order_attempt
 from scripts.shadow_maker_probe import get_json as shadow_get_json
@@ -11112,7 +11113,16 @@ class ResearchTests(unittest.TestCase):
                     "lookahead": "PASS",
                     "recursive": "PASS",
                     "rule_violations": 0,
-                    "funding_reconciliation": {"status": "PASS", "source_bound": True},
+                    "funding_reconciliation": {
+                        "status": "PASS",
+                        "source_bound": True,
+                        "source_records": [
+                            {
+                                "path": "research/risk-policy.json",
+                                "sha256": sha256((root / "research/risk-policy.json").read_bytes()).hexdigest(),
+                            }
+                        ],
+                    },
                 },
                 risk_policy=risk_policy,
                 objective=objective,
@@ -11122,6 +11132,28 @@ class ResearchTests(unittest.TestCase):
         self.assertFalse(report["promotion_eligible"])
         self.assertEqual(report["live_order_authorization"], "CLOSED")
         self.assertEqual(set(report["inputs"]), set(paths))
+        self.assertEqual(report["funding_reconciliation_audit"]["status"], "PASS")
+
+    def test_capital_preservation_funding_receipt_rehashes_project_sources(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        source = root / "research/risk-policy.json"
+        receipt = {
+            "funding_reconciliation": {
+                "status": "PASS",
+                "source_bound": True,
+                "source_records": [
+                    {
+                        "path": "research/risk-policy.json",
+                        "sha256": sha256(source.read_bytes()).hexdigest(),
+                    }
+                ],
+            }
+        }
+        self.assertEqual(verify_funding_reconciliation_sources(receipt)["status"], "PASS")
+        receipt["funding_reconciliation"]["source_records"][0]["sha256"] = "0" * 64
+        invalid = verify_funding_reconciliation_sources(receipt)
+        self.assertEqual(invalid["status"], "FAIL")
+        self.assertIn("SHA-256 mismatch", " ".join(invalid["failures"]))
 
     def test_registry_unique_strategy_is_atomic_and_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

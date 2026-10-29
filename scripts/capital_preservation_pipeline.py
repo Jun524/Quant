@@ -13,6 +13,7 @@ import argparse
 from hashlib import sha256
 import json
 from pathlib import Path
+from re import fullmatch
 import sys
 from typing import Any
 
@@ -61,6 +62,59 @@ def _reference(path: Path) -> dict[str, str]:
     return {"path": relative, "sha256": _sha256(path)}
 
 
+def verify_funding_reconciliation_sources(integrity: dict[str, Any]) -> dict[str, Any]:
+    """Rehash every source named by the candidate's funding receipt.
+
+    A generic capital-preservation diagnostic cannot prescribe a single
+    funding-file format, but it can reject a receipt that is merely a claim.
+    Receipt records are project-relative so an absolute path cannot silently
+    bind unrelated local data.
+    """
+    receipt = integrity.get("funding_reconciliation")
+    failures: list[str] = []
+    verified: list[dict[str, str]] = []
+    if not isinstance(receipt, dict):
+        failures.append("funding reconciliation receipt is missing")
+    elif receipt.get("status") != "PASS":
+        failures.append("funding reconciliation receipt is not PASS")
+    elif receipt.get("source_bound") is not True:
+        failures.append("funding reconciliation receipt is not source-bound")
+    else:
+        records = receipt.get("source_records")
+        if not isinstance(records, list) or not records:
+            failures.append("funding reconciliation receipt has no source records")
+        else:
+            for index, record in enumerate(records):
+                if not isinstance(record, dict):
+                    failures.append(f"funding source record {index} is invalid")
+                    continue
+                relative = record.get("path")
+                expected = record.get("sha256")
+                if not isinstance(relative, str) or not relative or Path(relative).is_absolute():
+                    failures.append(f"funding source record {index} has an unsafe path")
+                    continue
+                if not isinstance(expected, str) or fullmatch(r"[0-9a-f]{64}", expected) is None:
+                    failures.append(f"funding source record {index} has an invalid SHA-256")
+                    continue
+                source = (PROJECT_ROOT / relative).resolve()
+                if not source.is_relative_to(PROJECT_ROOT.resolve()):
+                    failures.append(f"funding source record {index} escapes project root")
+                    continue
+                if not source.is_file():
+                    failures.append(f"funding source record {index} is missing")
+                    continue
+                actual = _sha256(source)
+                if actual != expected:
+                    failures.append(f"funding source record {index} SHA-256 mismatch")
+                    continue
+                verified.append({"path": relative, "sha256": actual})
+    return {
+        "status": "PASS" if not failures else "FAIL",
+        "failures": failures,
+        "verified_source_records": verified,
+    }
+
+
 def build_diagnostic_report(
     *,
     preregistration: dict[str, Any],
@@ -86,6 +140,13 @@ def build_diagnostic_report(
             "failures": preregistration_failures,
             "inputs": {name: _reference(path) for name, path in sources.items()},
         }
+    funding_reconciliation_audit = verify_funding_reconciliation_sources(integrity)
+    gate_integrity = dict(integrity)
+    if funding_reconciliation_audit["status"] != "PASS":
+        gate_integrity["funding_reconciliation"] = {
+            "status": "FAIL",
+            "source_bound": False,
+        }
     gate = evaluate_capital_preservation(
         development,
         development_stress,
@@ -94,7 +155,7 @@ def build_diagnostic_report(
         objective=objective,
         risk_policy=risk_policy,
         execution_contract=execution_contract,
-        integrity=integrity,
+        integrity=gate_integrity,
     )
     return {
         "schema_version": 1,
@@ -104,6 +165,7 @@ def build_diagnostic_report(
         "live_order_authorization": "CLOSED",
         "preregistration_status": preregistration["status"],
         "capital_preservation_gate": gate,
+        "funding_reconciliation_audit": funding_reconciliation_audit,
         "inputs": {name: _reference(path) for name, path in sources.items()},
         "warning": (
             "Historical diagnostics can reject a candidate but cannot authorize "

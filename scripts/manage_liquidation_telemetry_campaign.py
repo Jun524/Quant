@@ -122,7 +122,14 @@ def status_payload(root: Path = DEFAULT_ROOT) -> dict:
         health = "STATE_INVALID"
     if running and latest and latest["status"] != "PASS":
         health = "LATEST_CHUNK_AUDIT_FAILED"
-    elif running and historical_integrity.get("status") == "DATA_INTEGRITY_ATTENTION":
+    elif running and (
+        historical_integrity.get("status") == "DATA_INTEGRITY_ATTENTION"
+        or bool(
+            (historical_integrity.get("mark_price_continuity") or {}).get(
+                "gap_failures"
+            )
+        )
+    ):
         health = "RUNNING_WITH_DATA_GAPS"
     sleep_guard = inspect_caffeinate_guard(payload.get("pid"))
     if running and sleep_guard.get("available") and not sleep_guard.get("running"):

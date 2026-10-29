@@ -2456,7 +2456,10 @@ class MonitoringTests(unittest.TestCase):
             ),
             patch(
                 "scripts.manage_liquidation_telemetry_campaign._historical_integrity",
-                return_value={"status": "DATA_INTEGRITY_ATTENTION"},
+                return_value={
+                    "status": "ACCUMULATING_DEVELOPMENT_WITH_EXCLUDED_DAYS",
+                    "mark_price_continuity": {"gap_failures": {"2026-10-28": [{}]}},
+                },
             ),
             patch(
                 "scripts.manage_liquidation_telemetry_campaign.inspect_caffeinate_guard",
@@ -2466,7 +2469,8 @@ class MonitoringTests(unittest.TestCase):
             payload = liquidation_campaign_status_payload(Path("unused"))
         self.assertEqual(payload["health"], "RUNNING_WITH_DATA_GAPS")
         self.assertEqual(
-            payload["historical_integrity"]["status"], "DATA_INTEGRITY_ATTENTION"
+            payload["historical_integrity"]["status"],
+            "ACCUMULATING_DEVELOPMENT_WITH_EXCLUDED_DAYS",
         )
 
     def test_forward_trade_database_is_reused_only_for_the_same_protocol(self) -> None:
@@ -4416,7 +4420,7 @@ class ResearchTests(unittest.TestCase):
                 expected_protocol=protocol,
                 now=datetime(2026, 10, 11, 1, tzinfo=timezone.utc),
             )
-        self.assertEqual(report["status"], "DATA_INTEGRITY_ATTENTION")
+        self.assertEqual(report["status"], "ACCUMULATING_DEVELOPMENT_WITH_EXCLUDED_DAYS")
         self.assertEqual(report["complete_utc_days_count"], 0)
         self.assertFalse(report["daily_coverage"][0]["mark_stream_continuous"])
         self.assertIn("2026-10-10", report["mark_price_continuity"]["gap_failures"])

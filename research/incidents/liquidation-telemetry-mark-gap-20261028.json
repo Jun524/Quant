@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "incident_id": "LIQUIDATION_TELEMETRY_MARK_STREAM_GAP_20261028",
+  "observed_at_utc": "2026-10-29T03:18:20Z",
+  "status": "EXCLUDED_NOT_REPAIRED",
+  "component": "RISK_OVERLAY_001 observed-liquidation forward telemetry mark-price stream",
+  "classification": {
+    "primary": "DATA",
+    "secondary": "UPSTREAM_WEBSOCKET_RECONNECT",
+    "root_cause": "The Binance mark-price websocket timed out and reconnected during an otherwise row-count-valid collector chunk. The old coverage receipt checked total mark rows but did not check event-time continuity."
+  },
+  "immutable_source": {
+    "manifest": "research/liquidation_telemetry/20261028T004021Z-2a4b8bc7/manifest.json",
+    "manifest_sha256": "77a1bd3cabd367c0c312b465c609efd019ef73eecd1c9b43c57e4874574666b6",
+    "telemetry": "research/liquidation_telemetry/20261028T004021Z-2a4b8bc7/telemetry.jsonl.gz",
+    "telemetry_sha256": "61fa9ecf18bcbb0b729781fb62a5b5b55985abaa7aa4ee1ad9f0d33347c638ee",
+    "collector_status": "PASS",
+    "collector_mark_stream": {
+      "connections": 2,
+      "reconnects": 1,
+      "last_error": "TimeoutError: "
+    },
+    "collector_mark_rows": 17895,
+    "collector_minimum_mark_rows": 12600.0
+  },
+  "affected_range": {
+    "utc_day": "2026-10-28",
+    "gap_start_utc": "2026-10-28T00:43:14Z",
+    "gap_end_utc": "2026-10-28T00:43:36.002Z",
+    "gap_ms": 22002,
+    "maximum_permitted_silence_ms": 15000,
+    "symbols": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT"],
+    "effect": "The full UTC day is incomplete under the preregistered missing-data rule and cannot be used as a development day, matched baseline day, validation day, or performance input."
+  },
+  "impact": {
+    "complete_development_days_before_continuity_reaudit": 18,
+    "complete_development_days_after_continuity_reaudit": 17,
+    "development_days_required": 60,
+    "orders_submitted": false,
+    "strategy_pnl_calculated": false,
+    "validation_lock_opened": false,
+    "live_order_authorization": "CLOSED"
+  },
+  "containment": {
+    "data_action": "Do not backfill, interpolate, replace, or rewrite the sealed telemetry source. Exclude the affected UTC day from all later calculations.",
+    "operational_action": "Leave the bounded forward-only campaign running; later complete days remain eligible only after their own integrity replay.",
+    "promotion_action": "Block use of the affected day in overlay analysis and validation. A later analysis may use only the required number of replacement complete days; this overlay never authorizes orders."
+  },
+  "reproducible_reaudit": {
+    "command": ".venv-research/bin/python scripts/liquidation_telemetry_status.py",
+    "expected_status": "ACCUMULATING_DEVELOPMENT_WITH_EXCLUDED_DAYS until enough replacement complete days exist",
+    "expected_gap_day": "2026-10-28",
+    "expected_complete_day_count": 17,
+    "implementation": "quant/research/liquidation_history.py uses the collector's fixed 15-second receive timeout as the maximum permitted mark-price event silence."
+  },
+  "prevention": "Campaign status now replays full historical integrity rather than reporting only the latest manifest. Any later mark-stream interruption longer than the fixed receive timeout is surfaced as RUNNING_WITH_DATA_GAPS and excluded without changing the signal trigger or collection protocol.",
+  "closure_requirements": [
+    "Preserve this incident and the original source bytes unchanged.",
+    "Maintain the affected-day exclusion on every later integrity replay.",
+    "Accumulate replacement complete forward days; do not reinterpret the excluded day as valid.",
+    "Keep live orders closed; this risk overlay never authorizes orders."
+  ]
+}

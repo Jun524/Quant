@@ -198,14 +198,22 @@ def assess_liquidation_history(
         if complete:
             complete_days.append(day.isoformat())
     required = int(policy["development_gate"]["complete_utc_days"])
-    if invalid or mark_gap_failures:
+    if invalid:
         status = "DATA_INTEGRITY_ATTENTION"
     elif valid_chunks == 0:
         status = "WAITING_FIRST_ELIGIBLE_CHUNK"
     elif len(complete_days) < required:
-        status = "ACCUMULATING_DEVELOPMENT"
+        status = (
+            "ACCUMULATING_DEVELOPMENT_WITH_EXCLUDED_DAYS"
+            if mark_gap_failures
+            else "ACCUMULATING_DEVELOPMENT"
+        )
     else:
-        status = "DEVELOPMENT_TELEMETRY_READY_ANALYSIS_NOT_RUN"
+        status = (
+            "DEVELOPMENT_TELEMETRY_READY_WITH_EXCLUDED_DAYS_ANALYSIS_NOT_RUN"
+            if mark_gap_failures
+            else "DEVELOPMENT_TELEMETRY_READY_ANALYSIS_NOT_RUN"
+        )
     return {
         "schema_version": 1,
         "observed_at": now.isoformat(),

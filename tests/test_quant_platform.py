@@ -368,7 +368,10 @@ from scripts.manage_alpha001_forward_dryrun import (
 )
 from scripts.record_mtm_equity import calculate_net_liquidation_equity, collect_equity
 from scripts.research_pipeline import require_explicit_legacy_protocol
-from scripts.capital_preservation_pipeline import validate_current_preregistration
+from scripts.capital_preservation_pipeline import (
+    build_diagnostic_report,
+    validate_current_preregistration,
+)
 from scripts.record_alpha001_entry_execution import parse_order_attempt
 from scripts.shadow_maker_probe import get_json as shadow_get_json
 from scripts.shadow_maker_probe import immediate_limit_fill, queue_ahead_at_limit
@@ -10866,6 +10869,76 @@ class ResearchTests(unittest.TestCase):
         )
         self.assertIn("preregistration status is not locked", failures)
         self.assertIn("live order authorization CLOSED", " ".join(failures))
+
+    def test_capital_preservation_pipeline_binds_four_results_and_current_policy(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        risk_policy = json.loads((root / "research/risk-policy.json").read_text(encoding="utf-8"))
+        objective = json.loads(
+            (root / "research/capital-preservation-objective.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        result = {
+            "organic": {"trades": 50, "net_return": 0.02, "profit_factor": 1.3},
+            "starting_balance": 1000.0,
+            "funding_net": 0.0,
+            "modeled_slippage_bps": 5.0,
+            "cost_drag": {"slippage_drag_pct": 0.0},
+            "max_drawdown": 0.04,
+            "daily": {"minimum_equity": 980.0},
+            "monthly": {"worst_month": -0.02},
+            "trade_risk": {"liquidation_exits": 0},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            preregistration_path = temporary / "preregistration.json"
+            preregistration = {
+                "candidate": "ALPHA_TEST_CURRENT_POLICY",
+                "status": "PREREGISTERED_HISTORICAL_DIAGNOSTIC",
+                "live_order_authorization": "CLOSED",
+            }
+            preregistration_path.write_text(json.dumps(preregistration), encoding="utf-8")
+            paths = {"preregistration": preregistration_path}
+            for name in (
+                "development",
+                "development_stress",
+                "post_development",
+                "post_development_stress",
+                "execution_contract",
+                "integrity",
+                "risk_policy",
+                "objective",
+            ):
+                path = temporary / f"{name}.json"
+                path.write_text("{}", encoding="utf-8")
+                paths[name] = path
+            report = build_diagnostic_report(
+                preregistration=preregistration,
+                preregistration_path=preregistration_path,
+                development=result,
+                development_stress=result,
+                post_development=result,
+                post_development_stress=result,
+                execution_contract={
+                    "leverage": 1.0,
+                    "planned_account_risk_per_trade": 0.0025,
+                    "maximum_simultaneous_positions": 2,
+                    "adverse_position_adds": False,
+                },
+                integrity={
+                    "data_integrity": "PASS",
+                    "lookahead": "PASS",
+                    "recursive": "PASS",
+                    "rule_violations": 0,
+                },
+                risk_policy=risk_policy,
+                objective=objective,
+                sources=paths,
+            )
+        self.assertEqual(report["status"], "DIAGNOSTIC_PASS_NOT_PROMOTABLE")
+        self.assertFalse(report["promotion_eligible"])
+        self.assertEqual(report["live_order_authorization"], "CLOSED")
+        self.assertEqual(set(report["inputs"]), set(paths))
 
     def test_registry_unique_strategy_is_atomic_and_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -7079,6 +7079,25 @@ class ResearchTests(unittest.TestCase):
             },
         }
         self.assertEqual(validate_risk_policy_contract(risk, objective)["status"], "PASS")
+        portfolio = json.loads(
+            (Path(__file__).resolve().parents[1] / "research/portfolio-promotion-policy.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(
+            validate_risk_policy_contract(
+                risk, objective, portfolio_promotion_policy=portfolio
+            )["status"],
+            "PASS",
+        )
+        portfolio["portfolio_requirements"]["combined_monthly_target_gate"] = "PASS"
+        portfolio_rejected = validate_risk_policy_contract(
+            risk, objective, portfolio_promotion_policy=portfolio
+        )
+        self.assertEqual(portfolio_rejected["status"], "FAIL")
+        self.assertIn(
+            "must not retain a monthly target gate", " ".join(portfolio_rejected["failures"])
+        )
         missing_version = dict(risk)
         missing_version.pop("policy_version")
         version_rejected = validate_risk_policy_contract(missing_version, objective)

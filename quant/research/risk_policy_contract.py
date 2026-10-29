@@ -10,7 +10,10 @@ REQUIRED_POLICY_ID = "CAPITAL_PRESERVATION_RISK_POLICY_V1"
 
 
 def validate_risk_policy_contract(
-    risk_policy: dict[str, Any], capital_objective: dict[str, Any]
+    risk_policy: dict[str, Any],
+    capital_objective: dict[str, Any],
+    *,
+    portfolio_promotion_policy: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Return explicit failures when the human policy's machine artifacts drift.
 
@@ -76,6 +79,43 @@ def validate_risk_policy_contract(
     for objective_key, policy_key in objective_mapping.items():
         if requirements.get(objective_key) != non_negotiables.get(policy_key):
             failures.append(f"capital objective {objective_key} disagrees with risk policy {policy_key}")
+    if portfolio_promotion_policy is not None:
+        portfolio_machine = portfolio_promotion_policy.get("machine_policy") or {}
+        portfolio_requirements = portfolio_promotion_policy.get(
+            "portfolio_requirements"
+        ) or {}
+        if (
+            portfolio_promotion_policy.get("policy")
+            != "CAPITAL_PRESERVATION_PORTFOLIO_PROMOTION_V19"
+        ):
+            failures.append("portfolio promotion policy is not the current V19 policy")
+        portfolio_expected = {
+            "maximum_portfolio_historical_drawdown": non_negotiables.get(
+                "maximum_cost_after_mtm_drawdown"
+            ),
+            "maximum_simultaneous_cost_stress_drawdown": non_negotiables.get(
+                "maximum_cost_stress_mtm_drawdown"
+            ),
+            "maximum_portfolio_rule_violations": non_negotiables.get(
+                "rule_violations"
+            ),
+        }
+        for key, value in portfolio_expected.items():
+            if portfolio_machine.get(key) != value:
+                failures.append(f"portfolio promotion policy {key} is inconsistent")
+        if portfolio_requirements.get("zero_liquidations") is not True:
+            failures.append("portfolio promotion policy must require zero liquidations")
+        if portfolio_requirements.get("zero_rule_violations") is not True:
+            failures.append("portfolio promotion policy must require zero rule violations")
+        if (
+            portfolio_requirements.get("combined_cost_after_expectancy_gate")
+            != "PASS_WITH_POSITIVE_LONG_HORIZON_COST_AFTER_EXPECTANCY;_NO_MONTHLY_RETURN_TARGET"
+        ):
+            failures.append(
+                "portfolio promotion policy must require cost-after expectancy without a monthly target"
+            )
+        if "combined_monthly_target_gate" in portfolio_requirements:
+            failures.append("portfolio promotion policy must not retain a monthly target gate")
     return {
         "status": "PASS" if not failures else "FAIL",
         "policy_id": risk_policy.get("policy_id"),

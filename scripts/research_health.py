@@ -412,13 +412,20 @@ def capital_preservation_policy_health(
         objective = json.loads(
             (project_root / "research/capital-preservation-objective.json").read_text(encoding="utf-8")
         )
+        portfolio = json.loads(
+            (project_root / "research/portfolio-promotion-policy.json").read_text(
+                encoding="utf-8"
+            )
+        )
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
         return {
             "status": "FAIL",
             "live_order_authorization": "CLOSED",
             "failures": [f"policy_artifact_unreadable:{type(error).__name__}"],
         }
-    return validate_risk_policy_contract(risk, objective)
+    return validate_risk_policy_contract(
+        risk, objective, portfolio_promotion_policy=portfolio
+    )
 
 
 def resolve_alpha013_health(payload: dict, scheduler_health: str) -> str:

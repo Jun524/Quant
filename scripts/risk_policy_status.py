@@ -20,7 +20,12 @@ def main() -> None:
     objective = json.loads(
         (PROJECT_ROOT / "research/capital-preservation-objective.json").read_text(encoding="utf-8")
     )
-    result = validate_risk_policy_contract(risk, objective)
+    portfolio = json.loads(
+        (PROJECT_ROOT / "research/portfolio-promotion-policy.json").read_text(encoding="utf-8")
+    )
+    result = validate_risk_policy_contract(
+        risk, objective, portfolio_promotion_policy=portfolio
+    )
     result["human_policy"] = risk.get("human_policy")
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if result["status"] != "PASS":

@@ -7213,6 +7213,7 @@ class ResearchTests(unittest.TestCase):
                 "lookahead_analysis": "PASS",
                 "recursive_analysis": "PASS",
                 "data_integrity": "PASS",
+                "funding_reconciliation": "PASS_WITH_SOURCE_BOUND_RECEIPT",
             },
         }
         objective = {
@@ -7235,6 +7236,7 @@ class ResearchTests(unittest.TestCase):
                 "data_integrity": "PASS",
                 "lookahead_analysis": "PASS",
                 "recursive_analysis": "PASS",
+                "funding_reconciliation": "PASS_WITH_SOURCE_BOUND_RECEIPT",
             },
         }
         self.assertEqual(validate_risk_policy_contract(risk, objective)["status"], "PASS")
@@ -11110,6 +11112,7 @@ class ResearchTests(unittest.TestCase):
                     "lookahead": "PASS",
                     "recursive": "PASS",
                     "rule_violations": 0,
+                    "funding_reconciliation": {"status": "PASS", "source_bound": True},
                 },
                 risk_policy=risk_policy,
                 objective=objective,
@@ -12749,6 +12752,7 @@ class ResearchTests(unittest.TestCase):
                 "data_integrity": "PASS",
                 "lookahead_analysis": "PASS",
                 "recursive_analysis": "PASS",
+                "funding_reconciliation": "PASS_WITH_SOURCE_BOUND_RECEIPT",
             },
         }
         risk_policy = json.loads(
@@ -12773,15 +12777,32 @@ class ResearchTests(unittest.TestCase):
             "maximum_simultaneous_positions": 2,
             "adverse_position_adds": False,
         }
+        integrity_pass = {
+            "data_integrity": "PASS",
+            "lookahead": "PASS",
+            "recursive": "PASS",
+            "rule_violations": 0,
+            "funding_reconciliation": {"status": "PASS", "source_bound": True},
+        }
         passed = evaluate_capital_preservation(
             result, result, result, result,
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(passed["status"], "DIAGNOSTIC_PASS_NOT_PROMOTABLE")
         self.assertFalse(passed["promotion_eligible"])
+
+        unreconciled_funding = evaluate_capital_preservation(
+            result, result, result, result,
+            objective=objective,
+            risk_policy=risk_policy,
+            execution_contract=contract,
+            integrity={key: value for key, value in integrity_pass.items() if key != "funding_reconciliation"},
+        )
+        self.assertEqual(unreconciled_funding["status"], "FAIL")
+        self.assertIn("funding_reconciliation", unreconciled_funding["failures"])
 
         funding_subsidized = dict(result)
         funding_subsidized["funding_net"] = 30.0
@@ -12790,7 +12811,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(funding_failed["status"], "FAIL")
         self.assertIn("development_adverse_funding_net_positive", funding_failed["failures"])
@@ -12802,7 +12823,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(slippage_failed["status"], "FAIL")
         self.assertIn("development_combined_fee_slippage_model", slippage_failed["failures"])
@@ -12815,7 +12836,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(drawdown_failed["status"], "FAIL")
         self.assertIn("development_combined_cost_stress_drawdown", drawdown_failed["failures"])
@@ -12832,7 +12853,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(funding_drawdown_failed["status"], "FAIL")
         self.assertIn(
@@ -12847,7 +12868,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(equity_failed["status"], "FAIL")
         self.assertIn(
@@ -12860,7 +12881,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "FAIL", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 1},
+            integrity={**integrity_pass, "data_integrity": "FAIL", "rule_violations": 1},
         )
         self.assertEqual(integrity_failed["status"], "FAIL")
         self.assertIn("data_integrity", integrity_failed["failures"])
@@ -12873,7 +12894,7 @@ class ResearchTests(unittest.TestCase):
             objective=objective,
             risk_policy=risk_policy,
             execution_contract=contract,
-            integrity={"data_integrity": "PASS", "lookahead": "PASS", "recursive": "PASS", "rule_violations": 0},
+            integrity=integrity_pass,
         )
         self.assertEqual(failed["status"], "FAIL")
         self.assertIn("development_organic_net_positive", failed["failures"])

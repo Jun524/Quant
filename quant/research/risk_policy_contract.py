@@ -57,6 +57,7 @@ def validate_risk_policy_contract(
         "lookahead_analysis": "PASS",
         "recursive_analysis": "PASS",
         "data_integrity": "PASS",
+        "funding_reconciliation": "PASS_WITH_SOURCE_BOUND_RECEIPT",
     }
     for key, value in expected.items():
         if non_negotiables.get(key) != value:
@@ -75,6 +76,7 @@ def validate_risk_policy_contract(
         "data_integrity": "data_integrity",
         "lookahead_analysis": "lookahead_analysis",
         "recursive_analysis": "recursive_analysis",
+        "funding_reconciliation": "funding_reconciliation",
     }
     for objective_key, policy_key in objective_mapping.items():
         if requirements.get(objective_key) != non_negotiables.get(policy_key):

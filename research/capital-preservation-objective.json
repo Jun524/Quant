@@ -35,7 +35,8 @@
     "adverse_funding_stress_net_return": "> 0 after removing favorable funding and doubling paid funding",
     "data_integrity": "PASS",
     "lookahead_analysis": "PASS",
-    "recursive_analysis": "PASS"
+    "recursive_analysis": "PASS",
+    "funding_reconciliation": "PASS_WITH_SOURCE_BOUND_RECEIPT"
   },
   "evidence_sequence": [
     "fixed historical development diagnostic",

@@ -101,6 +101,22 @@ def _minimum_reported_closed_trade_equity(result: Mapping[str, Any]) -> float | 
     return minimum_equity if isfinite(minimum_equity) else None
 
 
+def _source_bound_funding_reconciliation(integrity: Mapping[str, Any]) -> bool:
+    """Require a sealed funding receipt instead of a zero-funding assertion.
+
+    Binance may alter a perpetual contract's funding cadence, so a candidate
+    must reconcile actual funding events to source-bound records. The
+    candidate-specific receipt format may differ, but its status and binding
+    claim are uniform at this shared policy boundary.
+    """
+    receipt = integrity.get("funding_reconciliation")
+    return (
+        isinstance(receipt, Mapping)
+        and receipt.get("status") == "PASS"
+        and receipt.get("source_bound") is True
+    )
+
+
 def evaluate_capital_preservation(
     development: Mapping[str, Any],
     development_stress: Mapping[str, Any],
@@ -191,6 +207,7 @@ def evaluate_capital_preservation(
         _check("data_integrity", integrity.get("data_integrity") == "PASS", required="PASS", actual=integrity.get("data_integrity"), kind="integrity"),
         _check("lookahead_analysis", integrity.get("lookahead") == "PASS", required="PASS", actual=integrity.get("lookahead"), kind="integrity"),
         _check("recursive_analysis", integrity.get("recursive") == "PASS", required="PASS", actual=integrity.get("recursive"), kind="integrity"),
+        _check("funding_reconciliation", _source_bound_funding_reconciliation(integrity), required="PASS with source_bound=true", actual=integrity.get("funding_reconciliation"), kind="integrity"),
     ]
     hard_kinds = {"performance", "cost", "risk", "integrity"}
     failures = [item["name"] for item in checks if not item["passed"]]

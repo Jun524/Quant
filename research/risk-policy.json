@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "policy_id": "CAPITAL_PRESERVATION_RISK_POLICY_V1",
-  "policy_version": "1.0.0",
+  "policy_version": "1.1.0",
   "status": "ACTIVE_FOR_NEW_CANDIDATES_AND_DRY_RUN",
-  "effective_at_utc": "2026-10-28T00:00:00Z",
+  "effective_at_utc": "2026-10-29T00:00:00Z",
   "human_policy": "RISK_POLICY.md",
   "scope": "New research candidates and dry-run candidates only. Sealed protocols, completed verdicts, and locked forward samples retain their original terms.",
   "live_order_authorization": "CLOSED",
@@ -21,7 +21,8 @@
     "cost_stress_net_return": "> 0",
     "lookahead_analysis": "PASS",
     "recursive_analysis": "PASS",
-    "data_integrity": "PASS"
+    "data_integrity": "PASS",
+    "funding_reconciliation": "PASS_WITH_SOURCE_BOUND_RECEIPT"
   },
   "warning_halts": {
     "cost_after_mtm_drawdown": 0.05,

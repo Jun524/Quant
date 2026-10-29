@@ -284,6 +284,7 @@ from quant.research.spot_perp_carry import (
 from quant.research.leverage_crowding import build_decision_frame, simulate_trades, summarize_trades
 from quant.research.liquidation_telemetry import liquidation_events, mark_prices
 from quant.research.liquidation_history import assess_liquidation_history, merged_seconds
+from quant.research.liquidation_incident import verify_mark_gap_incident
 from quant.research.liquidation_overlay import (
     collapse_episodes as collapse_liquidation_episodes,
     evaluate_overlay as evaluate_liquidation_overlay,
@@ -4424,6 +4425,57 @@ class ResearchTests(unittest.TestCase):
         self.assertEqual(report["complete_utc_days_count"], 0)
         self.assertFalse(report["daily_coverage"][0]["mark_stream_continuous"])
         self.assertIn("2026-10-10", report["mark_price_continuity"]["gap_failures"])
+
+    def test_liquidation_mark_gap_incident_binds_source_and_exclusion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            raw = root / "research/liquidation_telemetry/run/telemetry.jsonl.gz"
+            raw.parent.mkdir(parents=True)
+            raw.write_bytes(b"sealed-telemetry")
+            manifest = root / "research/liquidation_telemetry/run/manifest.json"
+            manifest.write_bytes(b"sealed-manifest")
+            incident = {
+                "incident_id": "TEST_GAP",
+                "immutable_source": {
+                    "manifest": "research/liquidation_telemetry/run/manifest.json",
+                    "manifest_sha256": sha256(manifest.read_bytes()).hexdigest(),
+                    "telemetry": "research/liquidation_telemetry/run/telemetry.jsonl.gz",
+                    "telemetry_sha256": sha256(raw.read_bytes()).hexdigest(),
+                },
+                "affected_range": {
+                    "utc_day": "2026-10-28",
+                    "gap_ms": 22002,
+                    "symbols": ["BTCUSDT", "ETHUSDT"],
+                },
+            }
+            coverage = {
+                "complete_utc_days": ["2026-10-27"],
+                "daily_coverage": [
+                    {
+                        "date": "2026-10-28",
+                        "mark_stream_continuous": False,
+                        "complete": False,
+                    }
+                ],
+                "mark_price_continuity": {
+                    "gap_failures": {
+                        "2026-10-28": [
+                            {"symbol": "BTCUSDT", "gap_ms": 22002},
+                            {"symbol": "ETHUSDT", "gap_ms": 22002},
+                        ]
+                    }
+                },
+            }
+            verified = verify_mark_gap_incident(
+                incident, project_root=root, coverage=coverage
+            )
+            self.assertEqual(verified["status"], "PASS")
+            coverage["complete_utc_days"].append("2026-10-28")
+            invalid = verify_mark_gap_incident(
+                incident, project_root=root, coverage=coverage
+            )
+        self.assertEqual(invalid["status"], "FAIL")
+        self.assertIn("affected_day_still_counted_complete", invalid["failures"])
 
     def test_alpha007_external_cost_stress_can_only_make_gate_stricter(self) -> None:
         calibration = {

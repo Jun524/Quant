@@ -2422,12 +2422,52 @@ class MonitoringTests(unittest.TestCase):
                 return_value=None,
             ),
             patch(
+                "scripts.manage_liquidation_telemetry_campaign._historical_integrity",
+                return_value={"status": "ACCUMULATING_DEVELOPMENT"},
+            ),
+            patch(
                 "scripts.manage_liquidation_telemetry_campaign.inspect_caffeinate_guard",
                 return_value={"available": True, "running": True},
             ),
         ):
             payload = liquidation_campaign_status_payload(Path("unused"))
         self.assertEqual(payload["health"], "RUNNING_WITH_DATA_GAPS")
+
+    def test_liquidation_campaign_surfaces_historical_mark_gap(self) -> None:
+        state = {
+            "status": "RUNNING",
+            "pid": 123,
+            "chunk_seconds": 3600,
+            "current_chunk_started_at": datetime.now(timezone.utc).isoformat(),
+            "failed_chunks": 0,
+        }
+        with (
+            patch(
+                "scripts.manage_liquidation_telemetry_campaign._state",
+                return_value=state,
+            ),
+            patch(
+                "scripts.manage_liquidation_telemetry_campaign._running",
+                return_value=True,
+            ),
+            patch(
+                "scripts.manage_liquidation_telemetry_campaign._latest_audit",
+                return_value={"status": "PASS"},
+            ),
+            patch(
+                "scripts.manage_liquidation_telemetry_campaign._historical_integrity",
+                return_value={"status": "DATA_INTEGRITY_ATTENTION"},
+            ),
+            patch(
+                "scripts.manage_liquidation_telemetry_campaign.inspect_caffeinate_guard",
+                return_value={"available": True, "running": True},
+            ),
+        ):
+            payload = liquidation_campaign_status_payload(Path("unused"))
+        self.assertEqual(payload["health"], "RUNNING_WITH_DATA_GAPS")
+        self.assertEqual(
+            payload["historical_integrity"]["status"], "DATA_INTEGRITY_ATTENTION"
+        )
 
     def test_forward_trade_database_is_reused_only_for_the_same_protocol(self) -> None:
         first_protocol = {"strategy.py": "abc"}

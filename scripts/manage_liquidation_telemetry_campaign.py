@@ -20,10 +20,12 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from quant.monitoring.sleep_guard import inspect_caffeinate_guard
+from quant.research.liquidation_history import assess_liquidation_history
 from quant.research.liquidation_telemetry import protocol_digests
 
 
 DEFAULT_ROOT = PROJECT_ROOT / "research" / "liquidation_telemetry"
+POLICY_PATH = PROJECT_ROOT / "research" / "liquidation-telemetry-policy.json"
 
 
 def _state(root: Path) -> dict | None:
@@ -77,11 +79,28 @@ def _latest_audit(root: Path) -> dict | None:
     return {"status": "FAIL" if failures else "PASS", "path": str(path), "failures": failures}
 
 
+def _historical_integrity(root: Path) -> dict:
+    """Replay all sealed telemetry coverage for status, not just the newest run."""
+    try:
+        policy = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
+        return assess_liquidation_history(
+            root,
+            policy=policy,
+            expected_protocol=protocol_digests(PROJECT_ROOT),
+        )
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
+        return {
+            "status": "DATA_INTEGRITY_ATTENTION",
+            "failure": f"historical_integrity_replay_failed:{type(error).__name__}",
+        }
+
+
 def status_payload(root: Path = DEFAULT_ROOT) -> dict:
     payload = _state(root) or {"status": "NEVER_STARTED", "pid": None}
     running = _running(payload.get("pid"))
     state_status = str(payload.get("status") or "UNKNOWN")
     latest = _latest_audit(root)
+    historical_integrity = _historical_integrity(root)
     if not running:
         health = "TERMINAL" if state_status in {"FINISHED", "STOPPED"} else "PROCESS_DOWN"
     elif state_status == "WAITING_ELIGIBLE_START":
@@ -103,6 +122,8 @@ def status_payload(root: Path = DEFAULT_ROOT) -> dict:
         health = "STATE_INVALID"
     if running and latest and latest["status"] != "PASS":
         health = "LATEST_CHUNK_AUDIT_FAILED"
+    elif running and historical_integrity.get("status") == "DATA_INTEGRITY_ATTENTION":
+        health = "RUNNING_WITH_DATA_GAPS"
     sleep_guard = inspect_caffeinate_guard(payload.get("pid"))
     if running and sleep_guard.get("available") and not sleep_guard.get("running"):
         health = "SLEEP_GUARD_MISSING"
@@ -111,6 +132,7 @@ def status_payload(root: Path = DEFAULT_ROOT) -> dict:
         "running": running,
         "health": health,
         "latest_manifest_audit": latest,
+        "historical_integrity": historical_integrity,
         "sleep_guard": sleep_guard,
     }
 

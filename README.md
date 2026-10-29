@@ -179,6 +179,8 @@ make futures-logs
 - `quant/execution/shadow_maker.py`, `scripts/shadow_maker_probe.py`: 주문 없는 공개 호가/체결 queue probe
 - `scripts/collect_microstructure.py`, `quant/research/microstructure.py`: Binance 공식 순번을 검증하는 무주문 실측 수집·Alpha #7 평가
 - `quant/research/monthly_target.py`, `MONTHLY_TARGET.md`: 과거 월간 목표 연구의 기록. 신규 후보의 승격 목표는 `RISK_POLICY.md`의 비용 후 기대값·자본보전 게이트를 따른다.
+- `scripts/capital_preservation_pipeline.py`: 신규 후보의 잠긴 사전등록, 개발/후속 구간과 각각의 비용 스트레스, 실행 계약, 무결성 증거, 현재 Risk Policy를 SHA-256으로 결박해 역사 진단을 재현하는 경로. 이 결과는 승격·주문 권한을 만들지 않는다.
+- `scripts/research_pipeline.py`: 과거 일반 GatePolicy 연구 기록용 레거시 경로. `--legacy-protocol`을 명시하지 않으면 실행되지 않으며 현재 자본보전 정책 증거로 사용할 수 없다.
 - `quant/research/risk.py`: 군집 손실을 보존한 7일 block bootstrap 파산확률·MDD stress
 - `quant/research/equity.py`: 끊김 없는 UTC mark-to-market 자산곡선 검증과 월별/MDD 재계산
 - `quant/research/portfolio_performance.py`, `PORTFOLIO_PROMOTION.md`: 포트폴리오 폐쇄거래·일별 노출·MTM 손익 구성요소를 원본에서 재계산하고 비용 스트레스와 자산 증감을 대조하는 승격 감사
@@ -221,10 +223,10 @@ Alpha #13은 일반 CSV 입력 대신 `make alpha013-signal-panel`로 동일한 
 Funding 이벤트의 `fundingTime`은 결제 시각일 뿐, 해당 값이 결정 전에 로컬에 도착했다는 증명이 아니다. `make alpha013-decision-availability-audit`는 각 월요일 04:00 결정에 대해 05:00 진입 전 생성된 별도 수신 영수증을 요구한다. 영수증이 없으면 `CAUSAL_AVAILABILITY_VETO`이며, 나중에 REST에서 재구성한 funding은 신호 증거로 인정하지 않는다.
 
 `make goal-readiness`는 위 과정을 `reports/goal-readiness.json`과 `.md` 한 장으로 합친다.
-연구 프로세스 상태, 독립 PASS sleeve 수, 결합 월 10%·낙폭·파산위험·비용·주문경로 게이트를
+연구 프로세스 상태, 독립 PASS sleeve 수, 결합 비용 후 장기 기대값·낙폭·파산위험·비용·주문경로 게이트를
 서로 분리하며, 캘리브레이션이나 미완성 forward 표본을 승격 증거로 계산하지 않는다. 포트폴리오
 승격 정책 V2는 모든 sleeve에 현재 프로토콜로 결박된 lookahead/recursive PASS도 요구한다.
-승격 영수증은 manifest·결합 보고서·sleeve 보고서·실행 감사뿐 아니라 월 목표 및 포트폴리오
+승격 영수증은 manifest·결합 보고서·sleeve 보고서·실행 감사뿐 아니라 비용 후 기대값 및 포트폴리오
 평가기 코드의 SHA-256도 묶으며, 준비도 보고서가 원본을 다시 해시한다.
 보고서가 좋아도 별도 live preflight 전까지 주문 권한은 항상 `CLOSED`다.
 

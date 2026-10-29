@@ -111,13 +111,15 @@ class PortfolioPromotionPolicy:
     portfolio_risk_simulations_per_block: int = 5_000
     portfolio_risk_ruin_equity_fraction: float = 0.50
     portfolio_risk_drawdown_threshold: float = 0.10
-    portfolio_risk_annual_target_return: float = 1.10**12 - 1
+    # A zero return boundary reports annual positive-return probability; it
+    # is not a monthly-return-derived target and has no minimum pass rate.
+    portfolio_risk_annual_target_return: float = 0.0
     portfolio_risk_binomial_confidence_level: float = 0.95
     portfolio_risk_seed: int = 1701
     maximum_portfolio_probability_of_ruin: float = 0.005
     maximum_portfolio_probability_terminal_loss: float = 0.05
-    # Kept as a simulated diagnostic at the aspirational 10% monthly target,
-    # not a pass/fail requirement.
+    # The simulated positive-annual-return probability is descriptive, not a
+    # pass/fail requirement.
     minimum_portfolio_probability_reaching_annual_target: float = 0.0
     maximum_portfolio_bootstrap_drawdown_p95: float = 0.10
     maximum_portfolio_historical_drawdown: float = 0.10

@@ -97,6 +97,7 @@ from quant.research.funding_decision_availability import (
 from quant.research.portfolio_promotion import (
     PORTFOLIO_COST_AFTER_POLICY,
     PROMOTION_PROTOCOL_FILES,
+    PortfolioPromotionPolicy,
     REQUIRED_COST_AFTER_CHECK_NAMES,
     evaluate_portfolio_promotion,
     expected_execution_scopes,
@@ -7094,6 +7095,8 @@ class ResearchTests(unittest.TestCase):
         self.assertFalse(PORTFOLIO_COST_AFTER_POLICY.require_geometric_monthly_return)
         self.assertFalse(PORTFOLIO_COST_AFTER_POLICY.require_positive_month_ratio)
         self.assertTrue(PORTFOLIO_COST_AFTER_POLICY.require_positive_cost_after_return)
+        self.assertEqual(PortfolioPromotionPolicy().portfolio_risk_annual_target_return, 0.0)
+        self.assertEqual(PortfolioRiskPolicy().annual_target_return, 0.0)
         portfolio["portfolio_requirements"]["combined_monthly_target_gate"] = "PASS"
         portfolio_rejected = validate_risk_policy_contract(
             risk, objective, portfolio_promotion_policy=portfolio

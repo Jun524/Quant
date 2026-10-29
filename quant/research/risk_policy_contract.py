@@ -82,7 +82,11 @@ def validate_risk_policy_contract(
     if portfolio_promotion_policy is not None:
         # Import only for the portfolio status path.  Historical diagnostics
         # intentionally do not depend on a future portfolio implementation.
-        from quant.research.portfolio_promotion import PORTFOLIO_COST_AFTER_POLICY
+        from quant.research.portfolio_promotion import (
+            PORTFOLIO_COST_AFTER_POLICY,
+            PortfolioPromotionPolicy,
+        )
+        from quant.research.portfolio_risk import PortfolioRiskPolicy
 
         portfolio_machine = portfolio_promotion_policy.get("machine_policy") or {}
         portfolio_requirements = portfolio_promotion_policy.get(
@@ -90,7 +94,7 @@ def validate_risk_policy_contract(
         ) or {}
         if (
             portfolio_promotion_policy.get("policy")
-            != "CAPITAL_PRESERVATION_PORTFOLIO_PROMOTION_V19"
+            != "CAPITAL_PRESERVATION_PORTFOLIO_PROMOTION_V20"
         ):
             failures.append("portfolio promotion policy is not the current V19 policy")
         portfolio_expected = {
@@ -103,6 +107,7 @@ def validate_risk_policy_contract(
             "maximum_portfolio_rule_violations": non_negotiables.get(
                 "rule_violations"
             ),
+            "portfolio_risk_annual_target_return": 0.0,
         }
         for key, value in portfolio_expected.items():
             if portfolio_machine.get(key) != value:
@@ -136,6 +141,14 @@ def validate_risk_policy_contract(
                 failures.append(
                     f"portfolio promotion code {key} is inconsistent with the preservation objective"
                 )
+        if PortfolioPromotionPolicy().portfolio_risk_annual_target_return != 0.0:
+            failures.append(
+                "portfolio promotion code must use zero as the descriptive annual-return boundary"
+            )
+        if PortfolioRiskPolicy().annual_target_return != 0.0:
+            failures.append(
+                "portfolio risk code must use zero as the descriptive annual-return boundary"
+            )
     return {
         "status": "PASS" if not failures else "FAIL",
         "policy_id": risk_policy.get("policy_id"),

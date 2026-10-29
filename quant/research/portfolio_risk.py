@@ -29,10 +29,12 @@ class PortfolioRiskPolicy:
     simulations_per_block: int = 5_000
     ruin_equity_fraction: float = 0.50
     drawdown_threshold: float = 0.10
-    annual_target_return: float = 1.10**12 - 1
+    # Zero is a signed-return boundary for a descriptive annual scenario, not
+    # a target return.  Positive cost-after expectancy is tested separately.
+    annual_target_return: float = 0.0
     maximum_probability_of_ruin: float = 0.005
     maximum_probability_terminal_loss: float = 0.05
-    # The 10% monthly return is an aspirational diagnostic, not a pass/fail
+    # The annual positive-return scenario is descriptive, not a pass/fail
     # condition for a preservation-first portfolio.
     minimum_probability_reaching_annual_target: float = 0.0
     maximum_bootstrap_drawdown_p95: float = 0.10

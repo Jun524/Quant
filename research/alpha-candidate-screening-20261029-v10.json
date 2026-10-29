@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "screen_id": "ALPHA_CANDIDATE_SCREEN_20261029_V10",
+  "created_at_utc": "2026-10-29T03:08:16Z",
+  "purpose": "Independent follow-up literature screen for a reproducible Binance USDT-M, at-most-two-position successor after Alpha 015 was vetoed. This is an admission screen only: it does not inspect project return data, register an experiment, or alter any sealed protocol.",
+  "search_record": {
+    "tool": "Exa",
+    "workstreams": 4,
+    "sources_reviewed": 40,
+    "project_return_data_inspected_during_screening": false,
+    "hard_filters": [
+      "Binance USDT-M perpetual execution only, with at most two concurrent futures positions and planned leverage at or below one",
+      "fixed causal information set and reproducible decision-time source availability",
+      "fees, slippage, funding, interim mark-to-market and liquidation accounted for before a pass claim",
+      "economic mechanism independent of sealed failed or accumulating strategy families",
+      "no configuration search, post-hoc condition or unmodelled spot/cross-venue hedge"
+    ],
+    "discarded_source_classes": [
+      "vendor or anonymous backtest claims without an immutable method and raw-data provenance",
+      "event studies that document a mechanism but do not define a pre-data trading rule",
+      "historical results with winner concentration incompatible with the capital-preservation objective"
+    ]
+  },
+  "candidates": [
+    {
+      "name": "EXECUTION_CONSTRAINED_AUTOTUNING",
+      "decision": "RETAIN_AS_VALIDATION_INFRASTRUCTURE_NOT_ALPHA",
+      "source": "https://arxiv.org/pdf/2512.22476",
+      "quality": "Primary preprint. It explicitly models funding, slippage, strict t+1 execution and configuration-search fragility, while stating that it is alpha-agnostic and that its linear-cost simulations exclude market impact and capacity.",
+      "reason": "It is evidence for preserving the project's cost, bias and audit controls, not evidence for a new directional signal. Its Bayesian selection workflow cannot be adopted as an alpha without a separately sealed full trial inventory before any return access.",
+      "retain": "Keep as a governance reference only."
+    },
+    {
+      "name": "FIVE_MINUTE_VOLATILITY_SPIKE_TWELVE_HOUR_LONG",
+      "decision": "REJECT_CONCENTRATED_SINGLE_SOURCE_SHOCK_REVERSAL",
+      "source": "https://kquant.app/en/research/indicator-study/",
+      "quality": "Detailed practitioner research page, not an independently peer-reviewed or reproducibly archived primary dataset. It reports a single held-out positive estimate after costs but also reports that 85 percent of the profit came from ten days and that results are slippage-sensitive.",
+      "reason": "The proposed payoff is a crash-rebound/shock-reversal trade, adjacent to the sealed mean-reversion and volatility-event families. Extreme day concentration conflicts with the current objective's concentration and capital-preservation requirements. Reconstructing its winner after seeing the report would also be outcome-following.",
+      "retain": "Do not register or retune a volatility-spike successor from this result."
+    },
+    {
+      "name": "LIQUIDATION_CASCADE_DIRECTIONAL_SIGNAL",
+      "decision": "RETAIN_TELEMETRY_CONTEXT_NOT_ALPHA",
+      "source": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6579278",
+      "quality": "Single-event empirical study of the October 2025 crash across Binance and Bybit. It documents futures/spot divergence and liquidity stress but does not provide a general pre-registered trading rule or a point-in-time historical liquidation-data contract.",
+      "reason": "It supports the relevance of the currently accumulating liquidation-risk telemetry as a risk diagnostic. It cannot admit a directional alpha because its evidence is event-specific and historical liquidation availability/receipt time remains unverified.",
+      "retain": "Do not alter the fixed telemetry trigger, threshold or validation boundary."
+    },
+    {
+      "name": "PERPETUAL_BASIS_AND_PRICE_VOLUME_FACTOR_SORTS",
+      "decision": "REJECT_CROSS_SECTIONAL_BASIS_FAMILY_AND_POSITION_LIMIT",
+      "source": "https://www.research.ed.ac.uk/en/publications/anatomy-of-cryptocurrency-perpetual-futures-returns",
+      "quality": "Accepted academic research describing a perpetual-futures cost-of-carry framework and cross-sectional basis/price-volume predictor sorts.",
+      "reason": "The evidence is cross-sectional factor sorting rather than a single or two-position USDT-M rule. Basis/funding exposure overlaps the sealed negative basis/carry families, and an implementable broad sort would violate the two-position limit.",
+      "retain": "Use as theoretical context for cost and funding attribution only."
+    }
+  ],
+  "result": "NO_NEW_ALPHA_ADMITTED",
+  "next_action": "Keep live orders closed and continue the unchanged forward-only liquidation-risk telemetry campaign. A future candidate may be registered only after a distinct, reproducible two-position mechanism passes an admission screen before project return analysis.",
+  "live_order_authorization": "CLOSED"
+}

@@ -7800,6 +7800,33 @@ class ResearchTests(unittest.TestCase):
                 verify_alpha015_contract_semantics(audit, project_root=root)["status"],
                 "PASS",
             )
+            template["model"]["minimum_symbols"] = 30
+            preservation = json.loads(preservation_path.read_text(encoding="utf-8"))
+            preservation["candidate_compatibility"] = {
+                "status": "VETO_MAXIMUM_SIMULTANEOUS_POSITIONS",
+                "policy_limit": 2,
+                "minimum_concurrent_futures_positions": 12,
+            }
+            preservation_path.write_text(json.dumps(preservation), encoding="utf-8")
+            template_path.write_text(json.dumps(template), encoding="utf-8")
+            vetoed = verify_alpha015_contract_semantics(audit, project_root=root)
+            self.assertEqual(vetoed["status"], "PASS")
+            self.assertFalse(vetoed["capital_preservation"]["candidate_compatible"])
+            self.assertEqual(
+                vetoed["capital_preservation"]["candidate_compatibility_status"],
+                "VETO",
+            )
+            self.assertIn(
+                "template_simultaneous_position_limit_breach",
+                vetoed["capital_preservation"]["vetoes"],
+            )
+            template["model"]["minimum_symbols"] = 5
+            preservation["candidate_compatibility"] = {
+                "status": "COMPATIBLE",
+                "policy_limit": 2,
+                "minimum_concurrent_futures_positions": 2,
+            }
+            preservation_path.write_text(json.dumps(preservation), encoding="utf-8")
             template["development_gate"]["checks"][
                 "base_maximum_minute_mark_to_market_drawdown_fraction"
             ] = 0.15

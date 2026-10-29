@@ -252,6 +252,7 @@ def verify_alpha015_contract_semantics(
     preservation_contract = preservation.get("authoritative_risk_contract") or {}
     required_policy = preservation.get("policy_binding") or {}
     candidate_compatible = False
+    candidate_vetoes: list[str] = []
     try:
         base_drawdown = float(
             preservation_contract["maximum_base_minute_mark_to_market_drawdown_fraction"]
@@ -322,7 +323,11 @@ def verify_alpha015_contract_semantics(
             ):
                 failures.append("capital_preservation_position_veto_invalid")
             if template_positions > maximum_positions:
-                failures.append("template_simultaneous_position_limit_breach")
+                # The amendment deliberately records this as a pre-data veto.
+                # It is evidence that the template and the current policy agree
+                # on why Alpha 015 cannot proceed, not a contradiction between
+                # the contract documents themselves.
+                candidate_vetoes.append("template_simultaneous_position_limit_breach")
     return {
         "status": "PASS" if not failures else "FAIL",
         "failures": failures,
@@ -337,6 +342,10 @@ def verify_alpha015_contract_semantics(
             "maximum_minute_mark_to_market_drawdown": 0.10,
             "monthly_return_target": "NOT_A_GATE",
             "candidate_compatible": candidate_compatible,
+            "candidate_compatibility_status": (
+                "COMPATIBLE" if candidate_compatible else "VETO"
+            ),
+            "vetoes": candidate_vetoes,
         },
         "calibration_path": calibration_path,
         "calibration_measured_scopes": expected_scopes,

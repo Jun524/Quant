@@ -1,4 +1,9 @@
-"""Evidence gate for an aggressive net 10% monthly research objective."""
+"""Evidence gates for legacy monthly objectives and return-target-free policies.
+
+``MonthlyTargetPolicy`` remains available for frozen historical protocols.  A
+newer caller can explicitly disable the two monthly-return checks while
+retaining the same cost, risk, sample, and forward-evidence controls.
+"""
 
 from __future__ import annotations
 
@@ -20,7 +25,7 @@ def _parse_utc(value) -> datetime | None:
 
 @dataclass(frozen=True)
 class MonthlyTargetPolicy:
-    target_geometric_monthly_return: float = 0.10
+    target_geometric_monthly_return: float | None = 0.10
     minimum_complete_months: int = 12
     minimum_organic_trades: int = 100
     minimum_positive_month_ratio: float = 0.60
@@ -39,6 +44,9 @@ class MonthlyTargetPolicy:
     require_slippage_stress_positive: bool = False
     require_funding_stress_positive: bool = False
     require_locked_forward_evidence: bool = True
+    require_geometric_monthly_return: bool = True
+    require_positive_month_ratio: bool = True
+    require_positive_cost_after_return: bool = False
 
 
 def evaluate_monthly_target(
@@ -74,20 +82,6 @@ def evaluate_monthly_target(
             "kind": "sample",
         },
         {
-            "name": "geometric_monthly_return",
-            "passed": float(monthly.get("geometric_monthly_return") or 0.0) >= policy.target_geometric_monthly_return,
-            "actual": monthly.get("geometric_monthly_return"),
-            "required": policy.target_geometric_monthly_return,
-            "kind": "performance",
-        },
-        {
-            "name": "positive_month_ratio",
-            "passed": float(monthly.get("positive_month_ratio") or 0.0) >= policy.minimum_positive_month_ratio,
-            "actual": monthly.get("positive_month_ratio"),
-            "required": policy.minimum_positive_month_ratio,
-            "kind": "risk",
-        },
-        {
             "name": "worst_month_loss",
             "passed": monthly.get("worst_month") is not None
             and float(monthly["worst_month"]) >= -policy.maximum_worst_month_loss,
@@ -111,6 +105,41 @@ def evaluate_monthly_target(
             "kind": "performance",
         },
     ]
+    if policy.require_geometric_monthly_return:
+        checks.append(
+            {
+                "name": "geometric_monthly_return",
+                "passed": (
+                    policy.target_geometric_monthly_return is not None
+                    and float(monthly.get("geometric_monthly_return") or 0.0)
+                    >= policy.target_geometric_monthly_return
+                ),
+                "actual": monthly.get("geometric_monthly_return"),
+                "required": policy.target_geometric_monthly_return,
+                "kind": "performance",
+            }
+        )
+    if policy.require_positive_month_ratio:
+        checks.append(
+            {
+                "name": "positive_month_ratio",
+                "passed": float(monthly.get("positive_month_ratio") or 0.0)
+                >= policy.minimum_positive_month_ratio,
+                "actual": monthly.get("positive_month_ratio"),
+                "required": policy.minimum_positive_month_ratio,
+                "kind": "risk",
+            }
+        )
+    if policy.require_positive_cost_after_return:
+        checks.append(
+            {
+                "name": "cost_after_net_return",
+                "passed": float(organic.get("net_return") or 0.0) > 0.0,
+                "actual": organic.get("net_return"),
+                "required": "> 0 over the complete locked-forward sample",
+                "kind": "performance",
+            }
+        )
     if policy.require_mark_to_market_equity:
         checks.append(
             {

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "policy": "CAPITAL_PRESERVATION_PORTFOLIO_PROMOTION_V18",
+  "policy": "CAPITAL_PRESERVATION_PORTFOLIO_PROMOTION_V19",
   "created_at_utc": "2026-10-09T16:53:25Z",
-  "last_amended_at_utc": "2026-10-29T00:00:00Z",
+  "last_amended_at_utc": "2026-10-29T01:00:00Z",
   "sample_started": false,
-  "purpose": "Require preregistered locked-forward positive cost-after return, capital-preservation risk, bias, and exact execution-path evidence before a future portfolio can be considered for promotion. Ten percent net monthly return remains aspirational rather than a pass/fail gate.",
+  "purpose": "Require preregistered locked-forward positive long-horizon cost-after return, capital-preservation risk, bias, and exact execution-path evidence before a future portfolio can be considered for promotion. No monthly return target or positive-month quota is a pass/fail gate.",
   "machine_policy": {
     "minimum_sleeves": 2,
     "maximum_sleeves": 5,
@@ -68,7 +68,7 @@
     "maximum_intratrade_leverage_adjusted_mae": 0.2,
     "zero_liquidations": true,
     "zero_rule_violations": true,
-    "combined_monthly_target_gate": "PASS_WITH_POSITIVE_COST_AFTER_RETURN;_10_PERCENT_REPORTED_AS_ASPIRATIONAL",
+    "combined_cost_after_expectancy_gate": "PASS_WITH_POSITIVE_LONG_HORIZON_COST_AFTER_EXPECTANCY;_NO_MONTHLY_RETURN_TARGET",
     "minimum_daily_mtm_profit_factor": 1.2,
     "simultaneous_fee_slippage_funding_stress_net_return": "> 0",
     "simultaneous_fee_slippage_funding_stress_maximum_drawdown": "<= 0.10 with no interim insolvency",

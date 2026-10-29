@@ -95,9 +95,9 @@ from quant.research.funding_decision_availability import (
     receipt_filename,
 )
 from quant.research.portfolio_promotion import (
-    PORTFOLIO_MONTHLY_POLICY,
+    PORTFOLIO_COST_AFTER_POLICY,
     PROMOTION_PROTOCOL_FILES,
-    REQUIRED_MONTHLY_CHECK_NAMES,
+    REQUIRED_COST_AFTER_CHECK_NAMES,
     evaluate_portfolio_promotion,
     expected_execution_scopes,
 )
@@ -5137,7 +5137,7 @@ class ResearchTests(unittest.TestCase):
                 execution_scopes=execution_scopes,
             )
             self.assertEqual(result["status"], "PASS")
-            self.assertEqual(result["monthly_target_gate"]["status"], "PASS")
+            self.assertEqual(result["cost_after_expectancy_gate"]["status"], "PASS")
             self.assertEqual(result["organic_trades"], 100)
             self.assertGreater(result["stress_returns"]["simultaneous"], 0.0)
             self.assertAlmostEqual(
@@ -6219,12 +6219,12 @@ class ResearchTests(unittest.TestCase):
             }
 
         def portfolio_performance_audit() -> dict:
-            monthly_gate = {
+            cost_after_gate = {
                 "status": "PASS",
-                "policy": asdict(PORTFOLIO_MONTHLY_POLICY),
+                "policy": asdict(PORTFOLIO_COST_AFTER_POLICY),
                 "checks": [
                     {"name": name, "passed": True}
-                    for name in sorted(REQUIRED_MONTHLY_CHECK_NAMES)
+                    for name in sorted(REQUIRED_COST_AFTER_CHECK_NAMES)
                 ],
             }
             return {
@@ -6274,7 +6274,7 @@ class ResearchTests(unittest.TestCase):
                     "maximum_trade_fee_shortfall": 0.0,
                     "maximum_trade_all_in_shortfall": 0.0,
                 },
-                "monthly_target_gate": monthly_gate,
+                "cost_after_expectancy_gate": cost_after_gate,
                 "daily_mtm_profit_factor": 1.5,
                 "daily_mtm_gross_profit": 30.0,
                 "daily_mtm_gross_loss": 20.0,
@@ -6339,7 +6339,7 @@ class ResearchTests(unittest.TestCase):
                         "closed_trade_mtm_component_reconciliation",
                         "preregistered_execution_cost_floor",
                         "capital_preservation_rule_violations",
-                        "monthly_target_gate",
+                        "cost_after_expectancy_gate",
                         "daily_mtm_profit_factor",
                         "simultaneous_cost_funding_stress",
                         "simultaneous_cost_funding_stress_drawdown",
@@ -6352,8 +6352,8 @@ class ResearchTests(unittest.TestCase):
         report = {
             "portfolio_manifest_sha256": digest,
             "portfolio_promotion_policy_sha256": policy_digest,
-            "monthly_target_gate": json.loads(
-                json.dumps(performance_audit["monthly_target_gate"])
+            "cost_after_expectancy_gate": json.loads(
+                json.dumps(performance_audit["cost_after_expectancy_gate"])
             ),
             "evidence": {
                 "sample_role": "locked_forward",
@@ -6855,8 +6855,8 @@ class ResearchTests(unittest.TestCase):
 
     def test_portfolio_promotion_rejects_fake_monthly_check_inventory(self) -> None:
         manifest, report, sleeves, execution, digest, policy_digest = self._passing_portfolio_inputs()
-        report["monthly_target_gate"]["checks"] = [{"name": "all", "passed": True}]
-        report["portfolio_performance_audit"]["monthly_target_gate"]["checks"] = [
+        report["cost_after_expectancy_gate"]["checks"] = [{"name": "all", "passed": True}]
+        report["portfolio_performance_audit"]["cost_after_expectancy_gate"]["checks"] = [
             {"name": "all", "passed": True}
         ]
         rejected = evaluate_portfolio_promotion(
@@ -6868,7 +6868,7 @@ class ResearchTests(unittest.TestCase):
             policy_sha256=policy_digest,
         )
         monthly = next(
-            item for item in rejected["checks"] if item["name"] == "combined_monthly_target_gate"
+            item for item in rejected["checks"] if item["name"] == "combined_cost_after_expectancy_gate"
         )
         self.assertFalse(monthly["passed"])
         self.assertFalse(monthly["actual"]["check_inventory_valid"])
@@ -11511,6 +11511,79 @@ class ResearchTests(unittest.TestCase):
             base, double_cost=stress, risk=risk, evidence=passing_forward_evidence()
         )
         self.assertEqual(near_target["status"], "FAIL")
+
+    def test_cost_after_policy_has_no_monthly_return_or_green_month_quota(self) -> None:
+        policy = MonthlyTargetPolicy(
+            target_geometric_monthly_return=None,
+            require_geometric_monthly_return=False,
+            require_positive_month_ratio=False,
+            require_positive_cost_after_return=True,
+            maximum_worst_month_loss=0.05,
+            maximum_drawdown=0.10,
+            maximum_leverage=1.0,
+            maximum_trade_adverse_excursion=0.20,
+            maximum_probability_of_ruin=0.005,
+            maximum_probability_terminal_loss=0.05,
+            minimum_probability_reaching_annual_target=0.0,
+            maximum_bootstrap_drawdown_p95=0.10,
+        )
+        base = {
+            "monthly": {
+                "complete_months": 12,
+                "geometric_monthly_return": -0.01,
+                "positive_month_ratio": 0.10,
+                "worst_month": -0.04,
+            },
+            "organic": {"trades": 100, "profit_factor": 1.3, "net_return": 0.01},
+            "max_drawdown": 0.08,
+            "equity_basis": "mark_to_market",
+            "trade_risk": {
+                "excursion_coverage_ratio": 1.0,
+                "maximum_leverage": 1.0,
+                "maximum_leverage_adjusted_mae": 0.10,
+                "liquidation_exits": 0,
+            },
+        }
+        passed = evaluate_monthly_target(
+            base,
+            double_cost={"organic": {"net_return": 0.01}},
+            risk={
+                "probability_of_ruin": 0.005,
+                "probability_terminal_loss": 0.05,
+                "probability_reaching_annual_target": 0.0,
+                "maximum_drawdown_p95": 0.10,
+            },
+            evidence=passing_forward_evidence(),
+            policy=policy,
+        )
+        self.assertEqual(passed["status"], "PASS")
+        self.assertNotIn(
+            "geometric_monthly_return",
+            {item["name"] for item in passed["checks"]},
+        )
+        self.assertNotIn(
+            "positive_month_ratio",
+            {item["name"] for item in passed["checks"]},
+        )
+
+        base["organic"]["net_return"] = 0.0
+        failed = evaluate_monthly_target(
+            base,
+            double_cost={"organic": {"net_return": 0.01}},
+            risk={
+                "probability_of_ruin": 0.005,
+                "probability_terminal_loss": 0.05,
+                "probability_reaching_annual_target": 0.0,
+                "maximum_drawdown_p95": 0.10,
+            },
+            evidence=passing_forward_evidence(),
+            policy=policy,
+        )
+        self.assertEqual(failed["status"], "FAIL")
+        self.assertIn(
+            "cost_after_net_return",
+            {item["name"] for item in failed["checks"] if not item["passed"]},
+        )
 
     def test_monthly_target_rejects_historical_or_weak_bootstrap_evidence(self) -> None:
         base = {

@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from quant.research.portfolio_promotion import (
-    PORTFOLIO_MONTHLY_POLICY,
+    PORTFOLIO_COST_AFTER_POLICY,
     PROMOTION_PROTOCOL_FILES,
     PortfolioPromotionPolicy,
 )
@@ -350,7 +350,7 @@ def build_goal_readiness(
             "portfolio_performance_source_replay",
             "reported_performance_matches_source",
             "locked_sample_source_window_binding",
-            "combined_monthly_target_gate",
+            "combined_cost_after_expectancy_gate",
             "daily_mtm_profit_factor",
             "boundary_force_exit_integrity",
             "common_daily_observations",
@@ -610,7 +610,7 @@ def build_goal_readiness(
         "live_order_authorization": "CLOSED",
         "research_health": research_health.get("status"),
         "thresholds": {
-            **asdict(PORTFOLIO_MONTHLY_POLICY),
+            **asdict(PORTFOLIO_COST_AFTER_POLICY),
             "portfolio": asdict(PortfolioPromotionPolicy()),
         },
         "return_objective": return_objective,

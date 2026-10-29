@@ -18,7 +18,16 @@ PORTFOLIO_PERFORMANCE_PROTOCOL_FILES = (
     "scripts/portfolio_promotion_report.py",
 )
 
-PORTFOLIO_PERFORMANCE_MONTHLY_POLICY = MonthlyTargetPolicy(
+PORTFOLIO_PERFORMANCE_COST_AFTER_POLICY = MonthlyTargetPolicy(
+    # The capital-preservation objective requires a positive long-horizon
+    # cost-after edge, not a monthly return target or a quota of green months.
+    target_geometric_monthly_return=None,
+    require_geometric_monthly_return=False,
+    require_positive_month_ratio=False,
+    require_positive_cost_after_return=True,
+    maximum_worst_month_loss=0.05,
+    maximum_drawdown=0.10,
+    maximum_leverage=1.0,
     maximum_trade_adverse_excursion=0.20,
     require_slippage_stress_positive=True,
     require_funding_stress_positive=True,
@@ -675,14 +684,14 @@ def evaluate_portfolio_performance(
         ),
         "maximum_drawdown_p95": aggregate_risk.get("maximum_drawdown_p95"),
     }
-    monthly_gate = evaluate_monthly_target(
+    cost_after_expectancy_gate = evaluate_monthly_target(
         base,
         double_cost={"organic": {"net_return": double_cost_return}},
         slippage_stress={"organic": {"net_return": slippage_stress_return}},
         funding_stress={"organic": {"net_return": funding_stress_return}},
         risk=risk,
         evidence=evidence,
-        policy=PORTFOLIO_PERFORMANCE_MONTHLY_POLICY,
+        policy=PORTFOLIO_PERFORMANCE_COST_AFTER_POLICY,
     )
     checks = [
         {
@@ -786,9 +795,9 @@ def evaluate_portfolio_performance(
             "required": f"<= {maximum_rule_violations} source-ledger risk-envelope violations",
         },
         {
-            "name": "monthly_target_gate",
-            "passed": monthly_gate["status"] == "PASS",
-            "actual": monthly_gate["status"],
+            "name": "cost_after_expectancy_gate",
+            "passed": cost_after_expectancy_gate["status"] == "PASS",
+            "actual": cost_after_expectancy_gate["status"],
             "required": "PASS",
         },
         {
@@ -838,7 +847,7 @@ def evaluate_portfolio_performance(
         "rule_violation_evidence": rule_violation_evidence,
         "exposure_reconciliation": exposure_reconciliation,
         "boundary_force_exit_audit": boundary_force_exit_audit,
-        "monthly_target_gate": monthly_gate,
+        "cost_after_expectancy_gate": cost_after_expectancy_gate,
         "daily_mtm_profit_factor": daily_mtm_profit_factor,
         "daily_mtm_gross_profit": daily_gross_profit,
         "daily_mtm_gross_loss": daily_gross_loss,

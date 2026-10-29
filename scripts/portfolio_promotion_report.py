@@ -584,7 +584,7 @@ def main() -> None:
         raise SystemExit("embedded portfolio performance audit does not match source replay")
     portfolio_report["portfolio_performance_audit"] = portfolio_performance_audit
     performance_fields = {
-        "monthly_target_gate": portfolio_performance_audit.get("monthly_target_gate"),
+        "cost_after_expectancy_gate": portfolio_performance_audit.get("cost_after_expectancy_gate"),
         "maximum_gross_leverage": portfolio_performance_audit.get(
             "maximum_gross_leverage"
         ),

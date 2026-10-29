@@ -52,11 +52,13 @@ PROMOTION_PROTOCOL_FILES = (
     "scripts/portfolio_promotion_report.py",
     "research/portfolio-promotion-policy.json",
 )
-PORTFOLIO_MONTHLY_POLICY = MonthlyTargetPolicy(
-    # The programme reports 10% as an ambition, but no longer rejects a
-    # capital-preserving portfolio solely for missing that return target.
-    # A tiny positive threshold avoids calling a flat portfolio an edge.
-    target_geometric_monthly_return=1e-12,
+PORTFOLIO_COST_AFTER_POLICY = MonthlyTargetPolicy(
+    # Positive cost-after expectancy is assessed across the locked sample;
+    # monthly performance is reported but never a promotion hurdle.
+    target_geometric_monthly_return=None,
+    require_geometric_monthly_return=False,
+    require_positive_month_ratio=False,
+    require_positive_cost_after_return=True,
     maximum_worst_month_loss=0.05,
     maximum_drawdown=0.10,
     maximum_probability_of_ruin=0.005,
@@ -68,7 +70,7 @@ PORTFOLIO_MONTHLY_POLICY = MonthlyTargetPolicy(
     require_slippage_stress_positive=True,
     require_funding_stress_positive=True,
 )
-REQUIRED_MONTHLY_CHECK_NAMES = frozenset(
+REQUIRED_COST_AFTER_CHECK_NAMES = frozenset(
     item["name"]
     for item in evaluate_monthly_target(
         {},
@@ -77,7 +79,7 @@ REQUIRED_MONTHLY_CHECK_NAMES = frozenset(
         funding_stress=None,
         risk=None,
         evidence={},
-        policy=PORTFOLIO_MONTHLY_POLICY,
+        policy=PORTFOLIO_COST_AFTER_POLICY,
     )["checks"]
 )
 
@@ -1112,7 +1114,7 @@ def _portfolio_performance_failures(
         not _finite_number(audit.get("maximum_trade_leverage_adjusted_mae"))
         or float(audit["maximum_trade_leverage_adjusted_mae"]) < 0.0
         or float(audit["maximum_trade_leverage_adjusted_mae"])
-        > PORTFOLIO_MONTHLY_POLICY.maximum_trade_adverse_excursion
+        > PORTFOLIO_COST_AFTER_POLICY.maximum_trade_adverse_excursion
     ):
         failures.append("portfolio performance intratrade leverage-adjusted MAE is invalid")
     daily_pf = audit.get("daily_mtm_profit_factor")
@@ -1127,7 +1129,7 @@ def _portfolio_performance_failures(
             float(daily_gross_loss) > 0.0
             and (
                 not _finite_number(daily_pf)
-                or float(daily_pf) < PORTFOLIO_MONTHLY_POLICY.minimum_profit_factor
+                or float(daily_pf) < PORTFOLIO_COST_AFTER_POLICY.minimum_profit_factor
             )
         )
         or (float(daily_gross_loss) == 0.0 and daily_pf is not None)
@@ -1278,7 +1280,7 @@ def _portfolio_performance_failures(
         "closed_trade_mtm_component_reconciliation",
         "preregistered_execution_cost_floor",
         "capital_preservation_rule_violations",
-        "monthly_target_gate",
+        "cost_after_expectancy_gate",
         "daily_mtm_profit_factor",
         "simultaneous_cost_funding_stress",
         "simultaneous_cost_funding_stress_drawdown",
@@ -1324,22 +1326,22 @@ def evaluate_portfolio_promotion(
     performance_failures = _portfolio_performance_failures(
         performance_audit, candidates=candidates
     )
-    monthly_gate = (
-        performance_audit.get("monthly_target_gate")
+    cost_after_gate = (
+        performance_audit.get("cost_after_expectancy_gate")
         if isinstance(performance_audit, dict)
         else {}
     ) or {}
-    monthly_checks = monthly_gate.get("checks")
-    monthly_check_names = [
+    cost_after_checks = cost_after_gate.get("checks")
+    cost_after_check_names = [
         str(item.get("name") or "")
-        for item in monthly_checks or []
+        for item in cost_after_checks or []
         if isinstance(item, dict)
     ]
-    monthly_check_inventory_valid = (
-        isinstance(monthly_checks, list)
-        and len(monthly_check_names) == len(monthly_checks)
-        and len(monthly_check_names) == len(set(monthly_check_names))
-        and set(monthly_check_names) == REQUIRED_MONTHLY_CHECK_NAMES
+    cost_after_check_inventory_valid = (
+        isinstance(cost_after_checks, list)
+        and len(cost_after_check_names) == len(cost_after_checks)
+        and len(cost_after_check_names) == len(set(cost_after_check_names))
+        and set(cost_after_check_names) == REQUIRED_COST_AFTER_CHECK_NAMES
     )
     composition_audit = portfolio_report.get("portfolio_composition_audit")
     composition_failures = _portfolio_composition_failures(
@@ -1549,18 +1551,18 @@ def evaluate_portfolio_promotion(
             "evidence",
         ),
         _check(
-            "combined_monthly_target_gate",
-            monthly_gate.get("status") == "PASS"
-            and monthly_gate.get("policy") == asdict(PORTFOLIO_MONTHLY_POLICY)
-            and monthly_check_inventory_valid
-            and all(item.get("passed") is True for item in monthly_checks),
+            "combined_cost_after_expectancy_gate",
+            cost_after_gate.get("status") == "PASS"
+            and cost_after_gate.get("policy") == asdict(PORTFOLIO_COST_AFTER_POLICY)
+            and cost_after_check_inventory_valid
+            and all(item.get("passed") is True for item in cost_after_checks),
             {
-                "status": monthly_gate.get("status"),
-                "policy_matches": monthly_gate.get("policy") == asdict(PORTFOLIO_MONTHLY_POLICY),
-                "check_inventory_valid": monthly_check_inventory_valid,
-                "check_names": monthly_check_names,
+                "status": cost_after_gate.get("status"),
+                "policy_matches": cost_after_gate.get("policy") == asdict(PORTFOLIO_COST_AFTER_POLICY),
+                "check_inventory_valid": cost_after_check_inventory_valid,
+                "check_names": cost_after_check_names,
             },
-            "exact portfolio monthly policy and check inventory, all PASS",
+            "exact return-target-free cost-after policy and check inventory, all PASS",
             "performance",
         ),
         _check(
@@ -1606,7 +1608,7 @@ def evaluate_portfolio_promotion(
             "portfolio_performance_source_replay",
             not performance_failures,
             performance_failures,
-            "source-replayed MTM, trade ledger, exposure, costs, funding, and monthly target",
+            "source-replayed MTM, trade ledger, exposure, costs, funding, and cost-after expectancy",
             "evidence",
         ),
         _check(
@@ -1698,8 +1700,8 @@ def evaluate_portfolio_promotion(
         _check(
             "reported_performance_matches_source",
             isinstance(performance_audit, dict)
-            and portfolio_report.get("monthly_target_gate")
-            == performance_audit.get("monthly_target_gate")
+            and portfolio_report.get("cost_after_expectancy_gate")
+            == performance_audit.get("cost_after_expectancy_gate")
             and portfolio_report.get("maximum_gross_leverage")
             == performance_audit.get("maximum_gross_leverage")
             and portfolio_report.get("maximum_absolute_net_leverage")
@@ -1717,7 +1719,7 @@ def evaluate_portfolio_promotion(
                 "maximum_drawdown"
             ),
             {
-                "monthly_target_gate": portfolio_report.get("monthly_target_gate"),
+                "cost_after_expectancy_gate": portfolio_report.get("cost_after_expectancy_gate"),
                 "maximum_gross_leverage": portfolio_report.get(
                     "maximum_gross_leverage"
                 ),
